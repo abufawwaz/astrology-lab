@@ -1,0 +1,330 @@
+<input type='hidden' id='{0}' name='{0}' value=''>
+<a id='id_{0}_choice' href='#' onclick='function_{0}_show(); return false;'><div id='id_{0}_link_choice'>Now</div></a>
+
+<script language="JavaScript">
+var field_{0}_isDateNow = {1}
+var field_{0}_date = new Date({2})
+var field_{0}_month_name = new Array('January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December' )
+
+function function_{0}_update() {
+  if (field_{0}_isDateNow) {
+   field_{0}_date = new Date()
+   function_{0}_display_choice()
+   setTimeout("function_{0}_update()", 1000)
+  } else {
+   function_{0}_display_choice()
+  }
+}
+
+function function_{0}_show() {
+ field_{0}_isDateNow = false
+ function_{0}_generate(field_{0}_date)
+ document.getElementById('div_{0}_time_chooser').style.visibility = 'visible'
+}
+
+function function_{0}_replaceElement(old_parent, new_element, old_id) {
+ if (old_parent.hasChildNodes()) {
+  old_element = document.getElementById(old_id)
+  if (old_element) {
+   old_parent.removeChild(old_element)
+  }
+ }
+ old_parent.appendChild(new_element)
+}
+
+function function_{0}_display_choice() {
+ var choice = function_{0}_display_twodigits(field_{0}_date.getHours()) + ":" + function_{0}_display_twodigits(field_{0}_date.getMinutes()) + ":" + function_{0}_display_twodigits(field_{0}_date.getSeconds()) + " on " + field_{0}_date.getDate() + " " + field_{0}_month_name[field_{0}_date.getMonth()] + " " + field_{0}_date.getFullYear()
+ var text_choice = document.createTextNode(choice)
+ var id_{0}_link_choice = document.createElement('div')
+ id_{0}_link_choice.appendChild(text_choice)
+ id_{0}_link_choice.setAttribute('id', 'id_{0}_link_choice')
+ function_{0}_replaceElement(document.getElementById('id_{0}_choice'), id_{0}_link_choice, 'id_{0}_link_choice')
+
+ var text_date = function_{0}_display_twodigits(field_{0}_date.getHours()) + ":" + function_{0}_display_twodigits(field_{0}_date.getMinutes()) + ":" + function_{0}_display_twodigits(field_{0}_date.getSeconds()) + " " + function_{0}_display_twodigits(field_{0}_date.getDate()) + "-" + function_{0}_display_twodigits(eval(field_{0}_date.getMonth() + 1)) + "-" + field_{0}_date.getFullYear()
+ document.getElementById('{0}').value = text_date
+}
+function function_{0}_display_twodigits(digits) {
+ var choice = "00" + digits
+ return choice.substring(choice.length - 2)
+}
+
+function_{0}_update()
+</script>
+
+<div id='div_{0}_time_chooser' style='position:absolute; background-color:#ffffff; visibility:hidden'>
+
+<style type='text/css'>
+<!--
+.css_{0}_current_date { text-align: center; font-size: larger; font-weight: bold; color: black;}
+.css_{0}_other_date { text-align: center; font-size: smaller; color: blue;}
+.css_{0}_tiny_date { text-align: center; font-size: xx-small; color: blue;}
+.css_{0}_work_date { text-align: right; color: black;}
+.css_{0}_free_date { text-align: right; color: green;}
+.css_{0}_handle_hours { text-align: center; color: black; font-size: smaller; font-weight: bold;}
+A:link {text-decoration: none;}
+A:visited {text-decoration: none;}
+-->
+</style>
+
+<script language="JavaScript">
+
+function function_{0}_generate(new_date) {
+ field_{0}_date = new_date
+
+ function_{0}_generateFirstRow()
+ function_{0}_generateSecondRow()
+ function_{0}_generateThirdRow()
+ function_{0}_generateForthRow()
+
+ function_{0}_display_choice()
+}
+
+function function_{0}_generateFirstRow() {
+ var element_year1 = document.getElementById('id_{0}_element_year1')
+ var link_year1 = document.createElement('a')
+ var text_year1 = document.createTextNode('' + (field_{0}_date.getFullYear() - 1) + ' <<')
+ link_year1.appendChild(text_year1)
+ link_year1.setAttribute('id','id_{0}_link_year1')
+ link_year1.setAttribute('href','#')
+ link_year1.onclick=function() { function_{0}_move('FullYear', -1); }
+ function_{0}_replaceElement(element_year1, link_year1, 'id_{0}_link_year1')
+ 
+ var element_year4 = document.getElementById('id_{0}_element_year4')
+ var link_year4 = document.createElement('a')
+ var text_year4 = document.createTextNode('' + (field_{0}_date.getFullYear() - 50) + ' <<')
+ link_year4.appendChild(text_year4)
+ link_year4.setAttribute('id','id_{0}_link_year4')
+ link_year4.setAttribute('href','#')
+ link_year4.onclick=function() { function_{0}_move('FullYear', -50); }
+ function_{0}_replaceElement(element_year4, link_year4, 'id_{0}_link_year4')
+
+ var element_year2 = document.getElementById('id_{0}_element_year2')
+ var link_year2 = document.createElement('a')
+ var text_year2 = document.createTextNode('' + field_{0}_date.getFullYear())
+ link_year2.appendChild(text_year2)
+ link_year2.setAttribute('id','id_{0}_link_year2')
+ function_{0}_replaceElement(element_year2, link_year2, 'id_{0}_link_year2')
+
+ var element_year3 = document.getElementById('id_{0}_element_year3')
+ var link_year3 = document.createElement('a')
+ var text_year3 = document.createTextNode('>> ' + (field_{0}_date.getFullYear() + 1))
+ link_year3.appendChild(text_year3)
+ link_year3.setAttribute('id','id_{0}_link_year3')
+ link_year3.setAttribute('href','#')
+ link_year3.onclick=function() { function_{0}_move('FullYear', +1); }
+ function_{0}_replaceElement(element_year3, link_year3, 'id_{0}_link_year3')
+ 
+ var element_year5 = document.getElementById('id_{0}_element_year5')
+ var link_year5 = document.createElement('a')
+ var text_year5 = document.createTextNode('>> ' + (field_{0}_date.getFullYear() + 50))
+ link_year5.appendChild(text_year5)
+ link_year5.setAttribute('id','id_{0}_link_year5')
+ link_year5.setAttribute('href','#')
+ link_year5.onclick=function() { function_{0}_move('FullYear', +50); }
+ function_{0}_replaceElement(element_year5, link_year5, 'id_{0}_link_year5')
+}
+
+function function_{0}_generateSecondRow() {
+ var element_month1 = document.getElementById('id_{0}_element_month1')
+ var link_month1 = document.createElement('a')
+ var text_month1 = document.createTextNode('' + function_{0}_resolveMonthName(field_{0}_date.getMonth() - 1) + ' <<')
+ link_month1.appendChild(text_month1)
+ link_month1.setAttribute('id','id_{0}_link_month1')
+ link_month1.setAttribute('href','#')
+ link_month1.onclick=function() { function_{0}_move('Month', -1); }
+ function_{0}_replaceElement(element_month1, link_month1, 'id_{0}_link_month1')
+
+ var element_month2 = document.getElementById('id_{0}_element_month2')
+ var link_month2 = document.createElement('a')
+ var text_month2 = document.createTextNode('' + function_{0}_resolveMonthName(field_{0}_date.getMonth()))
+ link_month2.appendChild(text_month2)
+ link_month2.setAttribute('id','id_{0}_link_month2')
+ function_{0}_replaceElement(element_month2, link_month2, 'id_{0}_link_month2')
+
+ var element_month3 = document.getElementById('id_{0}_element_month3')
+ var link_month3 = document.createElement('a')
+ var text_month3 = document.createTextNode('>> ' + function_{0}_resolveMonthName(field_{0}_date.getMonth() + 1))
+ link_month3.appendChild(text_month3)
+ link_month3.setAttribute('id','id_{0}_link_month3')
+ link_month3.setAttribute('href','#')
+ link_month3.onclick=function() { function_{0}_move('Month', +1); }
+ function_{0}_replaceElement(element_month3, link_month3, 'id_{0}_link_month3')
+}
+function function_{0}_resolveMonthName(month) {
+ return field_{0}_month_name[(month >= 0) ? month % 12 : month + 12];
+}
+
+function function_{0}_generateThirdRow() {
+  var d1 = new Date(field_{0}_date.getTime())
+  // find first date
+  d1.setDate(1)
+  var d = d1.getDay();
+  if (d == 0) d = 7
+  d = 9 - d
+  if (d > 1) d -= 7
+
+  // find last date
+  var dlast
+  for (dlast = 27; dlast < 40; dlast++) {
+   d1.setDate(dlast)
+   if (d1.getMonth() != field_{0}_date.getMonth()) {
+    break
+   }
+  }
+
+  var cell_text
+  for (i = 0; i < 6 * 7; i++, d++) {
+   var link_cell = document.createElement('a')
+   var text_cell = document.createTextNode((d > 0 && d < dlast) ? d : "")
+   link_cell.appendChild(text_cell)
+   link_cell.setAttribute('id_{0}_chosen_date', d)
+   link_cell.setAttribute('id', 'id_{0}_text_' + i)
+   if (d == field_{0}_date.getDate()) {
+    link_cell.setAttribute('class','css_{0}_current_date')
+   }
+   link_cell.setAttribute('href','#')
+   link_cell.onclick = function_{0}_move_chooseDate
+
+   var cell_element = document.getElementById("id_{0}_date_" + i)
+   function_{0}_replaceElement(cell_element, link_cell, 'id_{0}_text_' + i)
+  }
+}
+
+function function_{0}_generateForthRow() {
+ var element_hour1 = document.getElementById('id_{0}_element_hour')
+ var link_hour1 = document.createElement('a')
+ var text_hour1 = document.createTextNode(function_{0}_display_twodigits(field_{0}_date.getHours()))
+ link_hour1.appendChild(text_hour1)
+ link_hour1.setAttribute('id','id_{0}_link_hour')
+ function_{0}_replaceElement(element_hour1, link_hour1, 'id_{0}_link_hour')
+
+ var element_minute = document.getElementById('id_{0}_element_minute')
+ var link_minute = document.createElement('a')
+ var text_minute = document.createTextNode(function_{0}_display_twodigits(field_{0}_date.getMinutes()))
+ link_minute.appendChild(text_minute)
+ link_minute.setAttribute('id','id_{0}_link_minute')
+ function_{0}_replaceElement(element_minute, link_minute, 'id_{0}_link_minute')
+
+ var element_second = document.getElementById('id_{0}_element_second')
+ var link_second = document.createElement('a')
+ var text_second = document.createTextNode(function_{0}_display_twodigits(field_{0}_date.getSeconds()))
+ link_second.appendChild(text_second)
+ link_second.setAttribute('id','id_{0}_link_second')
+ function_{0}_replaceElement(element_second, link_second, 'id_{0}_link_second')
+}
+
+function function_{0}_move(fieldType, timespan) {
+ var new_date = new Date()
+ new_date.setTime(field_{0}_date.getTime())
+ eval('new_date.set' + fieldType + '(field_{0}_date.get' + fieldType + '() + timespan)')
+ function_{0}_generate(new_date)
+ return false
+}
+function function_{0}_zero(fieldType) {
+ var new_date = new Date()
+ new_date.setTime(field_{0}_date.getTime())
+ eval('new_date.set' + fieldType + '(0)')
+ function_{0}_generate(new_date)
+ return false
+}
+
+function function_{0}_move_chooseDate() {
+ field_{0}_date.setDate(this.getAttribute('id_{0}_chosen_date'))
+ function_{0}_generate(field_{0}_date)
+ document.getElementById('div_{0}_time_chooser').style.visibility = 'hidden'
+ return false
+}
+</script>
+
+ <table border='1'>
+  <tr>
+   <td align='center'>
+    <table cellspacing='0' cellpadding='0'>
+     <tr>
+      <td></td>
+      <td class='css_{0}_handle_hours'><a href='#' onclick='function_{0}_zero("Hours")'><font size='-2'>00</font></a></td>
+      <td></td>
+     </tr>
+     <tr>
+      <td class='css_{0}_handle_hours'><a href='#' onclick='function_{0}_move("Hours", -1)'>&lt;&lt;&nbsp;</a></td>
+      <td id='id_{0}_element_hour' class='css_{0}_current_date'></td>
+      <td class='css_{0}_handle_hours'><a href='#' onclick='function_{0}_move("Hours", +1)'>&nbsp;&gt;&gt;</a></td>
+     </tr>
+    </table>
+   </td>
+   <td align='center'>
+    <table cellspacing='0' cellpadding='0'>
+     <tr>
+      <td></td>
+      <td class='css_{0}_handle_hours'><a href='#' onclick='function_{0}_zero("Minutes")'><font size='-2'>00</font></a></td>
+      <td></td>
+     </tr>
+     <tr>
+      <td class='css_{0}_handle_hours'><a href='#' onclick='function_{0}_move("Minutes", -1)'>&lt;&lt;&nbsp;</a></td>
+      <td id='id_{0}_element_minute' class='css_{0}_current_date'></td>
+      <td class='css_{0}_handle_hours'><a href='#' onclick='function_{0}_move("Minutes", +1)'>&nbsp;&gt;&gt;</a></td>
+     </tr>
+    </table>
+   </td>
+   <td align='center'>
+    <table cellspacing='0' cellpadding='0'>
+     <tr>
+      <td></td>
+      <td class='css_{0}_handle_hours'><a href='#' onclick='function_{0}_zero("Seconds")'><font size='-2'>00</font></a></td>
+      <td></td>
+     </tr>
+     <tr>
+      <td class='css_{0}_handle_hours'><a href='#' onclick='function_{0}_move("Seconds", -1)'>&lt;&lt;&nbsp;</a></td>
+      <td id='id_{0}_element_second' class='css_{0}_current_date'></td>
+      <td class='css_{0}_handle_hours'><a href='#' onclick='function_{0}_move("Seconds", +1)'>&nbsp;&gt;&gt;</a></td>
+     </tr>
+    </table>
+   </td>
+  </tr>
+  <tr>
+   <td id='id_{0}_element_year1' class='css_{0}_other_date'></td>
+   <td id='id_{0}_element_year2' class='css_{0}_current_date' rowspan='2'></td>
+   <td id='id_{0}_element_year3' class='css_{0}_other_date'></td>
+  </tr>
+  <tr>
+   <td id='id_{0}_element_year4' class='css_{0}_tiny_date'></td>
+   <td id='id_{0}_element_year5' class='css_{0}_tiny_date'></td>
+  </tr>
+  <tr>
+   <td id='id_{0}_element_month1' class='css_{0}_other_date'></td>
+   <td id='id_{0}_element_month2' class='css_{0}_current_date'></td>
+   <td id='id_{0}_element_month3' class='css_{0}_other_date'></td>
+  </tr>
+  <tr>
+   <td colspan='3'>
+    <table align='center' width='100%'>
+     <tr>
+      <td width='12%' class='css_{0}_work_date'>m</td>
+      <td width='12%' class='css_{0}_work_date'>t</td>
+      <td width='12%' class='css_{0}_work_date'>w</td>
+      <td width='12%' class='css_{0}_work_date'>t</td>
+      <td width='12%' class='css_{0}_work_date'>f</td>
+      <td width='12%' class='css_{0}_free_date '>s</td>
+      <td width='12%' class='css_{0}_free_date '>s</td>
+     </tr>
+
+<script language="JavaScript">
+var dindex = 0
+for (tr = 0; tr < 6; tr++) {
+ document.write("<tr>")
+ for (td = 0; td < 5; td++) {
+  document.write("<td id='id_{0}_date_" + (dindex++) + "' class='css_{0}_work_date'></td>")
+ }
+ for (td = 0; td < 2; td++) {
+  document.write("<td id='id_{0}_date_" + (dindex++) + "' class='css_{0}_free_date '></td>")
+ }
+ document.write("</tr>")
+}
+</script>
+
+    </table>
+   </td>
+  </tr>
+ </table>
+
+</div>

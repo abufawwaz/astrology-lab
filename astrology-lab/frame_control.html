@@ -1,0 +1,41 @@
+<html>
+ <script language="JavaScript">
+  var control_id = -1;
+  var controlled = true;
+  var freezed = false;
+
+  function control(forceControl) {
+    controlled = forceControl;
+    process();
+
+    if (forceControl) {
+      top.setControlView(control_id)
+    }
+  }
+
+  function freeze() {
+    freezed = !freezed;
+    process();
+  }
+
+  function process() {
+    if (controlled) {
+      document.getElementById('bplay').href = "javascript:return true";
+      document.getElementById('iplay').src = "play_off.gif";
+      freezed = false;
+    } else {
+      document.getElementById('bplay').href = "javascript:control(true)";
+      document.getElementById('iplay').src = "play_on.gif";
+    }
+  }
+
+ </script>
+ <body>
+  <form>
+   <div align="right">
+    <a id="bplay" href="javascript:control(true)"><image id="iplay" border="0" src="play_on.gif" title="Play"></a>
+    <image border="0" src="pause.gif" title="Pause">
+   </div>
+  </form>
+ </body>
+</html>
