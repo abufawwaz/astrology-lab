@@ -18,7 +18,7 @@ public class ProjectIterator {
   }
 
   public static ProjectIterator iterate(int laboratory) {
-    String query = "SELECT * FROM project, text WHERE " + ((laboratory > 0) ? "laboratory = " + laboratory + "AND " : "") + "project.name = text.id ORDER BY " + Personalize.getLanguage();
+    String query = "SELECT * FROM project, text WHERE " + ((laboratory > 0) ? "laboratory = " + laboratory + " AND " : "") + "project.name = text.id ORDER BY " + Personalize.getLanguage();
 
     return new ProjectIterator(Database.executeQuery(query));
   }
