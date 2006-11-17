@@ -1,6 +1,7 @@
 package astrolab.web.server;
 
 import java.io.*;
+import java.net.SocketException;
 import java.util.Properties;
 
 import astrolab.db.Personalize;
@@ -62,6 +63,8 @@ public class ConnectionInput extends Thread {
         	break;
         }
       }
+    } catch (SocketException se) {
+      System.err.println("[Client]: " + se.toString());
     } catch (Exception e) {
       System.err.println("[Client]: " + e);
       e.printStackTrace();
