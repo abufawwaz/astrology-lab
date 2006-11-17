@@ -1,0 +1,21 @@
+
+drop table project_human_birth;
+drop table project_diary;
+drop table project_relocation;
+drop table project_test_psycho_reaction;
+drop table project_test_psycho_color_blocks;
+drop table project_financial_balance;
+drop table project_financial_products;
+drop table project_sleep;
+drop table help_feedback;
+drop table help_project;
+drop table favourites;
+drop table action_group;
+drop table actions;
+drop table views;
+drop table attribute;
+drop table archive;
+drop table locations;
+drop table project;
+drop table users;
+drop table text;
