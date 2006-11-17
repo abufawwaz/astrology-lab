@@ -17,7 +17,7 @@ public class EventIterator extends RecordIterator {
   public static EventIterator iterate(String like) {
     String query = "SELECT DISTINCT(archive.event_id), subject_id, event_time, location, type, accuracy, source FROM archive, text" +
       " WHERE (en LIKE '%" + like + "%' OR bg LIKE '%" + like + "%')" +
-      " AND (id = event_id OR id = subject_id OR id = location)";
+      " AND (id = event_id OR id = subject_id OR id = location) AND (type = 'male' OR type = 'female')";
     return iterate(query, 0, 0);
   }
 
