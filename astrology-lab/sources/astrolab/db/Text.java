@@ -37,10 +37,6 @@ public class Text {
     return reserve(raw_text, descrid, type, 0);
   }
 
-  public synchronized static int reserve(String raw_text, int type, int user) {
-    return reserve(raw_text, "NULL", type, user);
-  }
-
   public synchronized static int reserve(String raw_text, String descrid, int type, int user) {
     String text = escape(raw_text);
     String language = Personalize.getLanguage();
@@ -98,11 +94,11 @@ public class Text {
     if (value == null && !"en".equals(language)) {
       value = Database.query("SELECT en from text where id = " + id + accessible_by);
     }
-    if (value == null && !"descrid".equals(language)) {
-      value = Database.query("SELECT descrid from text where id = " + id + accessible_by);
-    }
     if (value == null && !"bg".equals(language)) {
       value = Database.query("SELECT bg from text where id = " + id + accessible_by);
+    }
+    if (value == null) {
+      value = Database.query("SELECT descrid from text where id = " + id + accessible_by);
     }
     return value;
   }
@@ -122,6 +118,9 @@ public class Text {
 
     if (user == 2000001) {
       // system user sees everything
+      return "";
+    } else if (id.equals(String.valueOf(user))) {
+      // every user sees him/herself
       return "";
     } else {
       if (user > 0) {
