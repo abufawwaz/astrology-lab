@@ -65,8 +65,10 @@ public class Event extends AttributedObject {
   }
 
   public static void setSelectedEvent(int event, int number) {
-    Personalize.addFavourite(-1, event, Text.getId("user.session.event." + number));
-    Personalize.addFavourite(DisplayNatalRecords.ID, event);
+    if (event >= Text.TYPE_EVENT && event < Text.TYPE_LABORATORY) { // TODO: create a method to distinguish events
+      Personalize.addFavourite(-1, event, Text.getId("user.session.event." + number));
+      Personalize.addFavourite(DisplayNatalRecords.ID, event);
+    }
   }
 
   public Event(int id) {
