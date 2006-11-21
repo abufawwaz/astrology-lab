@@ -13,7 +13,7 @@ public class NatalRecord extends Event {
   }
 
   public static int store(String name, long timestamp, int location, String type, String accuracy, String source, int accessible_by) {
-    int user = Text.reserve(name, Text.TYPE_EVENT, accessible_by);
+    int user = Text.reserve(name, name, Text.TYPE_EVENT, accessible_by);
 
     Event.store(user, user, timestamp, location, type, accuracy, source);
     if (NatalRecord.TYPE_MALE.equals(type) || NatalRecord.TYPE_FEMALE.equals(type)) {
