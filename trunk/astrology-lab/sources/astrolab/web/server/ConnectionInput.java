@@ -5,6 +5,7 @@ import java.net.SocketException;
 import java.util.Properties;
 
 import astrolab.db.Personalize;
+import astrolab.tools.Log;
 
 public class ConnectionInput extends Thread {
 
@@ -22,7 +23,7 @@ public class ConnectionInput extends Thread {
 
   public void run() {
   	Request request;
-    System.out.println("Connection input parsed by " + Thread.currentThread());
+    Log.log("Connection input parsed by " + Thread.currentThread());
     Personalize.clear();
     try {
       while (true) {
@@ -36,7 +37,7 @@ public class ConnectionInput extends Thread {
         do {
           line = in.readLine();
           if (line == null) {
-            System.out.println("[Client]: EOF");
+            Log.log("[Client]: EOF");
             return;
           }
           int colon = line.indexOf(':');
@@ -44,7 +45,7 @@ public class ConnectionInput extends Thread {
             headers.setProperty(line.substring(0, colon), line.substring(colon + 1).trim());
           }
 
-          System.out.println("[Client]: " + line);
+          Log.log("[Client]: " + line);
         } while ((line != null) && (line.length() > 0));
 
         int contentLength = Integer.parseInt(headers.getProperty("Content-Length", "0"));
@@ -64,10 +65,9 @@ public class ConnectionInput extends Thread {
         }
       }
     } catch (SocketException se) {
-      System.err.println("[Client]: " + se.toString());
+      Log.log("[Client]: " + se);
     } catch (Exception e) {
-      System.err.println("[Client]: " + e);
-      e.printStackTrace();
+      Log.log("[Client]: ", e);
     }
   }
 
@@ -87,7 +87,7 @@ public class ConnectionInput extends Thread {
 
   private Request process(String request, Properties headers, int user, String content) {
 	  if (request == null) return null;
-    System.out.println("[Client]: " + request);
+    Log.log("[Client]: " + request);
     int index = request.indexOf(" ");
     if (request.charAt(index + 1) == '/') {
       index++;

@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Vector;
 
+import astrolab.tools.Log;
+
 public class Database {
 
   private static Connection connection;
@@ -15,8 +17,7 @@ public class Database {
     try {
       Class.forName("com.mysql.jdbc.Driver");
     } catch (Exception e) {
-      System.err.println(" Unable to load MySQL driver:");
-      System.err.println(e.toString());
+      Log.log(" Unable to load MySQL driver:", e);
     }
   }
 
@@ -33,28 +34,28 @@ public class Database {
   }
 
   public static void execute(String sql) {
-    System.out.println("[SQL execute] " + sql);
+    Log.log("[SQL execute] " + sql);
 
     try {
       createStatement().execute(sql);
     } catch (Exception e) {
-      e.printStackTrace();
+      Log.log(sql, e);
     }
   }
 
   public static ResultSet executeQuery(String query) {
-    System.out.println("[SQL execute query] " + query);
+    Log.log("[SQL execute query] " + query);
 
     try {
       return createStatement().executeQuery(query);
     } catch (Exception e) {
-      e.printStackTrace();
+      Log.log(query, e);
     }
     return null;
   }
 
   public static String query(String query) {
-    System.out.println("[SQL query value] " + query);
+    Log.log("[SQL query value] " + query);
 
     ResultSet set = null;
     try {
@@ -64,7 +65,7 @@ public class Database {
         return decode(set.getBytes(1));
       }
     } catch (Exception e) {
-      e.printStackTrace();
+      Log.log(query, e);
     } finally {
       closeSet(set);
     }
@@ -72,7 +73,7 @@ public class Database {
   }
 
   public static String[] queryList(String query) {
-    System.out.println("[SQL query values] " + query);
+    Log.log("[SQL query values] " + query);
 
     ResultSet set = null;
     Vector vector = new Vector();
@@ -83,7 +84,7 @@ public class Database {
         vector.add(decode(set.getBytes(1)));
       }
     } catch (Exception e) {
-      e.printStackTrace();
+      Log.log(query, e);
     } finally {
       closeSet(set);
     }
@@ -95,7 +96,7 @@ public class Database {
   }
 
   public static String[][] queryList(int columns, String query) {
-    System.out.println("[SQL query values] " + query);
+    Log.log("[SQL query values] " + query);
 
     ResultSet set = null;
     Vector vector = new Vector();
@@ -110,7 +111,7 @@ public class Database {
         vector.add(row);
       }
     } catch (Exception e) {
-      e.printStackTrace();
+      Log.log(query, e);
     } finally {
       closeSet(set);
     }
@@ -125,7 +126,7 @@ public class Database {
     try {
       return (encoded != null) ? new String(encoded, "windows-1251") : null;
     } catch (Exception e) {
-      e.printStackTrace();
+      Log.log(new String(encoded), e);
     }
     return new String(encoded);
   }
@@ -137,7 +138,7 @@ public class Database {
     try {
       set.close();
     } catch (Exception e) {
-      e.printStackTrace();
+      Log.log(null, e);
     }
   }
 
