@@ -20,9 +20,9 @@ public class FeedbackRecordIterator extends RecordIterator {
   }
 
   public static FeedbackRecordIterator iterate(Request request, int project, int sort) {
-    final String QUERY = "SELECT DISTINCT(text.id), TABLE1.app1, TABLE2.app2, TABLE11.app11, TABLE21.app21 FROM text " +
+    final String QUERY = "SELECT DISTINCT(text.id), TABLE1.app1, TABLE2.app2, TABLE3.app3, TABLE11.app11, TABLE21.app21 FROM text " +
 
-    "LEFT JOIN (SELECT text.id as app3_id FROM text, help_project WHERE text.id = help_project.comment_id AND help_project.project_id = " + project + ") as TABLE3 " +
+    "LEFT JOIN (SELECT text.id as app3_id, help_project.commenter_id as app3 FROM text, help_project WHERE text.id = help_project.comment_id AND help_project.project_id = " + project + ") as TABLE3 " +
     "ON text.id = TABLE3.app3_id " + 
 
     "LEFT JOIN (SELECT text.id as app1_id, COUNT(user_id) as app1 from text, help_feedback WHERE approve = 'yes' AND text.id = help_feedback.id GROUP BY app1_id) AS TABLE1 " +
@@ -51,6 +51,6 @@ public class FeedbackRecordIterator extends RecordIterator {
   }
 
   protected Object read() throws Exception {
-    return new FeedbackRecord(set.getInt(1), set.getInt(2), set.getInt(3), set.getInt(4), set.getInt(5));
+    return new FeedbackRecord(set.getInt(1), set.getInt(2), set.getInt(3), set.getInt(4), set.getInt(5), set.getInt(6));
   }
 }

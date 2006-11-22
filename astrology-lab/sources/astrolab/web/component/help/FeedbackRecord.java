@@ -8,13 +8,15 @@ class FeedbackRecord {
   private int id;
   private int approves;
   private int disapproves;
+  private int author;
   private int has_approved;
   private int has_disapproved;
 
-  FeedbackRecord(int id, int approves, int disapproves, int has_approved, int has_disapproved) {
+  FeedbackRecord(int id, int approves, int disapproves, int author, int has_approved, int has_disapproved) {
     this.id = id;
     this.approves = approves;
     this.disapproves = disapproves;
+    this.author = author;
     this.has_approved = has_approved;
     this.has_disapproved = has_disapproved;
   }
@@ -31,6 +33,10 @@ class FeedbackRecord {
     return disapproves;
   }
 
+  public int getAuthor() {
+    return author;
+  }
+
   public boolean hasApproved() {
     return has_approved > 0;
   }
@@ -44,19 +50,17 @@ class FeedbackRecord {
 
     Database.execute("DELETE FROM help_project WHERE comment_id = " + id);
     Database.execute("INSERT INTO help_project VALUES (" + id + ", " + person + ", " + project + ")");
+    Database.execute("INSERT INTO help_feedback VALUES (" + id + ", " + person + ", 'yes')");
 
-    approve(person, project, id);
     return id;
   }
 
   public static void approve(int person, int project, int message) {
-    Database.execute("DELETE FROM help_feedback WHERE user_id = " + person + " AND id = " + message);
-    Database.execute("INSERT INTO help_feedback VALUES (" + message + ", " + person + ", 'yes')");
+    Database.execute("UPDATE help_feedback SET approve='yes' WHERE id=" + message + " and user_id=" + person);
   }
 
   public static void disapprove(int person, int project, int message) {
-    Database.execute("DELETE FROM help_feedback WHERE user_id = " + person + " AND id = " + message);
-    Database.execute("INSERT INTO help_feedback VALUES (" + message + ", " + person + ", 'no')");
+    Database.execute("UPDATE help_feedback SET approve='no' WHERE id=" + message + " and user_id=" + person);
   }
 
 }
