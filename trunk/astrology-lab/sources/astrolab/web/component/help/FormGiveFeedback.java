@@ -44,27 +44,31 @@ public class FormGiveFeedback extends HTMLFormDisplay {
     while (records.hasNext()) {
       FeedbackRecord record = records.next();
       buffer.append("<tr>");
-      buffer.append("<td>");
-      if (!record.hasApproved()) {
-        buffer.append("<a href='javascript:document.forms[0].approve.value=" + record.getId() + ";document.forms[0].submit();'>");
+      if (record.getAuthor() == Personalize.getUser()) {
+        buffer.append("<td colspan='2'></td>");
+      } else {
+        buffer.append("<td>");
+        if (!record.hasApproved()) {
+          buffer.append("<a href='javascript:document.forms[0].approve.value=" + record.getId() + ";document.forms[0].submit();'>");
+        }
+        buffer.append(record.getApproves());
+        if (!record.hasApproved()) {
+          buffer.append("</a>");
+        }
+        buffer.append("</td>");
+        buffer.append("<td>");
+        if (!record.hasDisapproved()) {
+          buffer.append("<a href='javascript:document.forms[0].disapprove.value=" + record.getId() + ";document.forms[0].submit();'>");
+        }
+        buffer.append(record.getDisapproves());
+        if (!record.hasDisapproved()) {
+          buffer.append("</a>");
+        }
+        buffer.append("</td>");
       }
-      buffer.append(record.getApproves());
-      if (!record.hasApproved()) {
-        buffer.append("</a>");
-      }
-      buffer.append("</td>");
-      buffer.append("<td>");
-      if (!record.hasDisapproved()) {
-        buffer.append("<a href='javascript:document.forms[0].disapprove.value=" + record.getId() + ";document.forms[0].submit();'>");
-      }
-      buffer.append(record.getDisapproves());
-      if (!record.hasDisapproved()) {
-        buffer.append("</a>");
-      }
-      buffer.append("</td>");
       buffer.append("<td>");
       buffer.localize(record.getId());
-      buffer.signature(Personalize.getUser());
+      buffer.signature(record.getAuthor());
       buffer.append("</td>");
       buffer.append("</tr>");
     }
