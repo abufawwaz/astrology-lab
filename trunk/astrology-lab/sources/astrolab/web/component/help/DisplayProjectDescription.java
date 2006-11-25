@@ -48,27 +48,29 @@ public class DisplayProjectDescription extends HTMLFormDisplay {
 
       while (records.hasNext()) {
         FeedbackRecord record = records.next();
+        boolean isAuthor = (record.getAuthor() == Personalize.getUser());
+
         buffer.append("<tr>");
         buffer.append("<td>");
         buffer.localize(record.getId());
-        buffer.signature(Personalize.getUser());
+        buffer.signature(record.getAuthor());
         buffer.append("</td>");
 
         buffer.append("<td>");
-        if (!record.hasApproved()) {
+        if (!isAuthor && !record.hasApproved()) {
           buffer.append("<a href='javascript:document.forms[0].approve.value=" + record.getId() + ";document.forms[0].submit();'>");
         }
         buffer.append(record.getApproves());
-        if (!record.hasApproved()) {
+        if (!isAuthor && !record.hasApproved()) {
           buffer.append("</a>");
         }
         buffer.append("</td>");
         buffer.append("<td>");
-        if (!record.hasDisapproved()) {
+        if (!isAuthor && !record.hasDisapproved()) {
           buffer.append("<a href='javascript:document.forms[0].disapprove.value=" + record.getId() + ";document.forms[0].submit();'>");
         }
         buffer.append(record.getDisapproves());
-        if (!record.hasDisapproved()) {
+        if (!isAuthor && !record.hasDisapproved()) {
           buffer.append("</a>");
         }
         buffer.append("</td>");

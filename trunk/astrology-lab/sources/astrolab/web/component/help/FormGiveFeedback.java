@@ -43,29 +43,26 @@ public class FormGiveFeedback extends HTMLFormDisplay {
     FeedbackRecordIterator records = FeedbackRecordIterator.iterate(request, 0, FeedbackRecordIterator.SORT_BY_VOTE);
     while (records.hasNext()) {
       FeedbackRecord record = records.next();
+      boolean isAuthor = (record.getAuthor() == Personalize.getUser());
       buffer.append("<tr>");
-      if (record.getAuthor() == Personalize.getUser()) {
-        buffer.append("<td colspan='2'></td>");
-      } else {
-        buffer.append("<td>");
-        if (!record.hasApproved()) {
-          buffer.append("<a href='javascript:document.forms[0].approve.value=" + record.getId() + ";document.forms[0].submit();'>");
-        }
-        buffer.append(record.getApproves());
-        if (!record.hasApproved()) {
-          buffer.append("</a>");
-        }
-        buffer.append("</td>");
-        buffer.append("<td>");
-        if (!record.hasDisapproved()) {
-          buffer.append("<a href='javascript:document.forms[0].disapprove.value=" + record.getId() + ";document.forms[0].submit();'>");
-        }
-        buffer.append(record.getDisapproves());
-        if (!record.hasDisapproved()) {
-          buffer.append("</a>");
-        }
-        buffer.append("</td>");
+      buffer.append("<td>");
+      if (!isAuthor && !record.hasApproved()) {
+        buffer.append("<a href='javascript:document.forms[0].approve.value=" + record.getId() + ";document.forms[0].submit();'>");
       }
+      buffer.append(record.getApproves());
+      if (!isAuthor && !record.hasApproved()) {
+        buffer.append("</a>");
+      }
+      buffer.append("</td>");
+      buffer.append("<td>");
+      if (!isAuthor && !record.hasDisapproved()) {
+        buffer.append("<a href='javascript:document.forms[0].disapprove.value=" + record.getId() + ";document.forms[0].submit();'>");
+      }
+      buffer.append(record.getDisapproves());
+      if (!isAuthor && !record.hasDisapproved()) {
+        buffer.append("</a>");
+      }
+      buffer.append("</td>");
       buffer.append("<td>");
       buffer.localize(record.getId());
       buffer.signature(record.getAuthor());
