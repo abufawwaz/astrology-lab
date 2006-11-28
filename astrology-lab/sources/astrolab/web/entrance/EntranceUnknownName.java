@@ -8,8 +8,14 @@ import astrolab.web.server.content.LocalizedStringBuffer;
 class EntranceUnknownName extends HTMLDisplay implements Entrance {
 
   public boolean isApplicable(Request request) {
-    if ((request.getUser() <= 0) || (!Text.getText(request.getUser()).startsWith("User"))) {
+    System.out.println(" user: " + request.getUser());
+    if (request.getUser() <= 0) {
       return false;
+    } else {
+      String userName = Text.getText(request.getUser());
+      if ((userName != null) && !userName.startsWith("User")) {
+        return false;
+      }
     }
     
     return true;
