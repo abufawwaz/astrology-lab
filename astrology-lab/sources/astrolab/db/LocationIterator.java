@@ -11,6 +11,14 @@ public class LocationIterator extends RecordIterator {
     super(set);
   }
 
+  public static LocationIterator iterate(String like) {
+    String query = "SELECT DISTINCT(locations.id) FROM locations, text" +
+      " WHERE (text.en LIKE '%" + like + "%' OR text.bg LIKE '%" + like + "%')" +
+      " AND locations.id = text.id";
+
+    return new LocationIterator(Database.executeQuery(query));
+  }
+
   public static LocationIterator iterate(int region) {
     String QUERY = "SELECT locations.id FROM locations, text WHERE locations.id = text.id AND locations.id > 0 AND region = " + region + " ORDER BY text." + Personalize.getLanguage();
 

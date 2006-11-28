@@ -1,7 +1,8 @@
-<input type='hidden' id='{0}' name='{0}' value=''>
+<input type='hidden' id='{0}' name='{0}' value='' />
 <a id='id_{0}_choice' href='#' onclick='function_{0}_show(); return false;'><div id='id_{0}_link_choice'>Now</div></a>
 
 <script language="JavaScript">
+<![CDATA[
 var field_{0}_isDateNow = {1}
 var field_{0}_date = new Date({2})
 var field_{0}_month_name = new Array('January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December' )
@@ -17,9 +18,15 @@ function function_{0}_update() {
 }
 
 function function_{0}_show() {
- field_{0}_isDateNow = false
- function_{0}_generate(field_{0}_date)
- document.getElementById('div_{0}_time_chooser').style.visibility = 'visible'
+ var div_element = document.getElementById('div_{0}_time_chooser')
+ var div_style = document.getElementById('div_{0}_time_chooser').style
+ if (div_element.style.visibility == 'hidden') {
+   field_{0}_isDateNow = false
+   function_{0}_generate(field_{0}_date)
+   div_element.style.visibility = 'visible'
+ } else {
+   div_element.style.visibility = 'hidden'
+ }
 }
 
 function function_{0}_replaceElement(old_parent, new_element, old_id) {
@@ -48,26 +55,24 @@ function function_{0}_display_twodigits(digits) {
  return choice.substring(choice.length - 2)
 }
 
-function_{0}_update()
+]]>
 </script>
 
 <div id='div_{0}_time_chooser' style='position:absolute; background-color:#ffffff; visibility:hidden'>
 
 <style type='text/css'>
-<!--
-.css_{0}_current_date { text-align: center; font-size: larger; font-weight: bold; color: black;}
-.css_{0}_other_date { text-align: center; font-size: smaller; color: blue;}
-.css_{0}_tiny_date { text-align: center; font-size: xx-small; color: blue;}
-.css_{0}_work_date { text-align: right; color: black;}
-.css_{0}_free_date { text-align: right; color: green;}
-.css_{0}_handle_hours { text-align: center; color: black; font-size: smaller; font-weight: bold;}
-A:link {text-decoration: none;}
-A:visited {text-decoration: none;}
--->
+<![CDATA[
+.css_{0}_current_date { text-align: center; font-size: larger; font-weight: bold; color: black; text-decoration: none; }
+.css_{0}_other_date { text-align: center; font-size: smaller; color: blue; text-decoration: none; }
+.css_{0}_tiny_date { text-align: center; font-size: xx-small; color: blue; text-decoration: none; }
+.css_{0}_work_date { text-align: right; color: black; text-decoration: none; }
+.css_{0}_free_date { text-align: right; color: green; text-decoration: none; }
+.css_{0}_handle_hours { text-align: center; vertical-align: 25%; color: black; font-size: x-small; text-decoration: none; }
+]]>
 </style>
 
 <script language="JavaScript">
-
+<![CDATA[
 function function_{0}_generate(new_date) {
  field_{0}_date = new_date
 
@@ -82,7 +87,7 @@ function function_{0}_generate(new_date) {
 function function_{0}_generateFirstRow() {
  var element_year1 = document.getElementById('id_{0}_element_year1')
  var link_year1 = document.createElement('a')
- var text_year1 = document.createTextNode('' + (field_{0}_date.getFullYear() - 1) + ' <<')
+ var text_year1 = document.createTextNode('' + (field_{0}_date.getFullYear() - 1) + " <<")
  link_year1.appendChild(text_year1)
  link_year1.setAttribute('id','id_{0}_link_year1')
  link_year1.setAttribute('href','#')
@@ -91,7 +96,7 @@ function function_{0}_generateFirstRow() {
  
  var element_year4 = document.getElementById('id_{0}_element_year4')
  var link_year4 = document.createElement('a')
- var text_year4 = document.createTextNode('' + (field_{0}_date.getFullYear() - 50) + ' <<')
+ var text_year4 = document.createTextNode('' + (field_{0}_date.getFullYear() - 50) + " <<")
  link_year4.appendChild(text_year4)
  link_year4.setAttribute('id','id_{0}_link_year4')
  link_year4.setAttribute('href','#')
@@ -127,7 +132,7 @@ function function_{0}_generateFirstRow() {
 function function_{0}_generateSecondRow() {
  var element_month1 = document.getElementById('id_{0}_element_month1')
  var link_month1 = document.createElement('a')
- var text_month1 = document.createTextNode('' + function_{0}_resolveMonthName(field_{0}_date.getMonth() - 1) + ' <<')
+ var text_month1 = document.createTextNode('' + function_{0}_resolveMonthName(field_{0}_date.getMonth() - 1) + " <<")
  link_month1.appendChild(text_month1)
  link_month1.setAttribute('id','id_{0}_link_month1')
  link_month1.setAttribute('href','#')
@@ -172,6 +177,20 @@ function function_{0}_generateThirdRow() {
    }
   }
 
+  if (!document.getElementById("id_{0}_date_0")) {
+    table_element = document.getElementById("id_{0}_date_table")
+    for (tr = 0, dindex = 0; tr < 6; tr++) {
+      table_tr = document.createElement('tr')
+      for (td = 0; td < 7; td++) {
+        table_td = document.createElement('td')
+        table_td.setAttribute('id', 'id_{0}_date_' + (dindex++))
+        table_td.setAttribute('class', 'css_{0}_work_date')
+        table_tr.appendChild(table_td)
+      }
+      table_element.appendChild(table_tr)
+    }
+  }
+
   var cell_text
   for (i = 0; i < 6 * 7; i++, d++) {
    var link_cell = document.createElement('a')
@@ -181,12 +200,16 @@ function function_{0}_generateThirdRow() {
    link_cell.setAttribute('id', 'id_{0}_text_' + i)
    if (d == field_{0}_date.getDate()) {
     link_cell.setAttribute('class','css_{0}_current_date')
+   } else {
+    link_cell.setAttribute('class', (i % 7 < 5) ? 'css_{0}_work_date' : 'css_{0}_free_date')
    }
    link_cell.setAttribute('href','#')
    link_cell.onclick = function_{0}_move_chooseDate
 
    var cell_element = document.getElementById("id_{0}_date_" + i)
-   function_{0}_replaceElement(cell_element, link_cell, 'id_{0}_text_' + i)
+   if (cell_element) {
+     function_{0}_replaceElement(cell_element, link_cell, 'id_{0}_text_' + i)
+   }
   }
 }
 
@@ -231,9 +254,9 @@ function function_{0}_zero(fieldType) {
 function function_{0}_move_chooseDate() {
  field_{0}_date.setDate(this.getAttribute('id_{0}_chosen_date'))
  function_{0}_generate(field_{0}_date)
- document.getElementById('div_{0}_time_chooser').style.visibility = 'hidden'
  return false
 }
+]]>
 </script>
 
  <table border='1'>
@@ -242,13 +265,13 @@ function function_{0}_move_chooseDate() {
     <table cellspacing='0' cellpadding='0'>
      <tr>
       <td></td>
-      <td class='css_{0}_handle_hours'><a href='#' onclick='function_{0}_zero("Hours")'><font size='-2'>00</font></a></td>
+      <td><a href='#' onclick='function_{0}_zero("Hours")' class='css_{0}_handle_hours'><font size='-2'>00</font></a></td>
       <td></td>
      </tr>
      <tr>
-      <td class='css_{0}_handle_hours'><a href='#' onclick='function_{0}_move("Hours", -1)'>&lt;&lt;&nbsp;</a></td>
+      <td><a href='#' onclick='function_{0}_move("Hours", -1)' class='css_{0}_handle_hours'>&lt;&lt; </a></td>
       <td id='id_{0}_element_hour' class='css_{0}_current_date'></td>
-      <td class='css_{0}_handle_hours'><a href='#' onclick='function_{0}_move("Hours", +1)'>&nbsp;&gt;&gt;</a></td>
+      <td><a href='#' onclick='function_{0}_move("Hours", +1)' class='css_{0}_handle_hours'>&gt;&gt;</a></td>
      </tr>
     </table>
    </td>
@@ -256,13 +279,13 @@ function function_{0}_move_chooseDate() {
     <table cellspacing='0' cellpadding='0'>
      <tr>
       <td></td>
-      <td class='css_{0}_handle_hours'><a href='#' onclick='function_{0}_zero("Minutes")'><font size='-2'>00</font></a></td>
+      <td><a href='#' onclick='function_{0}_zero("Minutes")' class='css_{0}_handle_hours'><font size='-2'>00</font></a></td>
       <td></td>
      </tr>
      <tr>
-      <td class='css_{0}_handle_hours'><a href='#' onclick='function_{0}_move("Minutes", -1)'>&lt;&lt;&nbsp;</a></td>
+      <td><a href='#' onclick='function_{0}_move("Minutes", -1)' class='css_{0}_handle_hours'>&lt;&lt; </a></td>
       <td id='id_{0}_element_minute' class='css_{0}_current_date'></td>
-      <td class='css_{0}_handle_hours'><a href='#' onclick='function_{0}_move("Minutes", +1)'>&nbsp;&gt;&gt;</a></td>
+      <td><a href='#' onclick='function_{0}_move("Minutes", +1)' class='css_{0}_handle_hours'> &gt;&gt;</a></td>
      </tr>
     </table>
    </td>
@@ -270,13 +293,13 @@ function function_{0}_move_chooseDate() {
     <table cellspacing='0' cellpadding='0'>
      <tr>
       <td></td>
-      <td class='css_{0}_handle_hours'><a href='#' onclick='function_{0}_zero("Seconds")'><font size='-2'>00</font></a></td>
+      <td><a href='#' onclick='function_{0}_zero("Seconds")' class='css_{0}_handle_hours'>00</a></td>
       <td></td>
      </tr>
      <tr>
-      <td class='css_{0}_handle_hours'><a href='#' onclick='function_{0}_move("Seconds", -1)'>&lt;&lt;&nbsp;</a></td>
+      <td><a href='#' onclick='function_{0}_move("Seconds", -1)' class='css_{0}_handle_hours'>&lt;&lt; </a></td>
       <td id='id_{0}_element_second' class='css_{0}_current_date'></td>
-      <td class='css_{0}_handle_hours'><a href='#' onclick='function_{0}_move("Seconds", +1)'>&nbsp;&gt;&gt;</a></td>
+      <td><a href='#' onclick='function_{0}_move("Seconds", +1)' class='css_{0}_handle_hours'> &gt;&gt;</a></td>
      </tr>
     </table>
    </td>
@@ -297,7 +320,7 @@ function function_{0}_move_chooseDate() {
   </tr>
   <tr>
    <td colspan='3'>
-    <table align='center' width='100%'>
+    <table id='id_{0}_date_table' align='center' width='100%'>
      <tr>
       <td width='12%' class='css_{0}_work_date'>m</td>
       <td width='12%' class='css_{0}_work_date'>t</td>
@@ -307,24 +330,12 @@ function function_{0}_move_chooseDate() {
       <td width='12%' class='css_{0}_free_date '>s</td>
       <td width='12%' class='css_{0}_free_date '>s</td>
      </tr>
-
-<script language="JavaScript">
-var dindex = 0
-for (tr = 0; tr < 6; tr++) {
- document.write("<tr>")
- for (td = 0; td < 5; td++) {
-  document.write("<td id='id_{0}_date_" + (dindex++) + "' class='css_{0}_work_date'></td>")
- }
- for (td = 0; td < 2; td++) {
-  document.write("<td id='id_{0}_date_" + (dindex++) + "' class='css_{0}_free_date '></td>")
- }
- document.write("</tr>")
-}
-</script>
-
     </table>
    </td>
   </tr>
  </table>
 
+<script language="JavaScript">
+  function_{0}_update()
+</script>
 </div>

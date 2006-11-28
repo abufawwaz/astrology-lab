@@ -68,7 +68,7 @@ public class FormAddPurchase extends HTMLFormDisplay {
     buffer.append("</table>");
     buffer.append("<input type='submit' value='");
     buffer.localize("Save");
-    buffer.append("'>");
+    buffer.append("' />");
 	}
 
 }

@@ -113,6 +113,12 @@ create table help_project (
   INDEX (comment_id)
 ) ENGINE=InnoDB;
 
+create table project_statistics_value (
+  event_id INT UNSIGNED NOT NULL REFERENCES text (id),
+  project_id INT UNSIGNED NOT NULL REFERENCES project (id),
+  record_value DOUBLE NOT NULL
+) ENGINE=InnoDB;
+
 create table project_human_birth (
   event_id INT UNSIGNED NOT NULL REFERENCES archive (event_id),
 
@@ -217,6 +223,8 @@ insert into text values (3000022, NULL, NULL, 'Balance', 'Баланс');
 insert into text values (3000023, NULL, NULL, 'Products', 'Продукти');
 insert into text values (3000024, NULL, NULL, 'Personal Office', 'Личен кабинет');
 insert into text values (3000025, NULL, NULL, 'Sleep', 'Сън');
+insert into text values (3000026, NULL, NULL, 'Astronomy', 'Астрономия');
+insert into text values (3000027, NULL, NULL, 'Sun Spots', 'Слънчеви петна');
 
 insert into text values (4000002, NULL, NULL, 'Description', 'Описание');
 insert into text values (4000003, NULL, NULL, 'Chart', 'Карта');
@@ -372,6 +380,7 @@ insert into project values (3000019, 3000002, 'white', now(), NULL, 3000020);
 insert into project values (3000022, 3000021, 'white', now(), NULL, 0);
 insert into project values (3000023, 3000021, 'white', now(), NULL, 0);
 insert into project values (3000025, 3000009, 'white', now(), NULL, 0);
+insert into project values (3000027, 3000026, 'white', now(), NULL, 0);
 
 insert into locations values (0, 0, 0, 0, 0);
 insert into locations values (5000001,0,0,0,10003001);
@@ -447,6 +456,7 @@ insert into views values (47, 'astrolab.web.component.help.ModifySendInvitation'
 insert into views values (48, 'astrolab.project.sleep.FormSleepRecord');
 insert into views values (49, 'astrolab.project.sleep.ModifySleepRecord');
 insert into views values (50, 'astrolab.project.sleep.DisplaySleepRecords');
+insert into views values (51, 'astrolab.project.statistics.DisplayStatisticsRecords');
 
 insert into actions values (4000002, 4000016, NULL, NULL, NULL, NULL, 45, NULL);
 insert into actions values (4000003, 4000020, 10002016, NULL, NULL, NULL, 4, NULL);
@@ -487,6 +497,7 @@ insert into actions values (4000025, 4000016, NULL, 3000017, NULL, NULL, 30, NUL
 insert into actions values (4000025, 4000016, NULL, 3000019, NULL, NULL, 33, NULL);
 insert into actions values (4000025, 4000016, NULL, 3000022, NULL, NULL, 42, NULL);
 insert into actions values (4000025, 4000016, NULL, 3000023, NULL, NULL, 39, NULL);
+insert into actions values (4000025, 4000016, NULL, 3000027, NULL, NULL, 51, NULL);
 insert into actions values (4000026, 4000016, NULL, 3000013, NULL, NULL, 26, NULL);
 insert into actions values (4000027, 4000016, NULL, 3000013, NULL, NULL, 27, NULL);
 insert into actions values (4000030, 4000016, NULL, 3000001, NULL, NULL, 36, NULL);

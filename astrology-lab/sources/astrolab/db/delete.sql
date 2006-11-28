@@ -1,4 +1,5 @@
 
+drop table project_statistics_value;
 drop table project_human_birth;
 drop table project_diary;
 drop table project_relocation;

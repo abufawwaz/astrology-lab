@@ -13,11 +13,11 @@ public class DisplayPurchaseList extends HTMLFormDisplay {
 
   public void fillBodyContent(Request request, LocalizedStringBuffer buffer) {
     // Search bar
-    buffer.append("<hr>");
+    buffer.append("<hr />");
     buffer.append(" ...");
     buffer.localize("Search");
     buffer.append(" ...");
-    buffer.append("<hr>");
+    buffer.append("<hr />");
 
     buffer.append("<table>");
     buffer.append("<tr><th>Operation</th><th>Item</th><th>Quantity</th><th>Price</th><th>Time</th></tr>");
@@ -49,12 +49,12 @@ public class DisplayPurchaseList extends HTMLFormDisplay {
       buffer.append("</td>");
       buffer.append("<td>");
       buffer.append(purchase.getQuantity());
-      buffer.append("&nbsp;");
+      buffer.append("-");
       buffer.localize(purchase.getMeasure());
       buffer.append("</td>");
       buffer.append("<td>");
       buffer.append(purchase.getPrice());
-      buffer.append("&nbsp;");
+      buffer.append("-");
       buffer.localize(purchase.getCurrency());
       buffer.append("</td>");
       buffer.append("<td>");
@@ -67,15 +67,15 @@ public class DisplayPurchaseList extends HTMLFormDisplay {
     buffer.append("<tr><th><hr /></th><th><hr /></th><th><hr /></th><th>");
     if (sum_bgn != 0.0) {
       buffer.append(sum_bgn);
-      buffer.append("&nbsp;BGN");
+      buffer.append("-BGN");
     }
     if (sum_eur != 0.0) {
       buffer.append(sum_eur);
-      buffer.append("&nbsp;BGN");
+      buffer.append("-EUR");
     }
     if (sum_usd != 0.0) {
       buffer.append(sum_usd);
-      buffer.append("&nbsp;BGN");
+      buffer.append("-USD");
     }
     buffer.append("</th><th><hr /></th></tr>");
     buffer.append("</table>");

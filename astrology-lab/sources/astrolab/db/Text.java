@@ -26,21 +26,26 @@ public class Text {
   public final static int TYPE_TIME_ZONE = TYPE_SUB_OFFSET * 3 + TYPE_VARIOUS;
 
   public static String escape(String text) {
-    return text.replace('\'', '^').replace('\"', '^').replace('<', '(').replace('>', ')');
+    if (text == null) {
+      return "NULL";
+    } else {
+      return "'" + text.trim().replace('\'', '^').replace('\"', '^').replace('<', '(').replace('>', ')') + "'";
+    }
   }
 
   public synchronized static int reserve(String raw_text, int type) {
-    return reserve(raw_text, "NULL", type, 0);
+    return reserve(raw_text, null, type, 0);
   }
 
   public synchronized static int reserve(String raw_text, String descrid, int type) {
     return reserve(raw_text, descrid, type, 0);
   }
 
-  public synchronized static int reserve(String raw_text, String descrid, int type, int user) {
+  public synchronized static int reserve(String raw_text, String raw_descrid, int type, int user) {
+    String descrid = escape(raw_descrid);
     String text = escape(raw_text);
     String language = Personalize.getLanguage();
-    String existing = Database.query("SELECT id FROM text WHERE " + language + " = '" + text + "'");
+    String existing = Database.query("SELECT id FROM text WHERE " + language + " = " + text);
     if (existing != null) {
       int id = Integer.parseInt(existing);
       String accessible = Database.query("SELECT accessible_by FROM text WHERE id = " + id);
@@ -71,12 +76,10 @@ public class Text {
         accessible_by = String.valueOf(user);
       }
 
-      if (Personalize.LANGUAGE_EN.equals(language)) {
-        Database.execute("INSERT INTO text VALUES (" + id + ", " + accessible_by + ", '" + descrid + "', '" + text + "', NULL)");
-      } else if (Personalize.LANGUAGE_BG.equals(language)) {
-        Database.execute("INSERT INTO text VALUES (" + id + ", " + accessible_by + ", '" + descrid + "', NULL, '" + text + "')");
+      if (Personalize.LANGUAGE_BG.equals(language)) {
+        Database.execute("INSERT INTO text VALUES (" + id + ", " + accessible_by + ", " + descrid + ", NULL, " + text + ")");
       } else {
-        Database.execute("INSERT INTO text VALUES (" + id + ", " + accessible_by + ", '" + text + "', NULL, NULL)");
+        Database.execute("INSERT INTO text VALUES (" + id + ", " + accessible_by + ", " + descrid + ", " + text + ", NULL)");
       }
       return id;
     }

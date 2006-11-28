@@ -12,8 +12,9 @@ public class ComponentSelectTimeZone {
   public static void fill(LocalizedStringBuffer buffer) {
     buffer.append("\r\n<select id='" + Request.CHOICE_TIME_ZONE + "' name='" + Request.CHOICE_TIME_ZONE + "'>");
     for (int i = 0; i < ENUMERATION.length; i++) {
-      buffer.append("\r\n\t<option value='" + ENUMERATION[i] + "' />");
+      buffer.append("\r\n\t<option value='" + ENUMERATION[i] + "'>");
       buffer.append(ENUMERATION[i]);
+      buffer.append("</option>");
     }
     buffer.append("\r\n</select>");
   }
@@ -23,10 +24,11 @@ public class ComponentSelectTimeZone {
     for (int i = 0; i < ENUMERATION.length; i++) {
       buffer.append("\r\n\t<option value='" + ENUMERATION[i] + "'");
       if (ENUMERATION[i].equals(selected)) {
-        buffer.append(" SELECTED");
+        buffer.append(" selected='true'");
       }
-      buffer.append(" />");
+      buffer.append(">");
       buffer.append(ENUMERATION[i]);
+      buffer.append("</option>");
     }
     buffer.append("\r\n</select>");
   }

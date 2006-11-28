@@ -28,7 +28,7 @@ public class FormDiaryRecord extends HTMLFormDisplay {
     buffer.append(":</td>");
     buffer.append("<td><textarea id=\"" + Request.TEXT_NAME + "\" name='" + Request.TEXT_NAME + "' title='");
     buffer.localize("Enter the description of the event here!");
-    buffer.append("' cols=40 rows=6></textarea></td>");
+    buffer.append("' cols='40' rows='6'></textarea></td>");
     buffer.append("</tr>");
     buffer.append("<tr>");
     buffer.append("<td>");
@@ -36,7 +36,7 @@ public class FormDiaryRecord extends HTMLFormDisplay {
     buffer.append(":</td>");
     buffer.append("<td><div title='");
     buffer.localize("This is you.");
-    buffer.append("'>" + Text.getText(request.getUser()) + "</td>");
+    buffer.append("'>" + Text.getText(request.getUser()) + "</div></td>");
     buffer.append("</tr>");
     buffer.append("<tr>");
     buffer.append("<td>");
@@ -73,7 +73,7 @@ public class FormDiaryRecord extends HTMLFormDisplay {
     buffer.append("</table>");
     buffer.append("<input type='submit' value='");
     buffer.localize("Save");
-    buffer.append("'>");
+    buffer.append("' />");
 	}
 
 }

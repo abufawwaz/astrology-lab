@@ -1,16 +1,20 @@
 package astrolab.formula;
 
+import astrolab.formula.score.FormulaScore;
+import astrolab.formula.score.FormulaScoreFactory;
+
 public class FormulaData {
 
-  final static int NULL = -Integer.MAX_VALUE;
+  public final static int NULL = -Integer.MAX_VALUE;
 
   private Formulae formula;
   private FormulaScore score;
-  private int[] value = new int[360];
+  private double[] value = new double[360];
+  private int[] count = new int[360];
 
-  FormulaData(Formulae formula) {
+  FormulaData(Formulae formula, int scoreType) {
     this.formula = formula;
-    this.score = new FormulaScore(this);
+    this.score = FormulaScoreFactory.getScore(scoreType, this);
     for (int i = 0; i < value.length; i++) {
       value[i] = NULL;
     }
@@ -24,15 +28,24 @@ public class FormulaData {
     return formula;
   }
 
-  int[] getValue() {
-    return value;
+  public double[] getValue() {
+    double[] result = new double[360];
+    for (int i = 0; i < result.length; i++) {
+      result[i] = getValue(i);
+    }
+    return result;
+  }
+
+  public double getValue(int index) {
+    return (count[index] > 0) ? value[index] / count[index] : NULL;
   }
 
   public void feed(ElementData data) {
     // check for collision
     double v = formula.calculate(data);
-    score.feed(value, v, data.getTarget());
+    score.feed(v, data.getTarget());
     value[(int) v] = data.getTarget();
+    count[(int) v]++;
   }
 
   public String toString() {

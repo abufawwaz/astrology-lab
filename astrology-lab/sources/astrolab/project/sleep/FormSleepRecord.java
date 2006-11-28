@@ -26,7 +26,7 @@ public class FormSleepRecord extends HTMLFormDisplay {
     buffer.append("<tr>");
     buffer.append("<td>");
     buffer.localize(user);
-    buffer.append("&nbsp;");
+    buffer.append("</td><td>");
     buffer.localize("sleeps");
     buffer.append("</td>");
     buffer.append("</tr>");
@@ -66,14 +66,14 @@ public class FormSleepRecord extends HTMLFormDisplay {
     buffer.append("<td>");
     buffer.localize("Location");
     buffer.append(":</td>");
-    buffer.append("<td><div title=\"");
+    buffer.append("<td><div title='");
     buffer.localize("Report any different location in project Relocation!");
-    buffer.append("\">" + locationName + "</div></td>");
+    buffer.append("'>" + locationName + "</div></td>");
     buffer.append("</tr>");
     buffer.append("</table>");
     buffer.append("<input type='submit' value='");
     buffer.localize("Save");
-    buffer.append("'>");
+    buffer.append("' />");
 	}
 
 }

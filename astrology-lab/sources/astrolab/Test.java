@@ -5,15 +5,22 @@ import java.net.Socket;
 import java.sql.*;
 import java.util.*;
 
+import astrolab.astronom.planet.SolarSystem;
+import astrolab.db.Database;
+import astrolab.db.Event;
 import astrolab.db.Project;
 import astrolab.db.ProjectIterator;
+import astrolab.db.Text;
+import astrolab.formula.ElementSet;
 import astrolab.formula.FormulaPlot;
 import astrolab.formula.Formulae;
 import astrolab.formula.FormulaGenerator;
+import astrolab.formula.score.FormulaScoreFactory;
+import astrolab.project.statistics.InMemoryEvent;
 
 public class Test {
 
-  public static void main(String[] args) throws Exception {
+  public static void main3(String[] args) throws Exception {
     FileInputStream fos = new FileInputStream("testrecords.txt");
     LineNumberReader reader = new LineNumberReader(new InputStreamReader(fos));
     Class.forName("com.mysql.jdbc.Driver");
@@ -71,39 +78,98 @@ public class Test {
     fos.close();
   }
 
-  public static void main3(String[] args) throws Exception {
-    getNumbers();
+  public static void main(String[] args) throws Exception {
+    getSolarNumbers();
   }
 
-  private static void getNumbers() throws Exception {
-    FormulaPlot plot = new FormulaPlot(1000);
+//  private static void getNumbers() throws Exception {
+//    FormulaPlot plot = new FormulaPlot(1000);
+//
+//    String line = null;
+//    java.util.Date date;
+//    int number;
+//    LineNumberReader lines = new LineNumberReader(new InputStreamReader(new FileInputStream("./sources/numbers.txt")));
+//    while ((line = lines.readLine()) != null) {
+//      date = new java.util.Date(line.substring(0, 11));
+////      date.setHours(20);
+//      date.setHours(23);
+//      date.setMinutes(57);
+//      number = Integer.parseInt(line.substring(18, 19));
+////      number = Integer.parseInt(line.substring(16, 17));
+//      plot.feed(date, number);
+//    }
+//    System.out.println(" plot: " + plot.toString(20));
+//    while (true) {
+//      plot.step(100);
+//      System.out.println(" plot: " + plot.toString(20));
+//    }
+//  }
+
+  private static void getSolarNumbers() throws Exception {
+    ElementSet set = new ElementSet(new String[] {
+        SolarSystem.MERCURY,
+        SolarSystem.VENUS,
+        SolarSystem.EARTH,
+        SolarSystem.MARS,
+        SolarSystem.JUPITER,
+        SolarSystem.SATURN,
+        SolarSystem.URANUS,
+        SolarSystem.NEPTUNE,
+        SolarSystem.PLUTO,
+    });
+    FormulaPlot plot = new FormulaPlot(1000, FormulaScoreFactory.SCORE_ACCUMULATIVE, set);
 
     String line = null;
+    String datatext = null;
     java.util.Date date;
+    InMemoryEvent event;
     int number;
-    LineNumberReader lines = new LineNumberReader(new InputStreamReader(new FileInputStream("./sources/numbers.txt")));
-    while ((line = lines.readLine()) != null) {
-      date = new java.util.Date(line.substring(0, 11));
-//      date.setHours(20);
-      date.setHours(23);
-      date.setMinutes(57);
-      number = Integer.parseInt(line.substring(18, 19));
-//      number = Integer.parseInt(line.substring(16, 17));
-      plot.feed(date, number);
+
+    for (int year = 1818; year < 2006; year++) {
+      System.out.println("feed year: " + year);
+      LineNumberReader lines = new LineNumberReader(new InputStreamReader(new FileInputStream("./external-data/sunspots/" + year)));
+  
+      lines.readLine(); // skip title
+      lines.readLine(); // skip first divider
+      lines.readLine(); // skip months line
+      lines.readLine(); // skip second divider
+  
+      for (int day = 1; day < 32; day++) {
+        line = lines.readLine();
+        for (int month = 0; month < 12; month++) {
+          date = new java.util.Date(year - 1900, month, day);
+          datatext = line.substring(month * 6, month * 6 + 4).trim();
+          if (datatext.length() > 0) {
+            try {
+              number =  Integer.parseInt(datatext);
+            } catch (NumberFormatException nfe) {
+              number = 0;
+            }
+  
+//            event = new InMemoryEvent(-1, -1, date, 5000002, "sunspots", "a day", "accurate");
+            int id = Text.reserve("Stats:Sunspot:" + date.getDate()+"."+(date.getMonth() + 1)+"."+(date.getYear() + 1900), Text.TYPE_EVENT);
+            Event.store(id, 0, date.getTime(), 0, Event.TYPE_EVENT, Event.ACCURACY_DAY, Event.SOURCE_ACCURATE);
+            Database.execute("INSERT INTO project_statistics_value VALUES (" + id + ", 3000027, " + number + ")");
+//            System.out.println("feed: " + date + " = " + number);
+//            plot.feed(event, number);
+          }
+        }
+      }
     }
-    System.out.println(" plot: " + plot.toString(20));
-    while (true) {
-      plot.step(100);
-      System.out.println(" plot: " + plot.toString(20));
-    }
+
+//    System.out.println(" plot: " + plot.toString(20));
+//    while (true) {
+//      plot.step(10);
+//      System.out.println(" plot: " + plot.toString(20));
+//    }
   }
 
   public static void main2(String[] args) {
     System.out.println(" formulae: ");
-    Formulae f = FormulaGenerator.generateNext(null);
+    Formulae f = FormulaGenerator.generateNext(null, null);
     for (int i = 0; i < 1000; i++) {
       System.out.println(" " + (i + 1) + ": " + f);
-      f = FormulaGenerator.generateNext(f);
+      f = FormulaGenerator.generateNext(f, null);
     }
     System.out.println(" === ");
   }

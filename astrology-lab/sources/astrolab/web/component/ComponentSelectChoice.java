@@ -10,10 +10,11 @@ public class ComponentSelectChoice {
     for (int i = 0; i < enumeration.length; i++) {
       buffer.append("\r\n\t<option value='" + enumeration[i] + "'");
       if (enumeration[i].equals(selected)) {
-        buffer.append(" SELECTED");
+        buffer.append(" selected='true'");
       }
-      buffer.append(" />");
+      buffer.append(">");
       buffer.localize(enumeration[i]);
+      buffer.append("</option>");
     }
     buffer.append("\r\n</select>");
   }
@@ -23,10 +24,11 @@ public class ComponentSelectChoice {
     for (int i = 0; i < enumeration.length; i++) {
       buffer.append("\r\n\t<option value='" + values[i] + "'");
       if (enumeration[i].equalsIgnoreCase(selected)) {
-        buffer.append(" SELECTED");
+        buffer.append(" selected='true'");
       }
-      buffer.append(" />");
+      buffer.append(">");
       buffer.localize(enumeration[i]);
+      buffer.append("</option>");
     }
     buffer.append("\r\n</select>");
   }

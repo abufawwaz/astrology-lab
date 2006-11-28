@@ -3,7 +3,6 @@ package astrolab.web.project.archive.natal;
 import astrolab.db.Action;
 import astrolab.db.EventIterator;
 import astrolab.db.Personalize;
-import astrolab.db.Text;
 import astrolab.web.Display;
 import astrolab.web.HTMLFormDisplay;
 import astrolab.web.component.ComponentSelectEvent;
@@ -24,22 +23,22 @@ public class DisplayNatalRecords extends HTMLFormDisplay {
     buffer.append(NatalRecord.count());
     buffer.append(" ");
 		buffer.localize("records of births.");
-    buffer.append("<hr>");
+    buffer.append("<hr />");
 
     // Search bar
     buffer.append("<input type='text' id='" + Request.TEXT_NAME + "' name='" + Request.TEXT_NAME + "' value='' title='");
     buffer.localize("Enter part of name or birthplace");
-    buffer.append("'>");
+    buffer.append("' />");
     buffer.append("<input type='submit' value='");
     buffer.localize("Search");
-    buffer.append("'>");
+    buffer.append("' />");
 
-    buffer.append("<hr>");
+    buffer.append("<hr />");
 
     String text = request.get(Request.TEXT_NAME);
 
     if ((text != null) && (text.trim().length() > 0)) {
-      ComponentSelectEvent.fill(buffer, request, EventIterator.iterate(Text.escape(text.trim())));
+      ComponentSelectEvent.fill(buffer, request, EventIterator.iterate(text));
     } else {
       buffer.localize("Your favourites are:");
 

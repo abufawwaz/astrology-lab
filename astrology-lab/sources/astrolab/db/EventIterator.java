@@ -14,9 +14,10 @@ public class EventIterator extends RecordIterator {
     super(set);
   }
 
-  public static EventIterator iterate(String like) {
+  public static EventIterator iterate(String raw_like) {
+    String like = Text.escape("%" + raw_like + "%");
     String query = "SELECT DISTINCT(archive.event_id), subject_id, event_time, location, type, accuracy, source FROM archive, text" +
-      " WHERE (en LIKE '%" + like + "%' OR bg LIKE '%" + like + "%')" +
+      " WHERE (en LIKE " + like + " OR bg LIKE " + like + ")" +
       " AND (id = event_id OR id = subject_id OR id = location) AND (type = 'male' OR type = 'female')";
     return iterate(query, 0, 0);
   }

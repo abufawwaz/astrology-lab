@@ -23,8 +23,9 @@ public class ComponentSelectAccuracy {
   public static void fill(LocalizedStringBuffer buffer) {
     buffer.append("\r\n<select id='" + Request.CHOICE_ACCURACY + "' name='" + Request.CHOICE_ACCURACY + "'>");
     for (int i = 0; i < ENUMERATION.length; i++) {
-      buffer.append("\r\n\t<option value='" + ENUMERATION[i] + "' />");
+      buffer.append("\r\n\t<option value='" + ENUMERATION[i] + "'>");
       buffer.localize(ENUMERATION[i]);
+      buffer.append("</option>");
     }
     buffer.append("\r\n</select>");
   }
@@ -34,10 +35,11 @@ public class ComponentSelectAccuracy {
     for (int i = 0; i < ENUMERATION.length; i++) {
       buffer.append("\r\n\t<option value='" + ENUMERATION[i] + "'");
       if (ENUMERATION[i].equals(selected)) {
-        buffer.append(" SELECTED");
+        buffer.append(" selected='true'");
       }
-      buffer.append(" />");
+      buffer.append(">");
       buffer.localize(ENUMERATION[i]);
+      buffer.append("</option>");
     }
     buffer.append("\r\n</select>");
   }

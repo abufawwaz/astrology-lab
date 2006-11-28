@@ -18,16 +18,16 @@ public class ComponentSelectLattitude {
     buffer.append("\r\n<input type='hidden' id='" + Request.CHOICE_LATTITUDE + "' name='" + Request.CHOICE_LATTITUDE + "' />");
     buffer.append("\r\n<select id='__lattitude_1' onchange='recalculatelattitude(); return false;'>");
     for (int i = 0; i < 90; i++) {
-      buffer.append("\r\n\t<option value='" + i + "' />" + i);
+      buffer.append("\r\n\t<option value='" + i + "'>" + i + "</option>");
     }
     buffer.append("\r\n</select>");
     buffer.append("\r\n<select id='__lattitude_2' onchange='recalculatelattitude(); return false;'>");
-    buffer.append("\r\n\t<option value='N' />N");
-    buffer.append("\r\n\t<option value='S' />S");
+    buffer.append("\r\n\t<option value='N'>N</option>");
+    buffer.append("\r\n\t<option value='S'>S</option>");
     buffer.append("\r\n</select>");
     buffer.append("\r\n<select id='__lattitude_3' onchange='recalculatelattitude(); return false;'>");
     for (int i = 0; i < 60; i++) {
-      buffer.append("\r\n\t<option value='" + i + "' />" + i);
+      buffer.append("\r\n\t<option value='" + i + "'>" + i + "</option>");
     }
     buffer.append("\r\n</select>");
   }

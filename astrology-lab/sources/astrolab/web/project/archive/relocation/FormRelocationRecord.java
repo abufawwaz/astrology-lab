@@ -21,7 +21,7 @@ public class FormRelocationRecord extends HTMLFormDisplay {
     buffer.append("<table border='0'>");
     buffer.append("<tr>");
     buffer.append("<td>Relocation of </td>");
-    buffer.append("<td><div title='This is you.'>" + Text.getText(request.getUser()) + "</td>");
+    buffer.append("<td><div title='This is you.'>" + Text.getText(request.getUser()) + "</div></td>");
     buffer.append("</tr>");
     buffer.append("<tr>");
     buffer.append("<td>Time of relocation:</td>");
@@ -48,7 +48,7 @@ public class FormRelocationRecord extends HTMLFormDisplay {
     buffer.append("</td>");
     buffer.append("</tr>");
     buffer.append("</table>");
-    buffer.append("<input type='submit' value='Save'>");
+    buffer.append("<input type='submit' value='Save' />");
 	}
 
 }

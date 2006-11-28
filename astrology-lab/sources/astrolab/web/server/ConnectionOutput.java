@@ -26,9 +26,8 @@ public class ConnectionOutput {
       baos.write("HTTP/1.1 200 OK".getBytes());
       baos.write(CRLF);
       if (request.getResponse().getType() != null) {
-        baos.write("Content-Type: \"".getBytes());
+        baos.write("Content-Type: ".getBytes());
         baos.write(request.getResponse().getType().getBytes());
-        baos.write("\"".getBytes());
         baos.write(CRLF);
       }
       baos.write("Content-Length: ".getBytes());

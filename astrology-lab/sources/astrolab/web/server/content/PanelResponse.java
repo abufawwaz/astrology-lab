@@ -15,12 +15,12 @@ public class PanelResponse implements Response {
 	}
 
 	public String getType() {
-		String accepted = request.getHeader("Accept");
-		if (accepted != null && accepted.indexOf("application/xhtml+xml") >= 0) {
-  		return null;
-		} else {
+//		String accepted = request.getHeader("Accept");
+//		if (accepted != null && accepted.indexOf("application/xhtml+xml") >= 0) {
+//  		return null;
+//		} else {
 			return request.getDisplay().getType();
-		}
+//		}
 	}
 
 	public byte[] getBytes() {

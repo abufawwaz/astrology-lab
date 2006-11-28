@@ -28,11 +28,15 @@ public class Time extends GregorianCalendar {
       DateFormat dateFormat = new SimpleDateFormat("kk:mm:ss dd-MM-yyyy");
       TimeZone zone = Location.getLocation(location).getTimeZone();
       dateFormat.setTimeZone(zone);
+      this.setTimeZone(zone);
+
       long timestamp = dateFormat.parse(text).getTime();
       this.setTimeInMillis(timestamp);
-      this.setTimeZone(zone);
+    } catch (NullPointerException e) {
+      this.setTimeInMillis(System.currentTimeMillis());
     } catch (ParseException e) {
       e.printStackTrace();
+      this.setTimeInMillis(System.currentTimeMillis());
     }
   }
 
@@ -96,6 +100,11 @@ public class Time extends GregorianCalendar {
 
   public String toSimpleString() {
     return get(DAY_OF_MONTH) + " " + Text.getText(MONTHS_SHORT[get(MONTH)]) + " " + get(YEAR) + " "
+            + format(get(HOUR_OF_DAY)) + ":" + format(get(MINUTE)) + ":" + format(get(SECOND));
+  }
+
+  public String toMySQLString() {
+    return get(YEAR) + "-" + get(MONTH) + "-" + get(DAY_OF_MONTH) + " "
             + format(get(HOUR_OF_DAY)) + ":" + format(get(MINUTE)) + ":" + format(get(SECOND));
   }
 
