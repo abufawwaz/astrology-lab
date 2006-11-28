@@ -41,13 +41,13 @@ public class ComponentSelectEvent {
 
     buffer.append("<td>");
     if (isSelected) {
-      buffer.append("<b><font color=\"green\">");
+      buffer.append("<b><font color='green'>");
     }
     buffer.append(event.getEvent());
     if (isSelected) {
       buffer.append("</font></b>");
     }
-    buffer.append("</a></td>");
+    buffer.append("</td>");
 
     buffer.append("<td>");
     buffer.append(event.getLocation().toString());

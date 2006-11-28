@@ -2,16 +2,16 @@ package astrolab.formula;
 
 public class FormulaGenerator {
 
-  public final static Formulae generateNext(Formulae f1) {
+  public final static Formulae generateNext(Formulae f1, ElementSet elements) {
     boolean skipper = false;
     Formulae f2 = f1;
     Formulae f3 = f1;
     Element[] e;
     if (f1 == null) {
-      return next(null);
+      return next(null, elements);
     }
     while (true) {
-      f3 = next(f2);
+      f3 = next(f2, elements);
       e = f3.getElements();
 
       skipper = false;
@@ -29,8 +29,8 @@ public class FormulaGenerator {
     return f3;
   }
 
-  private final static Formulae next(Formulae f1) {
-    Element first = Element.getElements()[0];
+  private final static Formulae next(Formulae f1, ElementSet elements) {
+    Element first = elements.getElements()[0];
     if (f1 == null) {
       return new Formulae(new Element[] { first }, 1);
     } else if (f1.getDivedBy() < f1.getElements().length / 2 - 1) {
@@ -38,7 +38,7 @@ public class FormulaGenerator {
     } else {
       Element[] e = f1.getElements();
       for (int i = 0; i < e.length; i++) {
-        Element n = next(e, i);
+        Element n = next(e, i, elements);
         if (n != null) {
           Element[] ne = (Element[]) e.clone();
           for (int j = 0; j < i; j++) {
@@ -56,8 +56,8 @@ public class FormulaGenerator {
     }
   }
 
-  private final static Element next(Element[] e, int index) {
-    Element[] all = Element.getElements();
+  private final static Element next(Element[] e, int index, ElementSet elements) {
+    Element[] all = elements.getElements();
     int i = e[index].getIndex() + 1;
     //check if already in formulae
     while (i < all.length && !accept(e, index, all[i])) i++;

@@ -14,7 +14,7 @@ public class ComponentSelectTime {
   public static void fill(LocalizedStringBuffer buffer, String choice_id) {
     Properties parameters = new Properties();
     parameters.setProperty("{0}", choice_id);
-    parameters.setProperty("{1}", "false");
+    parameters.setProperty("{1}", "true");
     parameters.put("{2}", "");
 
     buffer.append(Template.populate(RAW_CONTENTS, parameters));

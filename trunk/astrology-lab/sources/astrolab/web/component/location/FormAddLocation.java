@@ -20,7 +20,7 @@ public class FormAddLocation extends HTMLFormDisplay {
     buffer.append(":</td>");
     buffer.append("<td><input id=\"" + Request.TEXT_NAME + "\" type='text' name='" + Request.TEXT_NAME + "' value='");
     buffer.localize("... not set ...");
-    buffer.append("'></td>");
+    buffer.append("' /></td>");
     buffer.append("</tr>");
     buffer.append("<tr>");
     buffer.append("<td>");
@@ -28,6 +28,7 @@ public class FormAddLocation extends HTMLFormDisplay {
     buffer.append(":</td>");
     buffer.append("<td>");
     ComponentSelectLocation.fill(buffer);
+    buffer.append("</td>");
     buffer.append("</tr>");
     buffer.append("<tr>");
     buffer.append("<td>");
@@ -56,7 +57,7 @@ public class FormAddLocation extends HTMLFormDisplay {
     buffer.append("</table>");
     buffer.append("<input type='submit' value='");
     buffer.localize("Save");
-    buffer.append("'>");
+    buffer.append("' />");
 	}
 
 }

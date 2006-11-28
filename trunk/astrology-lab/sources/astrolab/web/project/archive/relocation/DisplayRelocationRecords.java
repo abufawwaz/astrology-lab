@@ -15,7 +15,7 @@ public class DisplayRelocationRecords extends HTMLDisplay {
 
     buffer.append("Relocations of ");
     buffer.append(Text.getText(request.getUser()));
-    buffer.append(":<hr>");
+    buffer.append(":<hr />");
 
     buffer.append("<table><tr><th>Relocated to</th><th>At</th><th>Accuracy</th><th>Source</th></tr>");
     while (iterator.hasNext()) {
@@ -28,7 +28,7 @@ public class DisplayRelocationRecords extends HTMLDisplay {
       buffer.append(relocation.getEventId());
       buffer.append("'))\">");
       if (isSelected) {
-        buffer.append("<b><font color=\"green\">");
+        buffer.append("<b><font color='green'>");
       }
 			buffer.append(Text.getText(relocation.getLocation().getId()));
       if (isSelected) {

@@ -30,13 +30,12 @@ public class DisplayProjectDescription extends HTMLFormDisplay {
       buffer.append(" / ");
       buffer.localize("Opinion");
       buffer.append("</th>");
-      buffer.append("<th width=30>");
+      buffer.append("<th width='30'>");
       buffer.localize("Pro");
-      buffer.append("</th><th width=30>");
+      buffer.append("</th><th width='30'>");
       buffer.append(Text.getText("Con"));
       buffer.append("</th>");
       buffer.append("</tr>");
-      buffer.append("<tr>");
 
       FeedbackRecordIterator records = FeedbackRecordIterator.iterate(request, project);
 
@@ -78,17 +77,17 @@ public class DisplayProjectDescription extends HTMLFormDisplay {
       }
 
       buffer.append("<tr>");
-      buffer.append("<td><center>");
+      buffer.append("\r\n<td><center>");
       buffer.append("<textarea name='feedback' cols='65%' rows='10'></textarea>");
-      buffer.append("</td>");
-      buffer.append("<td colspan='2' valign='bottom'>");
+      buffer.append("</center></td>");
+      buffer.append("\r\n<td colspan='2' valign='bottom'><center>");
       buffer.append("<input type='submit' value='");
       buffer.localize("Save");
       buffer.append("' />");
       buffer.append("</center></td>");
-      buffer.append("</tr>");
+      buffer.append("\r\n</tr>");
 
-      buffer.append("</table>");
+      buffer.append("\r\n</table>");
     } else {
       buffer.localize("Please, select a project!");
     }

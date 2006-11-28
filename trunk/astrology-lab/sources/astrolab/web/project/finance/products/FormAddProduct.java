@@ -17,9 +17,9 @@ public class FormAddProduct extends HTMLFormDisplay {
     buffer.append("<td>");
     buffer.localize("Product");
     buffer.append(":</td>");
-    buffer.append("<td><input id=\"" + Request.TEXT_NAME + "\" type='text' name='" + Request.TEXT_NAME + "' value='");
+    buffer.append("<td><input id='" + Request.TEXT_NAME + "' type='text' name='" + Request.TEXT_NAME + "' value='");
     buffer.localize("... not set ...");
-    buffer.append("'></td>");
+    buffer.append("' /></td>");
     buffer.append("</tr>");
     buffer.append("<tr>");
     buffer.append("<td>");
@@ -27,11 +27,12 @@ public class FormAddProduct extends HTMLFormDisplay {
     buffer.append(":</td>");
     buffer.append("<td>");
     ComponentSelectProduct.fill(buffer);
+    buffer.append("</td>");
     buffer.append("</tr>");
     buffer.append("</table>");
     buffer.append("<input type='submit' value='");
     buffer.localize("Save");
-    buffer.append("'>");
+    buffer.append("' />");
 	}
 
 }

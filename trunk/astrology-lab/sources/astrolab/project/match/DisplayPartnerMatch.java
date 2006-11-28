@@ -25,15 +25,15 @@ public class DisplayPartnerMatch extends HTMLDisplay {
     double c2 = 0;
 
     buffer.append("<table border='2'>");
-    buffer.append("<tr><th rowspan=3>");
+    buffer.append("<tr><th rowspan='3'>");
     buffer.localize("Factor");
-    buffer.append("</th><th></th><th colspan=3>");
+    buffer.append("</th><th></th><th colspan='3'>");
     buffer.localize(person1.getSubjectId());
-    buffer.append("</th><th></th><th colspan=3>");
+    buffer.append("</th><th></th><th colspan='3'>");
     buffer.localize(person2.getSubjectId());
     buffer.append("</th></tr>");
 
-    buffer.append("<tr><th></th><th rowspan=2>Position</th><th colspan=2>Influence</th><th></th><th rowspan=2>Position</th><th colspan=2>Influence</th></tr>");
+    buffer.append("<tr><th></th><th rowspan='2'>Position</th><th colspan='2'>Influence</th><th></th><th rowspan='2'>Position</th><th colspan='2'>Influence</th></tr>");
 
     buffer.append("<tr><th></th><th>General</th><th>Indiviual</th><th></th><th>General</th><th>Indiviual</th></tr>");
 
@@ -58,10 +58,10 @@ public class DisplayPartnerMatch extends HTMLDisplay {
     }
     buffer.append("</table>");
 
-    buffer.append("<br>");
+    buffer.append("<br />");
 
     buffer.append("<table border='2'>");
-    buffer.append("<tr><th rowspan=2>Factor</th><th></th><th colspan=5>" + person1.getSubject() + "</th><th></th><th colspan=5>" + person2.getSubject() + "</th></tr>");
+    buffer.append("<tr><th rowspan='2'>Factor</th><th></th><th colspan='5'>" + person1.getSubject() + "</th><th></th><th colspan='5'>" + person2.getSubject() + "</th></tr>");
     buffer.append("<tr><th></th><th>Vision</th><th>V-I</th><th>Image</th><th>I-R</th><th>Reality</th><th></th><th>Vision</th><th>V-I</th><th>Image</th><th>I-R</th><th>Reality</th></tr>");
     for (int i = 0; i < factorsPartner1.length; i++) {
       double cvi1 = factorsPartner1[i].getVisionVsImage(partner2);
@@ -109,7 +109,7 @@ public class DisplayPartnerMatch extends HTMLDisplay {
     }
     buffer.append("</table>");
 
-    buffer.append("<br>");
+    buffer.append("<br />");
 
     buffer.append("<table border='2'>");
     buffer.append("<tr><th>Person</th><th>Vision vs. Image</th><th>Image vs. Reality</th><th>Compatibility</th></tr>");
@@ -142,7 +142,7 @@ public class DisplayPartnerMatch extends HTMLDisplay {
 
     buffer.append("</table>");
 
-    buffer.append("<hr> Overall Compatibility: ");
+    buffer.append("<hr /> Overall Compatibility: ");
     buffer.append((int) Math.sqrt(c1 * c2));
   }
 

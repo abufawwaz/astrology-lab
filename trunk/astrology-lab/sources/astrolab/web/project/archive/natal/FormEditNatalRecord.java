@@ -27,26 +27,29 @@ public class FormEditNatalRecord extends HTMLFormDisplay {
     buffer.append("<td>");
     buffer.append("<select id='_event_type' name='_event_type'>");
     if (NatalRecord.TYPE_MALE.equals(record.getType())) {
-      buffer.append("<option value='" + NatalRecord.TYPE_MALE + "' SELECTED />");
+      buffer.append("<option value='" + NatalRecord.TYPE_MALE + "' selected='true'>");
     } else {
-      buffer.append("<option value='" + NatalRecord.TYPE_MALE + "' />");
+      buffer.append("<option value='" + NatalRecord.TYPE_MALE + "'>");
     }
     buffer.localize(NatalRecord.TYPE_MALE);
+    buffer.append("</option>");
     if (NatalRecord.TYPE_FEMALE.equals(record.getType())) {
-      buffer.append("<option value='" + NatalRecord.TYPE_FEMALE + "' SELECTED />");
+      buffer.append("<option value='" + NatalRecord.TYPE_FEMALE + "' selected='true'>");
     } else {
-      buffer.append("<option value='" + NatalRecord.TYPE_FEMALE + "' />");
+      buffer.append("<option value='" + NatalRecord.TYPE_FEMALE + "'>");
     }
     buffer.localize(NatalRecord.TYPE_FEMALE);
+    buffer.append("</option>");
     if (NatalRecord.TYPE_EVENT.equals(record.getType())) {
-      buffer.append("<option value='" + NatalRecord.TYPE_EVENT + "' SELECTED />");
+      buffer.append("<option value='" + NatalRecord.TYPE_EVENT + "' selected='true'>");
     } else {
-      buffer.append("<option value='" + NatalRecord.TYPE_EVENT + "' />");
+      buffer.append("<option value='" + NatalRecord.TYPE_EVENT + "'>");
     }
     buffer.localize(NatalRecord.TYPE_EVENT);
+    buffer.append("</option>");
     buffer.append("</select>");
     buffer.append("</td>");
-    buffer.append("<td><input id=\"" + Request.TEXT_NAME + "\" type='text' name='" + Request.TEXT_NAME + "' value='");
+    buffer.append("<td><input id='" + Request.TEXT_NAME + "' type='text' name='" + Request.TEXT_NAME + "' value='");
     buffer.localize(record.getSubject());
     buffer.append("' /></td>");
     buffer.append("</tr>");

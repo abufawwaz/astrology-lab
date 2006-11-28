@@ -18,16 +18,16 @@ public class ComponentSelectLongitude {
     buffer.append("\r\n<input type='hidden' id='" + Request.CHOICE_LONGITUDE + "' name='" + Request.CHOICE_LONGITUDE + "' />");
     buffer.append("\r\n<select id='__longitude_1' onchange='recalculateLongitude(); return false;'>");
     for (int i = 0; i < 180; i++) {
-      buffer.append("\r\n\t<option value='" + i + "' />" + i);
+      buffer.append("\r\n\t<option value='" + i + "'>" + i + "</option>");
     }
     buffer.append("\r\n</select>");
     buffer.append("\r\n<select id='__longitude_2' onchange='recalculateLongitude(); return false;'>");
-    buffer.append("\r\n\t<option value='E' />E");
-    buffer.append("\r\n\t<option value='W' />W");
+    buffer.append("\r\n\t<option value='E'>E</option>");
+    buffer.append("\r\n\t<option value='W'>W</option>");
     buffer.append("\r\n</select>");
     buffer.append("\r\n<select id='__longitude_3' onchange='recalculateLongitude(); return false;'>");
     for (int i = 0; i < 60; i++) {
-      buffer.append("\r\n\t<option value='" + i + "' />" + i);
+      buffer.append("\r\n\t<option value='" + i + "'>" + i + "</option>");
     }
     buffer.append("\r\n</select>");
   }

@@ -6,15 +6,15 @@ import astrolab.web.server.content.LocalizedStringBuffer;
 public abstract class HTMLDisplay extends Display {
 
   public final static String getExtension() {
-    return "html";
+    return "xhtml";
   }
 
   public String getType() {
-    return null;
+    return "application/xhtml+xml";
   }
 
   public void fillContent(Request request, LocalizedStringBuffer buffer) {
-    buffer.append("<html>");
+    buffer.append("<html xmlns=\"http://www.w3.org/1999/xhtml\" xmlns:svg=\"http://www.w3.org/2000/svg\">");
     buffer.append("\r\n<head>");
     buffer.append("\r\n\t<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />");
     buffer.append("\r\n</head>");

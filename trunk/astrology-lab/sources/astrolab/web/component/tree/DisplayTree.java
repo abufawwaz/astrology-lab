@@ -43,11 +43,11 @@ public abstract class DisplayTree extends HTMLDisplay {
           if (parentNode != null) {
             buffer.append("<a href=\"?_d=");
             buffer.append(id);
-            buffer.append("&");
+            buffer.append("&amp;");
             buffer.append(choiceId);
             buffer.append("=");
             buffer.append(parentNode.getId());
-            buffer.append("\"><i>&lt;&lt;&nbsp;");
+            buffer.append("\"><i>&lt;&lt; ");
             if (parentNode.getId() > 0) {
               buffer.append(parentNode.getText(false));
             }
@@ -58,7 +58,7 @@ public abstract class DisplayTree extends HTMLDisplay {
           e.printStackTrace();
         }
         buffer.append(seletedNode.toString());
-        buffer.append(": <br>");
+        buffer.append(": <br />");
       }
     } catch (Exception e) {
       e.printStackTrace();
@@ -71,21 +71,21 @@ public abstract class DisplayTree extends HTMLDisplay {
       TreeObject child = (TreeObject) iterator.next();
       subtrees.add(new Integer(child.getId()));
 
-      buffer.append("&nbsp;<a href=\"?_d=");
+      buffer.append(" <a href=\"?_d=");
       buffer.append(id);
-      buffer.append("&");
+      buffer.append("&amp;");
       buffer.append(choiceId);
       buffer.append("=");
       buffer.append(child.getId());
       buffer.append("\"><i>&gt;&gt;</i></a>");
 
-      buffer.append("&nbsp;<a href=\"javascript:if (parent != top) parent.select(new Array('");
+      buffer.append(" <a href=\"javascript:if (parent != top) parent.select(new Array('");
       buffer.append(child.getId());
       buffer.append("', '");
       buffer.append(child.getText(false));
       buffer.append("'))\">");
       buffer.append(child.getText(true));
-      buffer.append("</a><br>");
+      buffer.append("</a><br />");
     }
 
     iterator = selectionRoot.iterateChildren();
@@ -93,13 +93,13 @@ public abstract class DisplayTree extends HTMLDisplay {
       TreeObject child = (TreeObject) iterator.next();
 
       if (!subtrees.contains(new Integer(child.getId()))) {
-        buffer.append("&nbsp;<a href=\"javascript:if (parent != top) parent.select(new Array('");
+        buffer.append(" <a href=\"javascript:if (parent != top) parent.select(new Array('");
         buffer.append(child.getId());
         buffer.append("', '");
         buffer.append(child.getText(false));
         buffer.append("'))\">");
         buffer.append(child.getText(true));
-        buffer.append("</a><br>");
+        buffer.append("</a><br />");
       }
     }
   }

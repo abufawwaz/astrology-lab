@@ -22,17 +22,20 @@ public class FormCreateNatalRecord extends HTMLFormDisplay {
     buffer.append("<tr>");
     buffer.append("<td>");
     buffer.append("<select id='_event_type' name='_event_type'>");
-    buffer.append("<option value='" + NatalRecord.TYPE_MALE + "' SELECTED>");
+    buffer.append("<option value='" + NatalRecord.TYPE_MALE + "' selected='true'>");
     buffer.localize(NatalRecord.TYPE_MALE);
+    buffer.append("</option>");
     buffer.append("<option value='" + NatalRecord.TYPE_FEMALE + "'>");
     buffer.localize(NatalRecord.TYPE_FEMALE);
+    buffer.append("</option>");
     buffer.append("<option value='" + NatalRecord.TYPE_EVENT + "'>");
     buffer.localize(NatalRecord.TYPE_EVENT);
+    buffer.append("</option>");
     buffer.append("</select>");
     buffer.append("</td>");
     buffer.append("<td><input id=\"" + Request.TEXT_NAME + "\" type='text' name='" + Request.TEXT_NAME + "' value='");
     buffer.localize("... not set ...");
-    buffer.append("'></td>");
+    buffer.append("' /></td>");
     buffer.append("</tr>");
     buffer.append("<tr>");
     buffer.append("<td>");
@@ -79,7 +82,7 @@ public class FormCreateNatalRecord extends HTMLFormDisplay {
     buffer.append("</table>");
     buffer.append("<input type='submit' value='");
     buffer.localize("Save");
-    buffer.append("'>");
+    buffer.append("' />");
 	}
 
 }

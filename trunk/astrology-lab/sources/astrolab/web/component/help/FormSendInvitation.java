@@ -70,9 +70,9 @@ public class FormSendInvitation extends HTMLFormDisplay {
 
       buffer.append("<tr>");
       buffer.append("<td colspan='2'>");
-      buffer.append("<hr><center>Keep this e-mail and use it to enter <b><i>www.</i></b><b><i>astrology-lab</i></b><b><i>.net</i></b> with your profile!</center>");
-      buffer.append("<br><br><center><input type='button' value='Enter www.astrology-lab.net'></center>");
-      buffer.append("<br><hr><center>Do not forward or send this e-mail to anyone!</center>");
+      buffer.append("<hr /><center>Keep this e-mail and use it to enter <b><i>www.</i></b><b><i>astrology-lab</i></b><b><i>.net</i></b> with your profile!</center>");
+      buffer.append("<br /><br /><center><input type='button' value='Enter www.astrology-lab.net' /></center>");
+      buffer.append("<br /><hr /><center>Do not forward or send this e-mail to anyone!</center>");
       buffer.append("</td>");
       buffer.append("</tr>");
 

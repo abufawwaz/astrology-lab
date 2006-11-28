@@ -20,9 +20,9 @@ public class FormGiveFeedback extends HTMLFormDisplay {
     buffer.append("<input type='hidden' name='disapprove' value='-1' />");
     buffer.append("<table border='0'>");
     buffer.append("<tr>");
-    buffer.append("<th width=30>");
+    buffer.append("<th width='30'>");
     buffer.localize("Pro");
-    buffer.append("</th><th width=30>");
+    buffer.append("</th><th width='30'>");
     buffer.append(Text.getText("Con"));
     buffer.append("</th><th>");
     buffer.localize("Message");
@@ -31,9 +31,9 @@ public class FormGiveFeedback extends HTMLFormDisplay {
     buffer.append("</th>");
     buffer.append("</tr>");
     buffer.append("<tr>");
-    buffer.append("<td colspan=3><center>");
+    buffer.append("<td colspan='3'><center>");
     buffer.append("<textarea name='feedback' cols='80%' rows='10'></textarea>");
-    buffer.append("<br>");
+    buffer.append("<br />");
     buffer.append("<input type='submit' value='");
     buffer.localize("Save");
     buffer.append("' />");

@@ -1,25 +1,30 @@
 package astrolab.formula;
 
-import java.util.Date;
 import java.util.Vector;
+
+import astrolab.db.Event;
 
 public class FormulaPlot {
 
   private int size;
+  private int scoreType;
   private Vector formula;
   private Vector dates;
   private Formulae lastFormula = null;
+  private ElementSet elementSet = null;
 
-  public FormulaPlot(int size) {
+  public FormulaPlot(int size, int scoreType, ElementSet elementSet) {
     this.size = size;
+    this.scoreType = scoreType;
+    this.elementSet = elementSet;
     this.formula = new Vector(size);
     this.dates = new Vector();
 
     feed();
   }
 
-  public void feed(Date date, int number) {
-    ElementData data = new ElementData(date, number);
+  public void feed(Event event, int number) {
+    ElementData data = new ElementData(elementSet, event, number);
     dates.add(data);
 
     for (int i = 0; i < formula.size(); i++) {
@@ -38,8 +43,8 @@ public class FormulaPlot {
   private void feed() {
     FormulaData data;
     while (formula.size() < size) {
-      lastFormula = FormulaGenerator.generateNext(lastFormula);
-      data = new FormulaData(lastFormula);
+      lastFormula = FormulaGenerator.generateNext(lastFormula, elementSet);
+      data = new FormulaData(lastFormula, scoreType);
       formula.add(data);
 
       for (int i = 0; i < dates.size(); i++) {
