@@ -43,14 +43,14 @@ public class Processor {
     if (request.getRequestedDisplay() >= 0) {
       request.setDisplay(Display.getView(request.getRequestedDisplay()));
     } else {
-      process(request, request.getAction(), request.getViewFrame());
+      process(request, request.getAction());
     }
 
     connection.getOutput().respond(request);
     return request;
 	}
 
-  private void process(Request request, int arg_action, int viewFrame) {
+  private void process(Request request, int arg_action) {
     int from_view = Display.getCurrentView(request);
     int action = determineAction(arg_action, from_view);
 
