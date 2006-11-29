@@ -71,19 +71,17 @@ public abstract class DisplayTree extends HTMLDisplay {
       TreeObject child = (TreeObject) iterator.next();
       subtrees.add(new Integer(child.getId()));
 
-      buffer.append(" <a href=\"?_d=");
+      buffer.append(" <a href=\"javascript:if (parent != top) parent.select(new Array('");
+      buffer.append(child.getId());
+      buffer.append("', '");
+      buffer.append(child.getText(false));
+      buffer.append("', false)); window.location.href='?_d=");
       buffer.append(id);
       buffer.append("&amp;");
       buffer.append(choiceId);
       buffer.append("=");
       buffer.append(child.getId());
-      buffer.append("\"><i>&gt;&gt;</i></a>");
-
-      buffer.append(" <a href=\"javascript:if (parent != top) parent.select(new Array('");
-      buffer.append(child.getId());
-      buffer.append("', '");
-      buffer.append(child.getText(false));
-      buffer.append("'))\">");
+      buffer.append("'\">");
       buffer.append(child.getText(true));
       buffer.append("</a><br />");
     }
@@ -97,7 +95,7 @@ public abstract class DisplayTree extends HTMLDisplay {
         buffer.append(child.getId());
         buffer.append("', '");
         buffer.append(child.getText(false));
-        buffer.append("'))\">");
+        buffer.append("', true))\">");
         buffer.append(child.getText(true));
         buffer.append("</a><br />");
       }

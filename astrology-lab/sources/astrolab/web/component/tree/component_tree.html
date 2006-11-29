@@ -1,7 +1,12 @@
 <script language="JavaScript">
 //<![CDATA[
 function comp_function_show() {
- document.getElementById('comp_id_tree_div').style.visibility = 'visible'
+ tree_style = document.getElementById('comp_id_tree_div').style
+ if (tree_style.visibility == 'hidden') {
+  tree_style.visibility = 'visible'
+ } else {
+  tree_style.visibility = 'hidden'
+ }
 }
 
 function comp_function_replace(old_parent, new_element, old_id) {
@@ -16,7 +21,11 @@ function comp_function_replace(old_parent, new_element, old_id) {
 
 function select(selection) {
  document.getElementById('comp_id_tree_selection').value = selection[0]
- document.getElementById('comp_id_tree_div').style.visibility = 'hidden'
+
+ // if leaf, hide the selection panel on selection
+ if (selection[2]) {
+  document.getElementById('comp_id_tree_div').style.visibility = 'hidden'
+ }
 
  var link_choice = document.createElement('div')
  link_choice.appendChild(document.createTextNode(selection[1]))
@@ -31,6 +40,6 @@ function select(selection) {
 <a id='comp_id_tree_text' href='#' onclick='comp_function_show(); return false;'><div id='comp_id_tree_choice'>{2}</div></a>
 
 <div id='comp_id_tree_div' style='position:absolute; background-color:#ffffff; visibility:hidden'>
- <iframe src='{3}' width='100%' height='100%'>
+ <iframe src='{3}' width='300px' height='400px'>
  </iframe>
 </div>
