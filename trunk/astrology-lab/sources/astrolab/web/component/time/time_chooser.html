@@ -2,7 +2,7 @@
 <a id='id_{0}_choice' href='#' onclick='function_{0}_show(); return false;'><div id='id_{0}_link_choice'>Now</div></a>
 
 <script language="JavaScript">
-<![CDATA[
+// <![CDATA[
 var field_{0}_isDateNow = {1}
 var field_{0}_date = new Date({2})
 var field_{0}_month_name = new Array('January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December' )
@@ -55,24 +55,22 @@ function function_{0}_display_twodigits(digits) {
  return choice.substring(choice.length - 2)
 }
 
-]]>
+// ]]>
 </script>
 
 <div id='div_{0}_time_chooser' style='position:absolute; background-color:#ffffff; visibility:hidden'>
 
 <style type='text/css'>
-<![CDATA[
 .css_{0}_current_date { text-align: center; font-size: larger; font-weight: bold; color: black; text-decoration: none; }
 .css_{0}_other_date { text-align: center; font-size: smaller; color: blue; text-decoration: none; }
 .css_{0}_tiny_date { text-align: center; font-size: xx-small; color: blue; text-decoration: none; }
 .css_{0}_work_date { text-align: right; color: black; text-decoration: none; }
 .css_{0}_free_date { text-align: right; color: green; text-decoration: none; }
 .css_{0}_handle_hours { text-align: center; vertical-align: 25%; color: black; font-size: x-small; text-decoration: none; }
-]]>
 </style>
 
 <script language="JavaScript">
-<![CDATA[
+// <![CDATA[
 function function_{0}_generate(new_date) {
  field_{0}_date = new_date
 
@@ -180,6 +178,7 @@ function function_{0}_generateThirdRow() {
   if (!document.getElementById("id_{0}_date_0")) {
     table_element = document.getElementById("id_{0}_date_table")
     for (tr = 0, dindex = 0; tr < 6; tr++) {
+      table_tbody = document.createElement('tbody')
       table_tr = document.createElement('tr')
       for (td = 0; td < 7; td++) {
         table_td = document.createElement('td')
@@ -187,7 +186,8 @@ function function_{0}_generateThirdRow() {
         table_td.setAttribute('class', 'css_{0}_work_date')
         table_tr.appendChild(table_td)
       }
-      table_element.appendChild(table_tr)
+      table_tbody.appendChild(table_tr)
+      table_element.appendChild(table_tbody)
     }
   }
 
@@ -256,7 +256,7 @@ function function_{0}_move_chooseDate() {
  function_{0}_generate(field_{0}_date)
  return false
 }
-]]>
+// ]]>
 </script>
 
  <table border='1'>
