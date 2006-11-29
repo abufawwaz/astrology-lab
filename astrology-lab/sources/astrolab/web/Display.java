@@ -41,10 +41,10 @@ public abstract class Display {
   }
 
   public static int getCurrentView(Request request) {
-		return Personalize.getFavourite(-1, ((request.getViewFrame() == 0) ? Personalize.KEY_VIEW_1 : Personalize.KEY_VIEW_2), 0);
+		return Personalize.getFavourite(-1, Personalize.KEY_VIEW_1, 0);
   }
   public static void setCurrentView(int view, Request request) {
-    Personalize.addFavourite(-1, view, (request.getViewFrame() == 0) ? Personalize.KEY_VIEW_1 : Personalize.KEY_VIEW_2);
+    Personalize.addFavourite(-1, view, Personalize.KEY_VIEW_1);
   }
 
 	public final static Display getView(int intid) {

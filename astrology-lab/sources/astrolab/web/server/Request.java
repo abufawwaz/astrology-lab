@@ -15,7 +15,6 @@ public class Request {
 
   public final static String TEXT_ACTION = "_a";
   public final static String TEXT_DISPLAY = "_d";
-  public final static String TEXT_VIEW_FRAME = "_v";
   public final static String TEXT_SELECTION = "_s";
   public final static String TEXT_PATH = "_p";
   public final static String TEXT_NAME = "_name";
@@ -31,7 +30,6 @@ public class Request {
   private int user = -1;
   private int requestedDisplay = -1;
   private int action = -1;
-  private int viewFrame = -1;
   private int[] selection = new int[0];
   private int[] path = new int[0];
 
@@ -77,10 +75,6 @@ public class Request {
 
   public int getRequestedDisplay() {
     return requestedDisplay;
-  }
-
-  public int getViewFrame() {
-    return viewFrame;
   }
 
   public int[] getSelection() {
@@ -154,8 +148,6 @@ public class Request {
         requestedDisplay = (parameterValue != null && parameterValue.length() > 0) ? Integer.parseInt(parameterValue) : 0;
       } else if (TEXT_ACTION.equals(parameterKey)) {
         action = (parameterValue != null && parameterValue.length() > 0) ? Integer.parseInt(parameterValue) : 0;
-      } else if (TEXT_VIEW_FRAME.equals(parameterKey)) {
-        viewFrame = (parameterValue != null && parameterValue.length() > 0) ? Integer.parseInt(parameterValue) : 0;
       } else if (TEXT_SELECTION.equals(parameterKey)) {
         if (parameterValue != null && parameterValue.length() > 0) {
           int i = 0;
