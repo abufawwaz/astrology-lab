@@ -5,18 +5,14 @@
    www.astrology-lab.net
   </title>
  </head>
+ 
  <script language="JavaScript">
   var current_path = ""
   var controlView = -1;
 
   function go(action, extension) {
-   if (controlView == 0) {
-     frames['view0'].location.href="root." + extension + "?_v=0&_a=" + action
-     frames['menu'].location.href="menu.html?_v=0&_a=" + action + "&_p=" + current_path
-   } else {
-     frames['view1'].location.href="root." + extension + "?_v=1&_a=" + action
-     frames['menu'].location.href="menu.html?_v=1&_a=" + action + "&_p=" + current_path
-   }
+   frames['view'].location.href="root." + extension + "?_a=" + action
+   frames['menu'].location.href="menu.html?_a=" + action + "&_p=" + current_path
   }
 
   function path(path_selection) {
@@ -29,47 +25,13 @@
    for (var i = 1; i < selection.length; i++) {
      s += ":" + selection[i]
    }
-   if (controlView == 0) {
-     frames['view0'].location.href=frames['view0'].location.pathname + "?_v=0&_s=" + s
-   } else {
-     frames['view1'].location.href=frames['view1'].location.pathname + "?_v=1&_s=" + s
-   }
-   frames['menu'].location.href="menu.html?_v=" + controlView + "&_s=" + s + "&_p=" + current_path
-  }
-
-  function setControlView(control_id) {
-   if (controlView != control_id) {
-     controlView = control_id;
-
-     if (controlView == 0) {
-       frames['control0'].controlled = true
-       frames['control0'].freezed = false
-       frames['control1'].control(false)
-     } else {
-       frames['control1'].controlled = true
-       frames['control1'].freezed = false
-       frames['control0'].control(false)
-     }
-     frames['control0'].process()
-     frames['control1'].process()
-   }
-  }
-
-  function controlReady() {
-    frames['control0'].control_id = 0;
-    frames['control1'].control_id = 1;
-    setControlView(0);
+   frames['view'].location.href=frames['view'].location.pathname + "?_s=" + s
+   frames['menu'].location.href="menu.html?_s=" + s + "&_p=" + current_path
   }
  </script>
- <frameset cols="200, *, 200" border="1" onload="controlReady()">
+ 
+ <frameset cols="200, *" border="1">
   <frame name="menu" src="menu.html">
-  <frameset rows="*, 30">
-   <frame name="view0" src="root.html">
-   <frame name="control0" src="frame_control.html" scrolling="no">
-  </frameset>
-  <frameset rows="*, 30">
-   <frame name="view1" src="">
-   <frame name="control1" src="frame_control.html" scrolling="no">
-  </frameset>
+  <frame name="view" src="">
  </frameset>
 </html>
