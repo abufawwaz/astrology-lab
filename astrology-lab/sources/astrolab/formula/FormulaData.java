@@ -2,6 +2,7 @@ package astrolab.formula;
 
 import astrolab.formula.score.FormulaScore;
 import astrolab.formula.score.FormulaScoreFactory;
+import astrolab.project.statistics.StatisticsRecord;
 
 public class FormulaData {
 
@@ -40,12 +41,17 @@ public class FormulaData {
     return (count[index] > 0) ? value[index] / count[index] : NULL;
   }
 
+  // TODO: deprecate in favour of StatisticsRecord
   public void feed(ElementData data) {
     // check for collision
     double v = formula.calculate(data);
     score.feed(v, data.getTarget());
     value[(int) v] = data.getTarget();
     count[(int) v]++;
+  }
+
+  public void feed(StatisticsRecord record) {
+    feed(new ElementData(ElementSet.getDefault(), record, record.getValue()));
   }
 
   public String toString() {

@@ -29,12 +29,12 @@ class FormulaScoreExactValue implements FormulaScore {
     return score;
   }
 
-  public void feed(double result, int target) {
+  public void feed(double result, double target) {
     int index = (int) result;
     double value = formula.getValue(index);
 
     if (value != FormulaData.NULL) {
-      int collision = collision((int) value, target);
+      int collision = collision((int) value, (int) target);
       if (collision == 0) {
         confirmed++;
       } else if (collision == 1) {

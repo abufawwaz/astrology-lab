@@ -9,7 +9,7 @@ public class ElementSet {
 
   private Element[] elements;
 
-  public ElementSet(String[] factors) {
+  public ElementSet(int[] factors) {
     elements = new Element[factors.length];
     for (int i = 0; i < factors.length; i++) {
       elements[i] = new Element(factors[i], i);
@@ -23,7 +23,7 @@ public class ElementSet {
   public static synchronized ElementSet getDefault() {
     if (defaultSet == null) {
       int formulaeElementId = Text.getId("formulae_element"); 
-      String[] elements = Database.queryList("SELECT descrid FROM text, types WHERE text.id = types.element_id AND types.type_id = " + formulaeElementId);
+      int[] elements = Database.queryIds("SELECT id FROM text, types WHERE text.id = types.element_id AND types.type_id = " + formulaeElementId);
       defaultSet = new ElementSet(elements);
     }
     return defaultSet;

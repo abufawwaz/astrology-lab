@@ -1,5 +1,7 @@
 package astrolab.formula;
 
+import java.util.HashMap;
+
 import astrolab.astronom.houses.HouseSystem;
 import astrolab.astronom.houses.PlacidusSystem;
 import astrolab.astronom.planet.Planet;
@@ -8,15 +10,15 @@ import astrolab.db.Event;
 
 public class ElementData {
 
-  private int target;
+  private double target;
   private Event event;
-  private double[] values;
+  private HashMap<Integer, Double> values;
 
-  public ElementData(ElementSet elementSet, Event event, int target) {
+  public ElementData(ElementSet elementSet, Event event, double target) {
     Element[] elements = elementSet.getElements();
     this.event = event;
     this.target = target;
-    this.values = new double[elements.length];
+    this.values = new HashMap<Integer, Double>();
 
     HouseSystem houses = new PlacidusSystem(event);
     SolarSystem solar = new SolarSystem();
@@ -24,16 +26,16 @@ public class ElementData {
     Planet center = solar.getPlanet(SolarSystem.SUN);
     solar.calculate(event);
 
-    for (int i = 0; i < values.length; i++) {
-      values[i] = elements[i].getPosition(solar, houses, center);
+    for (int i = 0; i < elements.length; i++) {
+      values.put(elements[i].getId(), elements[i].getPosition(solar, houses, center));
     }
   }
 
   public double getValue(Element element) {
-    return values[element.getIndex()];
+    return values.get(element.getId());
   }
 
-  public int getTarget() {
+  public double getTarget() {
     return target;
   }
 

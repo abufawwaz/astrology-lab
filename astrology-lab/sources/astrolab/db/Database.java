@@ -72,11 +72,34 @@ public class Database {
     return null;
   }
 
+  public static int[] queryIds(String query) {
+    Log.log("[SQL query ids] " + query);
+
+    ResultSet set = null;
+    Vector<Integer> vector = new Vector<Integer>();
+    try {
+      set = createStatement().executeQuery(query);
+      set.beforeFirst();
+      while (set.next()) {
+        vector.add(new Integer(set.getInt(1)));
+      }
+    } catch (Exception e) {
+      Log.log(query, e);
+    } finally {
+      closeSet(set);
+    }
+    int[] result = new int[vector.size()];
+    for (int i = 0; i < result.length; i++) {
+      result[i] = vector.get(i).intValue();
+    }
+    return result;
+  }
+
   public static String[] queryList(String query) {
     Log.log("[SQL query values] " + query);
 
     ResultSet set = null;
-    Vector vector = new Vector();
+    Vector<String> vector = new Vector<String>();
     try {
       set = createStatement().executeQuery(query);
       set.beforeFirst();
@@ -90,7 +113,7 @@ public class Database {
     }
     String[] result = new String[vector.size()];
     for (int i = 0; i < result.length; i++) {
-      result[i] = (String) vector.get(i);
+      result[i] = vector.get(i);
     }
     return result;
   }

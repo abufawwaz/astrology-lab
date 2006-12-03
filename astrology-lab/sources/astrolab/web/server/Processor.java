@@ -90,10 +90,6 @@ public class Processor {
   static {
     registerStaticPage("favicon.ico", "favicon.ico", "image/x-icon");
     registerStaticPage("", "frames.html", null);
-    registerStaticPage("frame_control.html", "frame_control.html", null);
-    registerStaticPage("play_on.gif", "play_on.gif", "image/gif");
-    registerStaticPage("play_off.gif", "play_off.gif", "image/gif");
-    registerStaticPage("pause.gif", "pause.gif", "image/gif");
   }
 
   private static void registerStaticPage(String key, String filename, String type) {

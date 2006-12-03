@@ -9,12 +9,22 @@ public class StatisticsRecord extends Event {
 
   public final static String TABLENAME = "project_statistics_value";
 
+  private double value = Double.NaN;
+
   StatisticsRecord(int id) {
-  	super(id);
+    super(id);
+  }
+
+  StatisticsRecord(Event event, double value) {
+    super(event.getEventId(), event.getSubjectId(), event.getTime().getTime(), event.getLocation().getId(), event.getType(), event.getAccuracy(), event.getSource());
+    this.value = value;
   }
 
   public double getValue() {
-    return Double.parseDouble(Database.query("SELECT record_value from " + TABLENAME + " WHERE event_id = " + getId()));
+    if (value == Double.NaN) {
+      value = Double.parseDouble(Database.query("SELECT record_value from " + TABLENAME + " WHERE event_id = " + getId()));
+    }
+    return value;
   }
 
   public static int store(String name, double value, long timestamp, int location, String type, String accuracy, String source, int accessible_by) {
