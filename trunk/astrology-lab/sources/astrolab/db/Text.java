@@ -10,7 +10,8 @@ public class Text {
 
 	// large groups
 	public final static int TYPE_VIEW = 1;
-	public final static int TYPE_EVENT = TYPE_OFFSET * 2 + 1;
+  public final static int TYPE_SYSTEM = TYPE_OFFSET * 1 + 1;
+  public final static int TYPE_EVENT = TYPE_OFFSET * 2 + 1;
 	public final static int TYPE_LABORATORY = TYPE_OFFSET * 3 + 1;
 	public final static int TYPE_ACTION = TYPE_OFFSET * 4 + 1;
   public final static int TYPE_REGION = TYPE_OFFSET * 5 + 1;
