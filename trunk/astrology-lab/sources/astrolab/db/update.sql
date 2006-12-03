@@ -55,3 +55,27 @@ update text set descrid = 'Saturn' where id = 6000021;
 update text set descrid = 'Uranus' where id = 6000022;
 update text set descrid = 'Neptune' where id = 6000023;
 update text set descrid = 'Pluto' where id = 6000024;
+
+create table formula_description (
+  formulae_id INT UNSIGNED NOT NULL REFERENCES text (id),
+  project_id INT UNSIGNED NOT NULL REFERENCES text (id),
+  owner_id INT UNSIGNED NOT NULL REFERENCES text (id),
+  score DOUBLE
+) ENGINE=InnoDB;
+
+create table formula_elements (
+  formulae_id INT UNSIGNED NOT NULL REFERENCES formula_description (id),
+  element_coefficient DOUBLE NOT NULL,
+  element_id INT UNSIGNED NOT NULL REFERENCES text (id)
+) ENGINE=InnoDB;
+
+insert into text values (4000032, NULL, NULL, 'Display formula', 'Покажи формули');
+insert into text values (4000033, NULL, NULL, 'Edit formulae', 'Редактирай формула');
+
+insert into views values (52, 'astrolab.formula.display.DisplayProjectFormula');
+insert into views values (53, 'astrolab.formula.display.ModifyFormulae');
+insert into views values (54, 'astrolab.formula.display.FormEditFormulae');
+
+insert into actions values (4000004, NULL, NULL, NULL, 54, 53, 52, NULL);
+insert into actions values (4000032, 4000016, NULL, NULL, NULL, NULL, 52, NULL);
+insert into actions values (4000033, 4000016, NULL, NULL, NULL, NULL, 54, NULL);

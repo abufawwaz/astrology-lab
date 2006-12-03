@@ -25,6 +25,7 @@ public class Text {
 	public final static int TYPE_EVENT_TYPE = TYPE_SUB_OFFSET * 1 + TYPE_VARIOUS;
   public final static int TYPE_EVENT_ATTRIBUTE_TYPE = TYPE_SUB_OFFSET * 2 + TYPE_VARIOUS;
   public final static int TYPE_TIME_ZONE = TYPE_SUB_OFFSET * 3 + TYPE_VARIOUS;
+  public static final int TYPE_FORMULAE = TYPE_SUB_OFFSET * 4 + TYPE_VARIOUS;
 
   public static String escape(String text) {
     if (text == null) {

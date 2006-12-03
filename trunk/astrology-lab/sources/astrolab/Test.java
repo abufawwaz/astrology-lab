@@ -114,7 +114,7 @@ public class Test {
     InMemoryEvent event;
     int number;
 
-    for (int year = 1818; year < 2006; year++) {
+    for (int year = 1818; year < 1820; year++) {
       System.out.println("feed year: " + year);
       LineNumberReader lines = new LineNumberReader(new InputStreamReader(new FileInputStream("./external-data/sunspots/" + year)));
   
