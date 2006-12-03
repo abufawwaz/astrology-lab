@@ -14,6 +14,11 @@ create table text (
   INDEX (id)
 ) ENGINE=InnoDB DEFAULT CHARSET cp1251 COLLATE cp1251_bulgarian_ci;
 
+create table types (
+  element_id INT UNSIGNED NOT NULL REFERENCES text (id),
+  type_id INT UNSIGNED NOT NULL REFERENCES text (id)
+) ENGINE=InnoDB;
+
 create table users (
   user_id INT UNSIGNED NOT NULL PRIMARY KEY REFERENCES text (id),
   user_language ENUM ('en', 'bg' ),
@@ -193,6 +198,11 @@ create table project_sleep (
 
 insert into text values (0, NULL, NULL, '... not set ...', '... липсва ...');
 
+insert into text values (1000001, NULL, 'type', NULL, NULL);
+insert into text values (1000002, NULL, 'planet', 'planet', 'планета');
+insert into text values (1000003, NULL, 'house', 'house', 'дом');
+insert into text values (1000004, NULL, 'formulae_element', 'formulae element', 'елемент за формула');
+
 insert into text values (2000001, NULL, NULL, 'Stephan Zlatarev', 'Стефан Златарев');
 insert into text values (2000002, NULL, NULL, 'Svetlana Stancheva', 'Светлана Станчева');
 insert into text values (2000003, NULL, NULL, 'gufi', 'gufi');
@@ -272,16 +282,16 @@ insert into text values (6000011, NULL, NULL, 'Pro', 'За');
 insert into text values (6000012, NULL, NULL, 'Con', 'Против');
 insert into text values (6000013, NULL, NULL, 'Message', 'Съобщение');
 insert into text values (6000014, NULL, NULL, 'Opinion', 'Мнение');
-insert into text values (6000015, NULL, NULL, 'Sun', 'Слънце');
-insert into text values (6000016, NULL, NULL, 'Moon', 'Луна');
-insert into text values (6000017, NULL, NULL, 'Mercury', 'Меркурий');
-insert into text values (6000018, NULL, NULL, 'Venus', 'Венера');
-insert into text values (6000019, NULL, NULL, 'Mars', 'Марс');
-insert into text values (6000020, NULL, NULL, 'Jupiter', 'Юпитер');
-insert into text values (6000021, NULL, NULL, 'Saturn', 'Сатурн');
-insert into text values (6000022, NULL, NULL, 'Uranus', 'Уран');
-insert into text values (6000023, NULL, NULL, 'Neptune', 'Нептун');
-insert into text values (6000024, NULL, NULL, 'Pluto', 'Плутон');
+insert into text values (6000015, NULL, 'Sun', 'Sun', 'Слънце');
+insert into text values (6000016, NULL, 'Moon', 'Moon', 'Луна');
+insert into text values (6000017, NULL, 'Mercury', 'Mercury', 'Меркурий');
+insert into text values (6000018, NULL, 'Venus', 'Venus', 'Венера');
+insert into text values (6000019, NULL, 'Mars', 'Mars', 'Марс');
+insert into text values (6000020, NULL, 'Jupiter', 'Jupiter', 'Юпитер');
+insert into text values (6000021, NULL, 'Saturn', 'Saturn', 'Сатурн');
+insert into text values (6000022, NULL, 'Uranus', 'Uranus', 'Уран');
+insert into text values (6000023, NULL, 'Neptune', 'Neptune', 'Нептун');
+insert into text values (6000024, NULL, 'Pluto', 'Pluto', 'Плутон');
 insert into text values (6000025, NULL, NULL, 'male', 'мъж');
 insert into text values (6000026, NULL, NULL, 'female', 'жена');
 insert into text values (6000027, NULL, NULL, 'event', 'събитие');
@@ -368,6 +378,27 @@ insert into text values (10002018, NULL, 'user.session.event.3', 'event3', 'even
 insert into text values (10002019, NULL, 'user.session.event.4', 'event4', 'event4');
 
 insert into text values (10003001, NULL, 'Europe/Sofia', 'Europe/Sofia', 'Европа/София');
+
+insert into types values (6000015, 1000002);
+insert into types values (6000015, 1000004);
+insert into types values (6000016, 1000002);
+insert into types values (6000016, 1000004);
+insert into types values (6000017, 1000002);
+insert into types values (6000017, 1000004);
+insert into types values (6000018, 1000002);
+insert into types values (6000018, 1000004);
+insert into types values (6000019, 1000002);
+insert into types values (6000019, 1000004);
+insert into types values (6000020, 1000002);
+insert into types values (6000020, 1000004);
+insert into types values (6000021, 1000002);
+insert into types values (6000021, 1000004);
+insert into types values (6000022, 1000002);
+insert into types values (6000022, 1000004);
+insert into types values (6000023, 1000002);
+insert into types values (6000023, 1000004);
+insert into types values (6000024, 1000002);
+insert into types values (6000024, 1000004);
 
 insert into project values (3000001, 3000002, 'white', now(), NULL, 3000003);
 insert into project values (3000005, 3000004, 'white', now(), NULL, 3000006);

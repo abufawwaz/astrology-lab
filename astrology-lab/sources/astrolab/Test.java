@@ -106,18 +106,7 @@ public class Test {
 //  }
 
   private static void getSolarNumbers() throws Exception {
-    ElementSet set = new ElementSet(new String[] {
-        SolarSystem.MERCURY,
-        SolarSystem.VENUS,
-        SolarSystem.EARTH,
-        SolarSystem.MARS,
-        SolarSystem.JUPITER,
-        SolarSystem.SATURN,
-        SolarSystem.URANUS,
-        SolarSystem.NEPTUNE,
-        SolarSystem.PLUTO,
-    });
-    FormulaPlot plot = new FormulaPlot(1000, FormulaScoreFactory.SCORE_ACCUMULATIVE, set);
+    FormulaPlot plot = new FormulaPlot(1000, FormulaScoreFactory.SCORE_ACCUMULATIVE, ElementSet.getDefault());
 
     String line = null;
     String datatext = null;
@@ -146,22 +135,22 @@ public class Test {
               number = 0;
             }
   
-//            event = new InMemoryEvent(-1, -1, date, 5000002, "sunspots", "a day", "accurate");
-            int id = Text.reserve("Stats:Sunspot:" + date.getDate()+"."+(date.getMonth() + 1)+"."+(date.getYear() + 1900), Text.TYPE_EVENT);
-            Event.store(id, 0, date.getTime(), 0, Event.TYPE_EVENT, Event.ACCURACY_DAY, Event.SOURCE_ACCURATE);
-            Database.execute("INSERT INTO project_statistics_value VALUES (" + id + ", 3000027, " + number + ")");
+            event = new InMemoryEvent(-1, -1, date, 5000002, "sunspots", "a day", "accurate");
+//            int id = Text.reserve("Stats:Sunspot:" + date.getDate()+"."+(date.getMonth() + 1)+"."+(date.getYear() + 1900), Text.TYPE_EVENT);
+//            Event.store(id, 0, date.getTime(), 0, Event.TYPE_EVENT, Event.ACCURACY_DAY, Event.SOURCE_ACCURATE);
+//            Database.execute("INSERT INTO project_statistics_value VALUES (" + id + ", 3000027, " + number + ")");
 //            System.out.println("feed: " + date + " = " + number);
-//            plot.feed(event, number);
+            plot.feed(event, number);
           }
         }
       }
     }
 
-//    System.out.println(" plot: " + plot.toString(20));
-//    while (true) {
-//      plot.step(10);
-//      System.out.println(" plot: " + plot.toString(20));
-//    }
+    System.out.println(" plot: " + plot.toString(20));
+    while (true) {
+      plot.step(10);
+      System.out.println(" plot: " + plot.toString(20));
+    }
   }
 
   public static void main2(String[] args) {
