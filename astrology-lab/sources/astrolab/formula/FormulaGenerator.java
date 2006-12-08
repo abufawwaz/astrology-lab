@@ -27,22 +27,22 @@ public class FormulaGenerator {
         isNew = true;
         break;
       } else {
-        elements[pos].setCoefficientIndex(0);
+        elements[pos].setCoefficientIndex(- max_used_coef);
       }
     }
 
     if (!isNew) {
       if (max_coef_pos == elements.length - 1) {
-        elements[0].setCoefficientIndex(max_used_coef + 1);
         max_coef_pos = 0;
+        max_used_coef++;
       } else {
-        elements[max_coef_pos].setCoefficientIndex(0);
-        elements[max_coef_pos + 1].setCoefficientIndex(max_used_coef);
         max_coef_pos ++;
       }
       for (int pos = 0; pos < elements.length; pos++) {
         if (pos != max_coef_pos) {
-          elements[pos].setCoefficientIndex(0);
+          elements[pos].setCoefficientIndex(-max_used_coef);
+        } else {
+          elements[pos].setCoefficientIndex(max_used_coef);
         }
       }
     }
