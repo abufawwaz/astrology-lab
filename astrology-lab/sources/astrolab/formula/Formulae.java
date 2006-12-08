@@ -90,9 +90,6 @@ public class Formulae {
     StringBuffer text = new StringBuffer();
     for (int i = 0; i < element.length; i++) {
       if (element[i].getCoefficient() != 0.0) {
-        text.append((element[i].getCoefficient() > 0) ? "+" : "");
-        text.append(element[i].getCoefficient());
-        text.append("x");
         text.append(element[i]);
         text.append(" ");
       }
@@ -107,9 +104,11 @@ public class Formulae {
     int project_id = Personalize.getFavourite(-1, Text.getId("user.session.project"), -1);
     Element[] elements = formulae.getElements();
     int id = Text.reserve("Formulae:" + project_id + ":" + Personalize.getUser() + ":" + formulae_slot, Text.TYPE_FORMULAE);
+    int user = Personalize.getUser();
+    double score = formulae.rescore();
 
     Database.execute("DELETE FROM formula_description WHERE formulae_id = " + id);
-    Database.execute("INSERT INTO formula_description VALUES (" + id + ", " + project_id + ", " + Personalize.getUser() + ", " + formulae.rescore() + ")");
+    Database.execute("INSERT INTO formula_description VALUES (" + id + ", " + project_id + ", " + user + ", " + score + ")");
 
     Database.execute("DELETE FROM formula_elements WHERE formulae_id = " + id);
     for (int i = 0; i < elements.length; i++) {

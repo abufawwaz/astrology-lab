@@ -21,7 +21,13 @@ public class FormulaFinder extends Thread {
     Personalize.addFavourite(-1, 3000027, Text.getId("user.session.project"));
 
     double score = 0;
-    Element[] formulaSource = (Element[]) ElementSet.getDefault().getElements().clone();
+    Element[] formulaElements = ElementSet.getDefault().getElements();
+    FormulaGeneratorElement[] formulaSource = new FormulaGeneratorElement[formulaElements.length];
+
+    for (int i = 0; i < formulaSource.length; i++) {
+      formulaSource[i] = new FormulaGeneratorElement(formulaElements[i].getId());
+    }
+
     Formulae formulae = FormulaGenerator.generateNext(formulaSource); // get first formulae from database
     ArrayList<ElementData> records = new ArrayList<ElementData>();
 
@@ -47,12 +53,14 @@ public class FormulaFinder extends Thread {
     while (true) {
       for (int iteration = 0; iteration < 100; iteration++) {
         formulae = FormulaGenerator.generateNext(formulaSource);
-System.err.println(" Next formulae: " + formulae + " -> " + formulae.getScore(records));
   
         if (formulae.getScore(records) > score) {
+          // store the best formulae so far
           Formulae.store(8, formulae);
           score = formulae.getScore();
-System.err.println(" Store formulae: " + formulae + " -> " + formulae.getScore());
+        } else {
+          // store the current formulae for monitoring
+          Formulae.store(10, formulae);
         }
       }
 

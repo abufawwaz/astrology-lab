@@ -13,6 +13,7 @@ import astrolab.db.ProjectIterator;
 import astrolab.db.Text;
 import astrolab.formula.Element;
 import astrolab.formula.ElementSet;
+import astrolab.formula.FormulaGeneratorElement;
 import astrolab.formula.Formulae;
 import astrolab.formula.FormulaGenerator;
 import astrolab.formula.score.FormulaScoreFactory;
@@ -155,7 +156,12 @@ public class Test {
 
   public static void main(String[] args) {
     System.out.println(" formulae: ");
-    Element[] formulaSource = (Element[]) ElementSet.getDefault().getElements().clone();
+    Element[] formulaElements = ElementSet.getDefault().getElements();
+    FormulaGeneratorElement[] formulaSource = new FormulaGeneratorElement[formulaElements.length];
+
+    for (int i = 0; i < formulaSource.length; i++) {
+      formulaSource[i] = new FormulaGeneratorElement(formulaElements[i].getId());
+    }
     
     Formulae f = FormulaGenerator.generateNext(formulaSource);
     for (int i = 0; i < 10000000; i++) {
