@@ -60,7 +60,12 @@ public class FormulaFinder extends Thread {
           score = formulae.getScore();
         } else {
           // store the current formulae for monitoring
-          Formulae.store(10, formulae);
+          try {
+            Log.beSilent(true);
+            Formulae.store(10, formulae);
+          } finally {
+            Log.beSilent(false);
+          }
         }
       }
 
