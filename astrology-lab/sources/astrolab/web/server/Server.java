@@ -3,6 +3,8 @@ package astrolab.web.server;
 import java.io.*;
 import java.net.*;
 
+import astrolab.formula.FormulaFinder;
+
 public class Server {
 
   private static int port = 80;
@@ -27,6 +29,10 @@ public class Server {
     	System.setOut(out);
     	System.setErr(out);
     }
+
+    System.out.println("Starting formula finder");
+    new FormulaFinder().start();
+
     System.out.println("Starting server on port " + port);
     new Server().run();
   }

@@ -1,5 +1,8 @@
 package astrolab.formula;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+
 import astrolab.astronom.util.Zodiac;
 import astrolab.db.Database;
 import astrolab.db.Personalize;
@@ -46,6 +49,17 @@ public class Formulae {
 
   public double getScore() {
     return score;
+  }
+
+  public double getScore(ArrayList<ElementData> records) {
+    FormulaData scoreData = new FormulaData(this, FormulaScoreFactory.SCORE_ACCUMULATIVE);
+
+    Iterator<ElementData> iterator = records.iterator();
+    while (iterator.hasNext()) {
+      scoreData.feed((ElementData) iterator.next());
+    }
+
+    return scoreData.getScore().getScore();
   }
 
   public Element[] getElements() {
@@ -99,7 +113,9 @@ public class Formulae {
 
     Database.execute("DELETE FROM formula_elements WHERE formulae_id = " + id);
     for (int i = 0; i < elements.length; i++) {
-      Database.execute("INSERT INTO formula_elements VALUES (" + id + ", " + elements[i].getCoefficient() + ", " + elements[i].getId() + ")");
+      if (Math.abs(elements[i].getCoefficient()) > 0.0001) {
+        Database.execute("INSERT INTO formula_elements VALUES (" + id + ", " + elements[i].getCoefficient() + ", " + elements[i].getId() + ")");
+      }
     }
   }
 

@@ -12,7 +12,7 @@ public class ElementSet {
   public ElementSet(int[] factors) {
     elements = new Element[factors.length];
     for (int i = 0; i < factors.length; i++) {
-      elements[i] = new Element(factors[i], i);
+      elements[i] = new Element(factors[i]);
     }
   }
 
