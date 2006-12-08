@@ -30,8 +30,10 @@ public class Server {
     	System.setErr(out);
     }
 
-    System.out.println("Starting formula finder");
-    new FormulaFinder().start();
+    if (!argument("-noformulafinder", args)) {
+      System.out.println("Starting formula finder");
+      new FormulaFinder().start();
+    }
 
     System.out.println("Starting server on port " + port);
     new Server().run();
