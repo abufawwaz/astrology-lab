@@ -8,7 +8,7 @@ import astrolab.db.Text;
 public final class Element {
 
   private final static double[] COEFINDEX = new double[] {
-    0, 1, - 1, 1.0 / 2, -1.0 / 2, 1.0 / 3, 2.0 / 3, 1.0 / 4, 3.0 / 4,
+    0, 1, 1.0 / 2, 1.0 / 3, 2.0 / 3, 1.0 / 4, 3.0 / 4,
     1.0 / 5, 2.0 / 5, 3.0 / 5, 4.0 / 5, 1.0 / 6, 5.0 / 6,
     1.0 / 7, 2.0 / 7, 3.0 / 7, 4.0 / 7, 5.0 / 7, 6.0 / 7,
     1.0 / 8, 3.0 / 8, 5.0 / 8, 7.0 / 8,
@@ -34,7 +34,7 @@ public final class Element {
   }
 
   public double getCoefficient() {
-    return (coefficient == Double.NaN) ? coefficient : COEFINDEX[coeffindex];
+    return (coefficient == Double.NaN) ? coefficient : COEFINDEX[Math.abs(coeffindex)] * Math.signum(coeffindex);
   }
 
   public int getCoefficientIndex() {
