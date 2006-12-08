@@ -3,10 +3,10 @@ package astrolab.formula;
 public class FormulaGenerator {
 
   public final static Formulae generateNext(Element[] elements) {
-    int max_used_coef = 0;
-    int max_coef_pos = 0;
+    int max_used_coef = -1;
+    int max_coef_pos = -1;
 
-    for (int i = 0; i < elements.length; i++) {
+    for (int i = elements.length - 1; i >= 0; i--) {
       if (max_used_coef < elements[i].getCoefficientIndex()) {
         max_used_coef = elements[i].getCoefficientIndex();
         max_coef_pos = i;
@@ -15,12 +15,15 @@ public class FormulaGenerator {
 
     boolean isNew = false;
     for (int pos = 0; pos < elements.length; pos++) {
-      if (elements[pos].getCoefficientIndex() < max_used_coef) {
-        if (max_coef_pos > pos) {
-          elements[pos].setCoefficientIndex(elements[pos].getCoefficientIndex() + 1);
-        } else {
-          elements[pos].setCoefficientIndex(max_used_coef);
-        }
+      if (pos == max_coef_pos) {
+        continue;
+      }
+      if ((pos < max_coef_pos) && (elements[pos].getCoefficientIndex() < max_used_coef)) {
+        elements[pos].setCoefficientIndex(elements[pos].getCoefficientIndex() + 1);
+        isNew = true;
+        break;
+      } else if ((pos > max_coef_pos) && (elements[pos].getCoefficientIndex() < max_used_coef - 1)) {
+        elements[pos].setCoefficientIndex(elements[pos].getCoefficientIndex() + 1);
         isNew = true;
         break;
       } else {
@@ -29,7 +32,19 @@ public class FormulaGenerator {
     }
 
     if (!isNew) {
-      elements[0].setCoefficientIndex(max_used_coef + 1);
+      if (max_coef_pos == elements.length - 1) {
+        elements[0].setCoefficientIndex(max_used_coef + 1);
+        max_coef_pos = 0;
+      } else {
+        elements[max_coef_pos].setCoefficientIndex(0);
+        elements[max_coef_pos + 1].setCoefficientIndex(max_used_coef);
+        max_coef_pos ++;
+      }
+      for (int pos = 0; pos < elements.length; pos++) {
+        if (pos != max_coef_pos) {
+          elements[pos].setCoefficientIndex(0);
+        }
+      }
     }
 
     return new Formulae(elements);
