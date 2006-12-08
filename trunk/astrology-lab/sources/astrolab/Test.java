@@ -11,8 +11,8 @@ import astrolab.db.Event;
 import astrolab.db.Project;
 import astrolab.db.ProjectIterator;
 import astrolab.db.Text;
+import astrolab.formula.Element;
 import astrolab.formula.ElementSet;
-import astrolab.formula.FormulaPlot;
 import astrolab.formula.Formulae;
 import astrolab.formula.FormulaGenerator;
 import astrolab.formula.score.FormulaScoreFactory;
@@ -78,7 +78,7 @@ public class Test {
     fos.close();
   }
 
-  public static void main(String[] args) throws Exception {
+  public static void main5(String[] args) throws Exception {
     getSolarNumbers();
   }
 
@@ -106,7 +106,7 @@ public class Test {
 //  }
 
   private static void getSolarNumbers() throws Exception {
-    FormulaPlot plot = new FormulaPlot(1000, FormulaScoreFactory.SCORE_ACCUMULATIVE, ElementSet.getDefault());
+//    FormulaPlot plot = new FormulaPlot(1000, FormulaScoreFactory.SCORE_ACCUMULATIVE, ElementSet.getDefault());
 
     String line = null;
     String datatext = null;
@@ -140,25 +140,27 @@ public class Test {
 //            Event.store(id, 0, date.getTime(), 0, Event.TYPE_EVENT, Event.ACCURACY_DAY, Event.SOURCE_ACCURATE);
 //            Database.execute("INSERT INTO project_statistics_value VALUES (" + id + ", 3000027, " + number + ")");
 //            System.out.println("feed: " + date + " = " + number);
-            plot.feed(event, number);
+//            plot.feed(event, number);
           }
         }
       }
     }
 
-    System.out.println(" plot: " + plot.toString(20));
-    while (true) {
-      plot.step(10);
-      System.out.println(" plot: " + plot.toString(20));
-    }
+//    System.out.println(" plot: " + plot.toString(20));
+//    while (true) {
+//      plot.step(10);
+//      System.out.println(" plot: " + plot.toString(20));
+//    }
   }
 
-  public static void main2(String[] args) {
+  public static void main(String[] args) {
     System.out.println(" formulae: ");
-    Formulae f = FormulaGenerator.generateNext(null, null);
-    for (int i = 0; i < 1000; i++) {
+    Element[] formulaSource = (Element[]) ElementSet.getDefault().getElements().clone();
+    
+    Formulae f = FormulaGenerator.generateNext(formulaSource);
+    for (int i = 0; i < 10000000; i++) {
       System.out.println(" " + (i + 1) + ": " + f);
-      f = FormulaGenerator.generateNext(f, null);
+      f = FormulaGenerator.generateNext(formulaSource);
     }
     System.out.println(" === ");
   }
