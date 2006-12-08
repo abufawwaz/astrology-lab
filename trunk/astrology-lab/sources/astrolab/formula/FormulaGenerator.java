@@ -2,7 +2,7 @@ package astrolab.formula;
 
 public class FormulaGenerator {
 
-  public final static Formulae generateNext(Element[] elements) {
+  public final static Formulae generateNext(FormulaGeneratorElement[] elements) {
     int max_used_coef = -1;
     int max_coef_pos = -1;
 

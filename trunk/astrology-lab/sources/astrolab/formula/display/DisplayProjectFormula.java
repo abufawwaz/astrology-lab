@@ -41,7 +41,7 @@ public class DisplayProjectFormula extends HTMLFormDisplay {
       buffer.append(slot);
       buffer.append("</td>");
       buffer.append("<td>");
-      buffer.localize(f.toString());
+      buffer.append(f.toString());
       buffer.append("</td>");
       buffer.append("<td>");
       buffer.append(f.getScore());
@@ -75,7 +75,7 @@ public class DisplayProjectFormula extends HTMLFormDisplay {
       buffer.localize(f.getOwner());
       buffer.append("</td>");
       buffer.append("<td>");
-      buffer.localize(f.toString());
+      buffer.append(f.toString());
       buffer.append("</td>");
       buffer.append("<td>");
       buffer.append(f.getScore());
