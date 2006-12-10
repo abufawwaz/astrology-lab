@@ -66,12 +66,19 @@ public class Formulae {
     return element;
   }
 
-  public double calculate(ElementData data) {
+  public double calculateSlot(ElementData data) {
     double result = 0;
     for (int i = 0; i < element.length; i++) {
       result += data.getValue(element[i]) * element[i].getCoefficient();
     }
     return Zodiac.degree(result);
+  }
+
+  public double calculateValue(ElementData elementData) {
+    if (scoreData == null) {
+      rescore();
+    }
+    return scoreData.getValue((int) calculateSlot(elementData));
   }
 
   public double rescore() {

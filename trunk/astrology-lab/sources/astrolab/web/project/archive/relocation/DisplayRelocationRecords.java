@@ -24,9 +24,9 @@ public class DisplayRelocationRecords extends HTMLDisplay {
       boolean isSelected = request.isSelected(new int[] { relocation.getEventId() }) || (selectedEventId == relocation.getEventId());
 
       buffer.append("<td>");
-      buffer.append("<a href=\"javascript:top.select(new Array('");
+      buffer.append("<a href='root.html?_s=");
       buffer.append(relocation.getEventId());
-      buffer.append("'))\">");
+      buffer.append("'>");
       if (isSelected) {
         buffer.append("<b><font color='green'>");
       }

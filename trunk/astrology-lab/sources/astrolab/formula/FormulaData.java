@@ -44,7 +44,7 @@ public class FormulaData {
   // TODO: deprecate in favour of StatisticsRecord
   public void feed(ElementData data) {
     // check for collision
-    double v = formula.calculate(data);
+    double v = formula.calculateSlot(data);
     score.feed(v, data.getTarget());
     value[(int) v] = data.getTarget();
     count[(int) v]++;

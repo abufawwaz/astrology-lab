@@ -20,9 +20,9 @@ public class LaboratoryList extends HTMLDisplay {
 		while (laboratories.hasNext()) {
 			Project lab = laboratories.next();
 
-      buffer.append("<a href=\"javascript:top.select(new Array('");
+      buffer.append("<a href='rot.html?_s=");
       buffer.append(lab.getLaboratory());
-      buffer.append("'))\">");
+      buffer.append("'>");
       if (selected_lab == lab.getLaboratory()) {
         buffer.append("<b><font color='green'>");
       }

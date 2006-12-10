@@ -154,7 +154,15 @@ public class Test {
 //    }
   }
 
-  public static void main(String[] args) {
+  public static void main(String[] args) throws Exception {
+    for (int day = 1; day < 600; day++) {
+      int id = Text.reserve("Stats:Random:" + day, Text.TYPE_EVENT);
+      Event.store(id, 0, new java.util.Date(107, 11, day).getTime(), 0, Event.TYPE_EVENT, Event.ACCURACY_DAY, Event.SOURCE_ACCURATE);
+      Database.execute("INSERT INTO project_statistics_value VALUES (" + id + ", 3000027, " + ((int) (Math.random() * 500)) + ")");
+    }
+  }
+
+  public static void main2(String[] args) {
     System.out.println(" formulae: ");
     Element[] formulaElements = ElementSet.getDefault().getElements();
     FormulaGeneratorElement[] formulaSource = new FormulaGeneratorElement[formulaElements.length];
