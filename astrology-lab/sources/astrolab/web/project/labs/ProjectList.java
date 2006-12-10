@@ -24,9 +24,9 @@ public class ProjectList extends HTMLDisplay {
         break;
       }
 
-      buffer.append("<a href=\"javascript:top.select(new Array('");
+      buffer.append("<a href='root.html?_s=");
       buffer.append(project.getId());
-      buffer.append("'))\">");
+      buffer.append("'>");
       if (selected_project == project.getId()) {
         buffer.append("<b><font color='green'>");
       }

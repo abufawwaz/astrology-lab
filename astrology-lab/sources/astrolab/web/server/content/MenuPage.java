@@ -106,11 +106,11 @@ public class MenuPage extends Request implements Response {
     for (int i = 0; i < actions.length; i++) {
       buffer.append("\r\n<br />");
       buffer.append(tab);
-      buffer.append("<a href=\"javascript:top.go(");
-      buffer.append(actions[i][0]);
-      buffer.append(",'");
+      buffer.append("<a href='#' onclick=\"javascript:top.addPane('', 'root.");
       buffer.append(Display.getExtension(actions[i][1]));
-      buffer.append("')\">");
+      buffer.append("?_a=");
+      buffer.append(actions[i][0]);
+      buffer.append("', true)\">");
       buffer.append(Text.getText(actions[i][0]));
       buffer.append("</a>");
     }
@@ -129,9 +129,9 @@ public class MenuPage extends Request implements Response {
       String newpathtext = (pathtext.length() > 0) ? (pathtext + ":" + actions[i]) : ("" + actions[i]);
       buffer.append("\r\n<br />");
       buffer.append(tab);
-      buffer.append("<a href=\"javascript:top.path('");
+      buffer.append("<a href='./menu.html?_p=");
       buffer.append(newpathtext);
-      buffer.append("')\"><i>");
+      buffer.append("'><i>");
       buffer.append(Text.getText(actions[i]));
       buffer.append("</i></a>");
       if ((offset < path.length) && (actions[i] == path[offset])) {

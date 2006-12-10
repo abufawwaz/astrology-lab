@@ -9,7 +9,7 @@ insert into text values (3000027, NULL, NULL, 'Sun Spots', 'Слънчеви п�
 
 insert into project values (3000027, 3000026, 'white', now(), NULL, 0);
 
-insert into views values (51, 'astrolab.project.statistics.DisplayStatisticsRecords');
+insert into views values (51, 'astrolab.project.statistics.ComponentChartStatistics');
 
 insert into actions values (4000025, 4000016, NULL, 3000027, NULL, NULL, 51, NULL);
 
@@ -79,3 +79,11 @@ insert into views values (54, 'astrolab.formula.display.FormEditFormulae');
 insert into actions values (4000004, NULL, NULL, NULL, 54, 53, 52, NULL);
 insert into actions values (4000032, 4000016, NULL, NULL, NULL, NULL, 52, NULL);
 insert into actions values (4000033, 4000016, NULL, NULL, NULL, NULL, 54, NULL);
+
+insert into text values (10002020, NULL, 'user.selection.x1', 'selection.x1', 'selection.x1');
+insert into text values (10002021, NULL, 'user.selection.x2', 'selection.x2', 'selection.x2');
+insert into text values (10002022, NULL, 'user.selection.y2', 'selection.y2', 'selection.y2');
+
+insert into text values (4000034, NULL, NULL, 'Display formulae chart', 'Display formulae chart');
+insert into views values (55, 'astrolab.formula.display.ComponentChartFormulae');
+insert into actions values (4000034, 4000016, NULL, NULL, NULL, NULL, 55, NULL);

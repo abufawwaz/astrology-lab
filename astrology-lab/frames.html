@@ -10,16 +10,6 @@
   var current_path = ""
   var controlView = -1;
 
-  function go(action, extension) {
-   frames['view'].location.href="root." + extension + "?_a=" + action
-   frames['menu'].location.href="menu.html?_a=" + action + "&_p=" + current_path
-  }
-
-  function path(path_selection) {
-   current_path = path_selection
-   frames['menu'].location.href="menu.html?_p=" + current_path
-  }
-
   function select(selection) {
    var s=selection[0]
    for (var i = 1; i < selection.length; i++) {
@@ -28,10 +18,152 @@
    frames['view'].location.href=frames['view'].location.pathname + "?_s=" + s
    frames['menu'].location.href="menu.html?_s=" + s + "&_p=" + current_path
   }
+
+var mousex = 0;
+var mousey = 0;
+var grabx = 0;
+var graby = 0;
+var orix = 0;
+var oriy = 0;
+var elex = 0;
+var eley = 0;
+var maxZindex = 20;
+
+var dragobj = null;
+var handleobj = null;
+
+function falsefunc() { return false; } // used to block cascading events
+
+function init() {
+  document.onmousemove = update; // update(event) implied on NS, update(null) implied on IE
+  update();
+}
+
+function update(e) {
+  if (!e) e = window.event; // works on IE, but not NS (we rely on NS passing us the event)
+
+  if (e) { 
+    if (e.pageX || e.pageY) { // this doesn't work on IE6!! (works on FF,Moz,Opera7)
+      mousex = e.pageX;
+      mousey = e.pageY;
+    } else if (e.clientX || e.clientY) { // works on IE6,FF,Moz,Opera7
+      mousex = e.clientX + document.body.scrollLeft;
+      mousey = e.clientY + document.body.scrollTop;
+    }  
+  }
+}
+
+function grab(context, handler) {
+  maxZindex += 10
+  document.onmousedown = falsefunc; // in NS this prevents cascading of events, thus disabling text selection
+  dragobj = context;
+  dragobj.style.zIndex = maxZindex; // move it to the top
+
+  handleobj = handler;
+  handleobj.style.height = '20px';
+  handleobj.style.zIndex = maxZindex + 10;
+
+  document.onmousemove = drag;
+  document.onmouseup = drop;
+  grabx = mousex;
+  graby = mousey;
+  elex = orix = dragobj.offsetLeft;
+  eley = oriy = dragobj.offsetTop;
+  update();
+}
+
+function drag(e) {// parameter passing is important for NS family\
+  if (dragobj) {
+    elex = orix + (mousex-grabx);
+    eley = oriy + (mousey-graby);
+    dragobj.style.position = "absolute";
+    dragobj.style.left = (elex).toString(10) + 'px';
+    dragobj.style.top  = (eley).toString(10) + 'px';
+  }
+  update(e);
+  return false; // in IE this prevents cascading of events, thus text selection is disabled
+}
+
+function drop() {
+  if (dragobj) {
+    dragobj = null;
+    handleobj.style.height='5px';
+    handleobj = null;
+  }
+  update();
+  document.onmousemove = update;
+  document.onmouseup = null;
+  document.onmousedown = null;   // re-enables text selection on NS
+}
+
+function addPane(_id, _src, _new) {
+ if (_new) {
+   _id += Math.random() * 255
+ } else if (document.getElementById('obj_id_' + _id)) {
+   // the pane is already opened
+   return
+ }
+
+ var _div = document.createElement("div");
+ _div.setAttribute('id', 'obj_id_' + _id)
+ _div.style.position='absolute'
+ _div.style.backgroundColor='transparent'
+ var _table = document.createElement("table");
+ _table.border=0
+ _table.style.margin=0
+ _table.style.padding=0
+ _div.appendChild(_table)
+ var _tbody = document.createElement("tbody");
+ _table.appendChild(_tbody)
+ var _tr1 = document.createElement("tr");
+ _tbody.appendChild(_tr1)
+ var _td1 = document.createElement("td");
+ _td1.heigth=10
+ _tr1.appendChild(_td1)
+ var _handle = document.createElement("div");
+ _handle.setAttribute('id', 'obj_handle_id_' + _id)
+ _handle.style.position='absolute'
+ _handle.style.backgroundColor='blue'
+ _handle.style.top='0px'
+ _handle.style.left='0px'
+ _handle.style.width='100%'
+ _handle.style.height='5px'
+ _handle.style.margin='0px'
+ _handle.style.padding='0px'
+ _handle.style.cursor='move'
+ _handle.onmousedown=function() { grab(document.getElementById('obj_id_' + _id), this)}
+ _td1.appendChild(_handle)
+ var _close = document.createElement("a");
+ _close.setAttribute('href','#')
+ _close.onclick=function() { document.getElementById("_root_div_id").removeChild(document.getElementById('obj_id_' + _id)); }
+ _handle.appendChild(_close)
+ var _close_text = document.createTextNode("x")
+ _close.appendChild(_close_text)
+
+ var _tr2 = document.createElement("tr");
+ _tbody.appendChild(_tr2)
+ var _td2 = document.createElement("td");
+ _tr2.appendChild(_td2)
+ var _iframe = document.createElement("iframe")
+ _td2.appendChild(_iframe)
+
+ document.getElementById("_root_div_id").appendChild(_div);
+ _iframe.allowtransparency='true'
+ _iframe.setAttribute('frameborder', '0')
+ _iframe.frameborder=0
+ _iframe.marginwidth=0
+ _iframe.marginheight=0
+ _iframe.width=500
+ _iframe.height=300
+ _iframe.src=_src
+}
+
  </script>
- 
- <frameset cols="200, *" border="1">
-  <frame name="menu" src="menu.html">
-  <frame name="view" src="">
- </frameset>
+
+ <body id="_body_id" onload="init();addPane('text', './menu.html', false)" style="margin:0px;padding:0px;background-color:transparent">
+  <div id="_root_div_id" style="top:0px;left:0px;width:100%;height:100%">
+   <a href="#" onclick="addPane('text', './menu.html', false)">Menu</a>
+  </div>
+ </body>
+
 </html>

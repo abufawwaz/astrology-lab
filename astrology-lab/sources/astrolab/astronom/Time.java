@@ -104,7 +104,7 @@ public class Time extends GregorianCalendar {
   }
 
   public String toMySQLString() {
-    return get(YEAR) + "-" + get(MONTH) + "-" + get(DAY_OF_MONTH) + " "
+    return get(YEAR) + "-" + (get(MONTH) + 1) + "-" + get(DAY_OF_MONTH) + " "
             + format(get(HOUR_OF_DAY)) + ":" + format(get(MINUTE)) + ":" + format(get(SECOND));
   }
 

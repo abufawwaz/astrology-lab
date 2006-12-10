@@ -78,21 +78,21 @@ public class ComponentSelectEvent {
       buffer.append(position);
       buffer.append("</b>");
     } else {
-      buffer.append("<a href=\"javascript:top.select(new Array('");
+      buffer.append("<a href='root.html?_s=");
 
       for (int s = 0; s < position - 1; s++) {
         buffer.append(selection[s]);
-        buffer.append("', '");
+        buffer.append(":");
       }
   
       buffer.append(event);
 
       for (int s = position; s < selection.length; s++) {
-        buffer.append("', '");
+        buffer.append(":");
         buffer.append(selection[s]);
       }
 
-      buffer.append("'))\">");
+      buffer.append("'>");
       buffer.append(position);
       buffer.append("</a>");
     }
