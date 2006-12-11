@@ -18,7 +18,11 @@ public abstract class HTMLDisplay extends Display {
     buffer.append("\r\n<head>");
     buffer.append("\r\n\t<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />");
     buffer.append("\r\n</head>");
-    buffer.append("\r\n<body>");
+    if (Request.hasDatabaseChange()) {
+      buffer.append("\r\n<body onload='top.refreshAllPanes(this)'>");
+    } else {
+      buffer.append("\r\n<body>");
+    }
     fillBodyContent(request, buffer);
     buffer.append("\r\n</body>");
     buffer.append("\r\n</html>");

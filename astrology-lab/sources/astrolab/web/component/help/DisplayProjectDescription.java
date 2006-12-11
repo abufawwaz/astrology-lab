@@ -1,6 +1,5 @@
 package astrolab.web.component.help;
 
-import astrolab.db.Action;
 import astrolab.db.Personalize;
 import astrolab.db.Text;
 import astrolab.web.HTMLFormDisplay;
@@ -10,7 +9,7 @@ import astrolab.web.server.content.LocalizedStringBuffer;
 public class DisplayProjectDescription extends HTMLFormDisplay {
 
   public DisplayProjectDescription() {
-    super(Action.getAction(-1, -1, HTMLFormDisplay.getId(DisplayProjectDescription.class)));
+    super(HTMLFormDisplay.getId(DisplayProjectDescription.class), true);
   }
 
   public void fillBodyContent(Request request, LocalizedStringBuffer buffer) {

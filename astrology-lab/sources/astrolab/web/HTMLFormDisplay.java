@@ -5,10 +5,19 @@ import astrolab.web.server.content.LocalizedStringBuffer;
 
 public abstract class HTMLFormDisplay extends HTMLDisplay {
 
-  private int submitAction;
+  private int submitAction = -1;
+  private int submitDisplay = -1;
 
   protected HTMLFormDisplay(int submitAction) {
     this.submitAction = submitAction;
+  }
+
+  protected HTMLFormDisplay(int submitDisplay, boolean isDisplay) {
+    if (isDisplay) {
+      this.submitDisplay = submitDisplay;
+    } else {
+      this.submitAction = submitDisplay;
+    }
   }
 
   public void fillContent(Request request, LocalizedStringBuffer buffer) {
@@ -19,8 +28,14 @@ public abstract class HTMLFormDisplay extends HTMLDisplay {
     buffer.append("\r\n<body>");
     buffer.append("\r\n<object id=\"AdobeSVG\" classid=\"clsid:78156a80-c6a1-4bbf-8e6a-3cd390eeb4e2\"></object>");
     buffer.append("\r\n<?import namespace=\"svg\" implementation=\"#AdobeSVG\"?>");
-    buffer.append("\r\n<form method=\"post\" action=\"root.html?_a=");
-    buffer.append(submitAction);
+    buffer.append("\r\n<form method=\"post\" action=\"root.html?");
+    if (submitAction >= 0) {
+      buffer.append("_a=");
+      buffer.append(submitAction);
+    } else {
+      buffer.append("_d=");
+      buffer.append(submitDisplay);
+    }
     buffer.append("\">");
     fillBodyContent(request, buffer);
     buffer.append("\r\n</form>");
