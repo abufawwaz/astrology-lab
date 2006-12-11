@@ -181,7 +181,7 @@ public class Test {
 
   public static void main1(String[] args) {
     System.out.println(" projects: ");
-    ProjectIterator projects = ProjectIterator.iterate(-1);
+    ProjectIterator projects = ProjectIterator.iterate();
     while (projects.hasNext()) {
       Project p = projects.next();
       System.out.print(p.getName());

@@ -29,24 +29,7 @@ public class MenuPage extends Request implements Response {
     buffer.append("\r\n</head>");
     buffer.append("\r\n<body>");
 
-//    listActions(buffer, Action.getActions(-1, view, getSelection().length), "");
-//    buffer.append("\r\n<hr>");
-//
-//    buffer.append("view: " + view);
-//    buffer.append("<br>path: ");
-//    for (int i = 0; i < getPath().length; i++) {
-//      buffer.append(getPath()[i]);
-//    }
-//    buffer.append("<br>selection: ");
-//    for (int i = 0; i < getSelection().length; i++) {
-//      buffer.append(getSelection()[i]);
-//    }
-
     String info = "www.astrology-lab.net";
-    int lab = Personalize.getFavourite(-1, Text.getId("user.session.laboratory"), -1);
-    if (lab > 0) {
-      info += " / " + Text.getText(lab);
-    }
 
     int project = Personalize.getFavourite(-1, Text.getId("user.session.project"), -1);
     if (project > 0) {
