@@ -19,7 +19,7 @@ public class ComponentChartFormulae extends ComponentChartStatistics {
   }
 
   protected String decorateLine() {
-    return "stroke:orange;stroke-width:2";
+    return "stroke:orange;stroke-width:" + strokeWidth;
   }
 
   protected int calculateValue(StatisticsRecord record) {

@@ -23,7 +23,10 @@ public class LocalizedStringBuffer {
   }
 
   public void localize(int id) {
-    append(bbcode(Text.getText(id)));
+    String text = Text.getText(id);
+    if (text != null) {
+      append(bbcode(text));
+    }
   }
 
   public void signature(int user) {
