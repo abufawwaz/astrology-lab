@@ -39,6 +39,9 @@ function falsefunc() { return false; } // used to block cascading events
 function init() {
   document.onmousemove = update; // update(event) implied on NS, update(null) implied on IE
   update();
+
+  addPane('text', './menu.html', false, 150, 0, 10, 0)
+  addPane('account', './root.html?_d=56', false, 500)
 }
 
 function update(e) {
@@ -58,22 +61,23 @@ function update(e) {
 function grab(_dragobjid, _grabtype) {
   dragobjid = _dragobjid
   grabtype = _grabtype
-  
-  maxZindex += 10
-  document.onmousedown = falsefunc; // in NS this prevents cascading of events, thus disabling text selection
+
+  grabx = mousex;
+  graby = mousey;
+
   dragobj = document.getElementById('_obj_id_' + _dragobjid)
-  dragobj.style.zIndex = maxZindex; // move it to the top
+  elex = orix = dragobj.offsetLeft;
+  eley = oriy = dragobj.offsetTop;
+
+  dragobj.style.zIndex = ++maxZindex; // move it to the top
 
   handleobj = document.getElementById('_obj_' + _grabtype + '_handle_id_' + _dragobjid)
-  handleobj.style.height = '20px';
-  handleobj.style.zIndex = maxZindex + 10;
+  handleobj.style.top = (graby - oriy - 15).toString(10) + 'px';
+  handleobj.style.height = '30px';
 
   document.onmousemove = drag;
   document.onmouseup = drop;
-  grabx = mousex;
-  graby = mousey;
-  elex = orix = dragobj.offsetLeft;
-  eley = oriy = dragobj.offsetTop;
+  document.onmousedown = falsefunc; // in NS this prevents cascading of events, thus disabling text selection
 
   frameobj = document.getElementById('_obj_frame_id_' + _dragobjid)
   oriwidth = frameobj.width;
@@ -94,16 +98,14 @@ function drag(e) {// parameter passing is important for NS family\
     } else {
       // resize
       frameobj = document.getElementById('_obj_frame_id_' + dragobjid)
-      if (mousex - orix > 50) {
-        frameobj.width = oriwidth * (mousex - orix) / (grabx - orix)
-      } else {
-        frameobj.width = 50
-      }
-      if (mousey - oriy > 50) {
-        frameobj.height = oriheight * (mousey - oriy) / (graby - oriy)
-      } else {
-        frameobj.height = 50
-      }
+
+      temp = oriwidth * (mousex - orix) / (grabx - orix)
+      frameobj.width = (temp > 100) ? temp : 100
+
+      temp = mousey - oriy - 15
+      frameobj.height = (temp > 100) ? temp : 100
+
+      document.getElementById('_obj_r_handle_id_' + dragobjid).style.top = frameobj.height.toString(10) + 'px';
     }
   }
   update(e);
@@ -112,9 +114,11 @@ function drag(e) {// parameter passing is important for NS family\
 
 function drop() {
   if (dragobjid) {
-    dragobjid = null;
-    handleobj.style.height='5px';
+    dragobj = document.getElementById('_obj_id_' + dragobjid)
+    handleobj.style.top = (grabtype == 'm') ? '0px' : '99%';
+    handleobj.style.height = '5px';
     handleobj = null;
+    dragobjid = null;
   }
   update();
   document.onmousemove = update;
@@ -147,26 +151,32 @@ function addPane(_id, _src, _new, _width, _height, _x, _y) {
  var _tr1 = document.createElement("tr");
  _tbody.appendChild(_tr1)
  var _td1 = document.createElement("td");
- _td1.heigth=10
  _tr1.appendChild(_td1)
  var _handle = document.createElement("div");
  _handle.setAttribute('id', '_obj_m_handle_id_' + _id)
  _handle.style.position='absolute'
- _handle.style.backgroundColor='blue'
+ _handle.style.opacity=0.5
+ _handle.style.backgroundColor='#DDDDFF'
  _handle.style.top='0px'
  _handle.style.left='0px'
  _handle.style.width='100%'
  _handle.style.height='5px'
  _handle.style.margin='0px'
  _handle.style.padding='0px'
+ _handle.style.fontSize=0
  _handle.style.cursor='move'
  _handle.onmousedown=function() { grab(_id, 'm')}
  _td1.appendChild(_handle)
+
  var _close = document.createElement("a");
  _close.setAttribute('href','#')
+ _close.style.color='black'
+ _close.style.textDecoration='none'
+ _close.style.fontSize=7
+ _td1.style.align='right'
  _close.onclick=function() { document.getElementById("_root_div_id").removeChild(document.getElementById('_obj_id_' + _id)); }
- _handle.appendChild(_close)
- var _close_text = document.createTextNode("x")
+ _td1.appendChild(_close)
+ var _close_text = document.createTextNode("X")
  _close.appendChild(_close_text)
 
  var _tr2 = document.createElement("tr");
@@ -174,28 +184,6 @@ function addPane(_id, _src, _new, _width, _height, _x, _y) {
  var _td2 = document.createElement("td");
  _tr2.appendChild(_td2)
  var _iframe = document.createElement("iframe")
- _td2.appendChild(_iframe)
-
- var _tr3 = document.createElement("tr");
- _tbody.appendChild(_tr3)
- var _td3 = document.createElement("td");
- _td3.heigth=10
- _tr3.appendChild(_td3)
- var _resize_handle = document.createElement("div");
- _resize_handle.setAttribute('id', '_obj_r_handle_id_' + _id)
- _resize_handle.style.position='absolute'
- _resize_handle.style.backgroundColor='blue'
- _resize_handle.style.top='99%'
- _resize_handle.style.left='0px'
- _resize_handle.style.width='100%'
- _resize_handle.style.height='1%'
- _resize_handle.style.margin='0px'
- _resize_handle.style.padding='0px'
- _resize_handle.style.cursor='nw-resize'
- _resize_handle.onmousedown=function() { grab(_id, 'r')}
- _td3.appendChild(_resize_handle)
-
- document.getElementById("_root_div_id").appendChild(_div);
  _iframe.allowtransparency='true'
  _iframe.setAttribute('id', '_obj_frame_id_' + _id)
  _iframe.setAttribute('frameborder', '0')
@@ -204,12 +192,35 @@ function addPane(_id, _src, _new, _width, _height, _x, _y) {
  _iframe.marginheight=0
  _iframe.width=(_width) ? _width : 500
  _iframe.height=(_height) ? _height : 500
+ _td2.appendChild(_iframe)
+
+ var _tr3 = document.createElement("tr");
+ _tbody.appendChild(_tr3)
+ var _td3 = document.createElement("td");
+ _tr3.appendChild(_td3)
+ var _resize_handle = document.createElement("div");
+ _resize_handle.setAttribute('id', '_obj_r_handle_id_' + _id)
+ _resize_handle.style.position='absolute'
+ _resize_handle.style.opacity=0.5
+ _resize_handle.style.backgroundColor='#DDDDFF'
+ _resize_handle.style.top= '99%'
+ _resize_handle.style.left='0px'
+ _resize_handle.style.width='100%'
+ _resize_handle.style.height='5px'
+ _resize_handle.style.margin='0px'
+ _resize_handle.style.padding='0px'
+ _resize_handle.style.fontSize=0
+ _resize_handle.style.cursor='nw-resize'
+ _resize_handle.onmousedown=function() { grab(_id, 'r')}
+ _td3.appendChild(_resize_handle)
+
+ document.getElementById("_root_div_id").appendChild(_div);
  _iframe.src=_src
 }
 
  </script>
 
- <body id="_body_id" onload="init();addPane('text', './menu.html', false, 150, 0, 10, 0);addPane('account', './root.html?_d=56', false, 500)" style="margin:0px;padding:0px;background-color:transparent">
+ <body id="_body_id" onload="init()" style="margin:0px;padding:0px;background-color:transparent">
   <div id="_root_div_id" style="top:0px;left:0px;width:100%;height:100%">
    <a href="#" onclick="addPane('text', './menu.html', false)">Menu</a>
   </div>
