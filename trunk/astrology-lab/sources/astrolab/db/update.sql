@@ -89,3 +89,7 @@ insert into views values (55, 'astrolab.formula.display.ComponentChartFormulae')
 insert into actions values (4000034, 4000016, NULL, NULL, NULL, NULL, 55, NULL);
 
 insert into views values (56, 'astrolab.web.entrance.DisplayPersonalData');
+
+delete from action_group where id = 4000014;
+delete from actions where id = 4000022;
+update actions set action_group = 4000016 where id = 4000023;

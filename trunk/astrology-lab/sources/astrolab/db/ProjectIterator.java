@@ -11,14 +11,8 @@ public class ProjectIterator {
     this.set = set;
   }
 
-  public static ProjectIterator iterateLabs() {
-    String query = "SELECT * FROM project, text WHERE project.laboratory = text.id GROUP BY laboratory ORDER BY " + Personalize.getLanguage();
-
-    return new ProjectIterator(Database.executeQuery(query));
-  }
-
-  public static ProjectIterator iterate(int laboratory) {
-    String query = "SELECT * FROM project, text WHERE " + ((laboratory > 0) ? "laboratory = " + laboratory + " AND " : "") + "project.name = text.id ORDER BY " + Personalize.getLanguage();
+  public static ProjectIterator iterate() {
+    String query = "SELECT * FROM project, text WHERE project.name = text.id ORDER BY laboratory, " + Personalize.getLanguage();
 
     return new ProjectIterator(Database.executeQuery(query));
   }
