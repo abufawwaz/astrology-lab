@@ -8,6 +8,7 @@ import java.sql.Statement;
 import java.util.Vector;
 
 import astrolab.tools.Log;
+import astrolab.web.server.Request;
 
 public class Database {
 
@@ -38,6 +39,7 @@ public class Database {
 
     try {
       createStatement().execute(sql);
+      Request.markDatabaseChange(true);
     } catch (Exception e) {
       Log.log(sql, e);
     }
