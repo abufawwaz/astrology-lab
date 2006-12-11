@@ -54,11 +54,12 @@ public class Processor {
     int from_view = Display.getCurrentView(request);
     int action = determineAction(arg_action, from_view);
 
-    DisplayEntrance entrance = new DisplayEntrance();
-
-    if ((arg_action < 0) && (entrance.isApplicable(request))) {
-      request.setDisplay(entrance);
-    } else if (action > 0) {
+//    DisplayEntrance entrance = new DisplayEntrance();
+//
+//    if ((arg_action < 0) && (entrance.isApplicable(request))) {
+//      request.setDisplay(entrance);
+//    } else
+    if (action > 0) {
       String to_view = Action.getTarget(action, from_view);
       String injection = Action.getExecution(action, from_view);
 

@@ -96,7 +96,7 @@ function drop() {
   document.onmousedown = null;   // re-enables text selection on NS
 }
 
-function addPane(_id, _src, _new) {
+function addPane(_id, _src, _new, _width, _height, _x, _y) {
  if (_new) {
    _id += Math.random() * 255
  } else if (document.getElementById('obj_id_' + _id)) {
@@ -107,6 +107,8 @@ function addPane(_id, _src, _new) {
  var _div = document.createElement("div");
  _div.setAttribute('id', 'obj_id_' + _id)
  _div.style.position='absolute'
+ _div.style.left=(_x) ? _x+'px' : '200px'
+ if (_y) _div.style.top=_y+'px'
  _div.style.backgroundColor='transparent'
  var _table = document.createElement("table");
  _table.border=0
@@ -153,14 +155,14 @@ function addPane(_id, _src, _new) {
  _iframe.frameborder=0
  _iframe.marginwidth=0
  _iframe.marginheight=0
- _iframe.width=500
- _iframe.height=300
+ _iframe.width=(_width) ? _width : 500
+ _iframe.height=(_height) ? _height : 500
  _iframe.src=_src
 }
 
  </script>
 
- <body id="_body_id" onload="init();addPane('text', './menu.html', false)" style="margin:0px;padding:0px;background-color:transparent">
+ <body id="_body_id" onload="init();addPane('text', './menu.html', false, 150, 0, 10, 0);addPane('account', './root.html?_d=56', false, 500)" style="margin:0px;padding:0px;background-color:transparent">
   <div id="_root_div_id" style="top:0px;left:0px;width:100%;height:100%">
    <a href="#" onclick="addPane('text', './menu.html', false)">Menu</a>
   </div>

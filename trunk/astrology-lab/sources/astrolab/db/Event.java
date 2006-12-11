@@ -48,7 +48,7 @@ public class Event extends AttributedObject {
   public static Event getSelectedEvent(int number) {
     int selection = Personalize.getFavourite(-1, Text.getId("user.session.event." + number), 0);
     if (selection <= 0) {
-      selection = Personalize.getUser();
+      selection = Personalize.getUser(true);
     }
 
     return new Event(selection);
@@ -59,6 +59,9 @@ public class Event extends AttributedObject {
 
     for (int i = 0; i < result.length; i++) {
       result[i] = Personalize.getFavourite(-1, Text.getId("user.session.event." + (i + 1)), 0);
+      if (result[i] <= 0) {
+        result[i] = Personalize.getUser(true);
+      }
     }
 
     return result;

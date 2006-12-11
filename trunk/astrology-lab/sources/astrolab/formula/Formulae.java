@@ -7,7 +7,6 @@ import astrolab.astronom.util.Zodiac;
 import astrolab.db.Database;
 import astrolab.db.Personalize;
 import astrolab.db.Text;
-import astrolab.formula.score.FormulaScore;
 import astrolab.formula.score.FormulaScoreFactory;
 import astrolab.project.statistics.StatisticsRecord;
 import astrolab.project.statistics.StatisticsRecordIterator;
@@ -20,7 +19,6 @@ public class Formulae {
   private Element[] element;
 
   private double score;
-  private FormulaScore scoreAlgorithm = null;
   private FormulaData scoreData = null;
 
   public Formulae(int id, int project, int owner, double score) {
@@ -110,8 +108,8 @@ public class Formulae {
     }
     int project_id = Personalize.getFavourite(-1, Text.getId("user.session.project"), -1);
     Element[] elements = formulae.getElements();
-    int id = Text.reserve("Formulae:" + project_id + ":" + Personalize.getUser() + ":" + formulae_slot, Text.TYPE_FORMULAE);
-    int user = Personalize.getUser();
+    int user = Personalize.getUser(true);
+    int id = Text.reserve("Formulae:" + project_id + ":" + user + ":" + formulae_slot, Text.TYPE_FORMULAE);
     double score = formulae.rescore();
 
     Database.execute("DELETE FROM formula_description WHERE formulae_id = " + id);

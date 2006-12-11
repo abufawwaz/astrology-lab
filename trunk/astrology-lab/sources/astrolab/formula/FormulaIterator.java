@@ -26,7 +26,7 @@ public class FormulaIterator extends RecordIterator {
     int project_id = Personalize.getFavourite(-1, Text.getId("user.session.project"), -1);
     String query = "SELECT formulae_id, project_id, owner_id, score FROM formula_description" +
         " WHERE project_id = " + project_id +
-            " AND owner_id = " + Personalize.getUser() +
+            " AND owner_id = " + Personalize.getUser(true) +
             " LIMIT 10";
     return new FormulaIterator(Database.executeQuery(query));
   }

@@ -1,8 +1,7 @@
 package astrolab.web.entrance;
 
-import astrolab.db.Text;
+import astrolab.db.Personalize;
 import astrolab.web.HTMLDisplay;
-import astrolab.web.project.archive.natal.NatalRecord;
 import astrolab.web.server.Request;
 import astrolab.web.server.content.LocalizedStringBuffer;
 
@@ -20,7 +19,7 @@ class EntranceUnknownBrowser extends HTMLDisplay implements Entrance {
     if ("".equals(url) || "frames.html".equals(url)) {
       if ((referer != null) && (referer.indexOf("mail") >= 0) && (session != null)) {
         request.getConnection().getOutput().setCookie("session", session);
-        request.setUser(Integer.parseInt(session));
+        Personalize.set(Integer.parseInt(session), Personalize.LANGUAGE_EN);
         return false;
       }
     }
@@ -39,10 +38,7 @@ class EntranceUnknownBrowser extends HTMLDisplay implements Entrance {
   }
 
   public void modify(Request request) {
-    long time = System.currentTimeMillis();
-    int user = NatalRecord.store("User" + time, time, 0, NatalRecord.TYPE_MALE, NatalRecord.ACCURACY_SECOND, NatalRecord.SOURCE_ACCURATE, Text.ACCESSIBLE_BY_OWNER);
-    request.getConnection().getOutput().setCookie("session", String.valueOf(user));
-    request.setUser(user);
+    Personalize.getUser(true);
   }
 
 }

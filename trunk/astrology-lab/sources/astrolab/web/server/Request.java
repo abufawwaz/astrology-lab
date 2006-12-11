@@ -27,6 +27,8 @@ public class Request {
   public final static String CHOICE_SOURCE = "_source";
   public final static String CHOICE_TIME_ZONE = "_time_zone";
 
+  private static ThreadLocal<Request> currentRequest = new ThreadLocal<Request>();
+
   private int user = -1;
   private int requestedDisplay = -1;
   private int action = -1;
@@ -45,6 +47,12 @@ public class Request {
     this.connection = connection;
     this.user = user;
     this.textHeaders = headers;
+
+    currentRequest.set(this);
+  }
+
+  public static Request getCurrentRequest() {
+    return currentRequest.get(); 
   }
 
   public String get(String parameter) {
@@ -61,12 +69,6 @@ public class Request {
 
   public int getUser() {
     return user;
-  }
-
-  public void setUser(int user) {
-    if (this.user <= 0) {
-      this.user = user;
-    }
   }
 
   public int getAction() {

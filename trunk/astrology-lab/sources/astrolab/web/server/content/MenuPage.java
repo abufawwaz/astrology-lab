@@ -28,22 +28,6 @@ public class MenuPage extends Request implements Response {
     buffer.append("\r\n\t<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />");
     buffer.append("\r\n</head>");
     buffer.append("\r\n<body>");
-    if (getUser() < 0) {
-      buffer.append("\r\n");
-      buffer.append(Text.getText("menu.not-logged-in"));
-      buffer.append("\r\n<hr />");
-    } else {
-      String name = Text.getText(getUser()).trim();
-      int index = name.indexOf(' ');
-      if (index > 0) {
-        name = name.substring(0, index);
-      }
-      buffer.append("\r\n");
-      buffer.localize("Hello");
-      buffer.append(", ");
-      buffer.append(name);
-      buffer.append("!\r\n<hr />");
-    }
 
 //    listActions(buffer, Action.getActions(-1, view, getSelection().length), "");
 //    buffer.append("\r\n<hr>");

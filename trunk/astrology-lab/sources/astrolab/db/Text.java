@@ -53,7 +53,7 @@ public class Text {
       String accessible = Database.query("SELECT accessible_by FROM text WHERE id = " + id);
       String expected = String.valueOf(user);
       if (user == ACCESSIBLE_BY_OWNER) {
-        expected = String.valueOf(Personalize.getUser());
+        expected = String.valueOf(Personalize.getUser(false));
       } else if (user == ACCESSIBLE_BY_ALL) {
         expected = "NULL";
       }
@@ -72,7 +72,7 @@ public class Text {
       if (user == ACCESSIBLE_BY_ALL) {
         accessible_by = "NULL";
       } else if (user == ACCESSIBLE_BY_OWNER) {
-        int current_user = Personalize.getUser();
+        int current_user = Personalize.getUser(false);
         accessible_by = String.valueOf((current_user > 0) ? current_user : id);
       } else {
         accessible_by = String.valueOf(user);
@@ -119,25 +119,23 @@ public class Text {
   }
 
   private final static String constructAccessibleBy(String id) {
-    int user = Personalize.getUser();
+    int user = Personalize.getUser(false);
 
     if (user == 2000001) {
       // system user sees everything
       return "";
+    } else if (user == -1) {
+      try {
+        return " AND (accessible_by IS NULL OR accessible_by = " + Integer.parseInt(id) + ")";
+      } catch (NumberFormatException nfe) {
+        // no user. show only available to everybody
+        return " AND (accessible_by IS NULL)";
+      }
     } else if (id.equals(String.valueOf(user))) {
       // every user sees him/herself
       return "";
     } else {
-      if (user > 0) {
-        return " AND (accessible_by IS NULL OR accessible_by = " + user + ")";
-      } else {
-        try {
-          return " AND (accessible_by IS NULL OR accessible_by = " + Integer.parseInt(id) + ")";
-        } catch (NumberFormatException nfe) {
-          // no user. show only available to everybody
-          return " AND (accessible_by IS NULL)";
-        }
-      }
+      return " AND (accessible_by IS NULL OR accessible_by = " + user + ")";
     }
   }
 
