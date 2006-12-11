@@ -25,12 +25,14 @@ var grabx = 0;
 var graby = 0;
 var orix = 0;
 var oriy = 0;
+var oriwidth = 0;
+var oriheight = 0;
 var elex = 0;
 var eley = 0;
 var maxZindex = 20;
 
-var dragobj = null;
-var handleobj = null;
+var dragobjid = null
+var grabtype;
 
 function falsefunc() { return false; } // used to block cascading events
 
@@ -53,13 +55,16 @@ function update(e) {
   }
 }
 
-function grab(context, handler) {
+function grab(_dragobjid, _grabtype) {
+  dragobjid = _dragobjid
+  grabtype = _grabtype
+  
   maxZindex += 10
   document.onmousedown = falsefunc; // in NS this prevents cascading of events, thus disabling text selection
-  dragobj = context;
+  dragobj = document.getElementById('_obj_id_' + _dragobjid)
   dragobj.style.zIndex = maxZindex; // move it to the top
 
-  handleobj = handler;
+  handleobj = document.getElementById('_obj_' + _grabtype + '_handle_id_' + _dragobjid)
   handleobj.style.height = '20px';
   handleobj.style.zIndex = maxZindex + 10;
 
@@ -69,24 +74,45 @@ function grab(context, handler) {
   graby = mousey;
   elex = orix = dragobj.offsetLeft;
   eley = oriy = dragobj.offsetTop;
+
+  frameobj = document.getElementById('_obj_frame_id_' + _dragobjid)
+  oriwidth = frameobj.width;
+  oriheight = frameobj.height;
+
   update();
 }
 
 function drag(e) {// parameter passing is important for NS family\
-  if (dragobj) {
-    elex = orix + (mousex-grabx);
-    eley = oriy + (mousey-graby);
-    dragobj.style.position = "absolute";
-    dragobj.style.left = (elex).toString(10) + 'px';
-    dragobj.style.top  = (eley).toString(10) + 'px';
+  if (dragobjid) {
+    dragobj = document.getElementById('_obj_id_' + dragobjid)
+    if (grabtype == 'm') {
+      // move
+      elex = orix + (mousex-grabx);
+      eley = oriy + (mousey-graby);
+      dragobj.style.left = (elex).toString(10) + 'px';
+      dragobj.style.top  = (eley).toString(10) + 'px';
+    } else {
+      // resize
+      frameobj = document.getElementById('_obj_frame_id_' + dragobjid)
+      if (mousex - orix > 50) {
+        frameobj.width = oriwidth * (mousex - orix) / (grabx - orix)
+      } else {
+        frameobj.width = 50
+      }
+      if (mousey - oriy > 50) {
+        frameobj.height = oriheight * (mousey - oriy) / (graby - oriy)
+      } else {
+        frameobj.height = 50
+      }
+    }
   }
   update(e);
   return false; // in IE this prevents cascading of events, thus text selection is disabled
 }
 
 function drop() {
-  if (dragobj) {
-    dragobj = null;
+  if (dragobjid) {
+    dragobjid = null;
     handleobj.style.height='5px';
     handleobj = null;
   }
@@ -99,13 +125,13 @@ function drop() {
 function addPane(_id, _src, _new, _width, _height, _x, _y) {
  if (_new) {
    _id += Math.random() * 255
- } else if (document.getElementById('obj_id_' + _id)) {
+ } else if (document.getElementById('_obj_id_' + _id)) {
    // the pane is already opened
    return
  }
 
  var _div = document.createElement("div");
- _div.setAttribute('id', 'obj_id_' + _id)
+ _div.setAttribute('id', '_obj_id_' + _id)
  _div.style.position='absolute'
  _div.style.left=(_x) ? _x+'px' : '200px'
  if (_y) _div.style.top=_y+'px'
@@ -117,13 +143,14 @@ function addPane(_id, _src, _new, _width, _height, _x, _y) {
  _div.appendChild(_table)
  var _tbody = document.createElement("tbody");
  _table.appendChild(_tbody)
+
  var _tr1 = document.createElement("tr");
  _tbody.appendChild(_tr1)
  var _td1 = document.createElement("td");
  _td1.heigth=10
  _tr1.appendChild(_td1)
  var _handle = document.createElement("div");
- _handle.setAttribute('id', 'obj_handle_id_' + _id)
+ _handle.setAttribute('id', '_obj_m_handle_id_' + _id)
  _handle.style.position='absolute'
  _handle.style.backgroundColor='blue'
  _handle.style.top='0px'
@@ -133,11 +160,11 @@ function addPane(_id, _src, _new, _width, _height, _x, _y) {
  _handle.style.margin='0px'
  _handle.style.padding='0px'
  _handle.style.cursor='move'
- _handle.onmousedown=function() { grab(document.getElementById('obj_id_' + _id), this)}
+ _handle.onmousedown=function() { grab(_id, 'm')}
  _td1.appendChild(_handle)
  var _close = document.createElement("a");
  _close.setAttribute('href','#')
- _close.onclick=function() { document.getElementById("_root_div_id").removeChild(document.getElementById('obj_id_' + _id)); }
+ _close.onclick=function() { document.getElementById("_root_div_id").removeChild(document.getElementById('_obj_id_' + _id)); }
  _handle.appendChild(_close)
  var _close_text = document.createTextNode("x")
  _close.appendChild(_close_text)
@@ -149,8 +176,28 @@ function addPane(_id, _src, _new, _width, _height, _x, _y) {
  var _iframe = document.createElement("iframe")
  _td2.appendChild(_iframe)
 
+ var _tr3 = document.createElement("tr");
+ _tbody.appendChild(_tr3)
+ var _td3 = document.createElement("td");
+ _td3.heigth=10
+ _tr3.appendChild(_td3)
+ var _resize_handle = document.createElement("div");
+ _resize_handle.setAttribute('id', '_obj_r_handle_id_' + _id)
+ _resize_handle.style.position='absolute'
+ _resize_handle.style.backgroundColor='blue'
+ _resize_handle.style.top='99%'
+ _resize_handle.style.left='0px'
+ _resize_handle.style.width='100%'
+ _resize_handle.style.height='1%'
+ _resize_handle.style.margin='0px'
+ _resize_handle.style.padding='0px'
+ _resize_handle.style.cursor='nw-resize'
+ _resize_handle.onmousedown=function() { grab(_id, 'r')}
+ _td3.appendChild(_resize_handle)
+
  document.getElementById("_root_div_id").appendChild(_div);
  _iframe.allowtransparency='true'
+ _iframe.setAttribute('id', '_obj_frame_id_' + _id)
  _iframe.setAttribute('frameborder', '0')
  _iframe.frameborder=0
  _iframe.marginwidth=0
