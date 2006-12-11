@@ -2,6 +2,9 @@ package astrolab.db;
 
 import java.util.StringTokenizer;
 
+import astrolab.web.project.archive.natal.NatalRecord;
+import astrolab.web.server.Request;
+
 public final class Personalize extends AttributedObject {
 
   public final static int VALUE_NULL = -1;
@@ -14,7 +17,7 @@ public final class Personalize extends AttributedObject {
   public final static String LANGUAGE_BG = "bg";
   public final static String LANGUAGE_EN = "en";
 
-  private static ThreadLocal currentPersonalization = new ThreadLocal();
+  private static ThreadLocal<Personalize> currentPersonalization = new ThreadLocal<Personalize>();
 
   private final int user;
   private String language = LANGUAGE_EN;
@@ -57,7 +60,7 @@ public final class Personalize extends AttributedObject {
   }
 
   public static String getLanguage() {
-    Personalize person = (Personalize) currentPersonalization.get();
+    Personalize person = currentPersonalization.get();
     if (person != null && person.user > 0) {
       return person.language;
     } else {
@@ -65,17 +68,22 @@ public final class Personalize extends AttributedObject {
     }
   }
 
-  public static int getUser() {
-    Personalize person = (Personalize) currentPersonalization.get();
+  public static int getUser(boolean requireReal) {
+    Personalize person = currentPersonalization.get();
     if (person != null && person.user > 0) {
       return person.user;
+    } else if (requireReal) {
+      long time = System.currentTimeMillis();
+      int user = NatalRecord.store("User" + time, time, 0, NatalRecord.TYPE_MALE, NatalRecord.ACCURACY_SECOND, NatalRecord.SOURCE_ACCURATE, Text.ACCESSIBLE_BY_OWNER);
+      Request.getCurrentRequest().getConnection().getOutput().setCookie("session", String.valueOf(user));
+      return user;
     } else {
       return -1;
     }
   }
 
   public static int[] getFavourites(int int_view) {
-    Personalize person = (Personalize) currentPersonalization.get();
+    Personalize person = currentPersonalization.get();
     if (person != null && person.user > 0) {
       int user = person.user;
     	String view = (int_view >= 0) ? "= " + int_view : "IS NULL";
@@ -91,7 +99,7 @@ public final class Personalize extends AttributedObject {
   }
 
   public static int getFavourite(int int_view, int order, int default_value) {
-    Personalize person = (Personalize) currentPersonalization.get();
+    Personalize person = currentPersonalization.get();
     if (person != null && person.user > 0) {
       int user = person.user;
     	String view = (int_view >= 0) ? "= " + int_view : "IS NULL";
@@ -106,7 +114,7 @@ public final class Personalize extends AttributedObject {
   }
 
   public static void addFavourite(int int_view, int favour) {
-    Personalize person = (Personalize) currentPersonalization.get();
+    Personalize person = currentPersonalization.get();
     if (person == null || person.user < 0) {
       System.out.println("No personalization for anonymous user!");
       return;
@@ -126,7 +134,7 @@ public final class Personalize extends AttributedObject {
   }
 
   public static void addFavourite(int int_view, int favour, int order) {
-    Personalize person = (Personalize) currentPersonalization.get();
+    Personalize person = currentPersonalization.get();
     if (person == null || person.user < 0) {
       System.out.println("No personalization for anonymous user!");
       return;
@@ -150,7 +158,7 @@ public final class Personalize extends AttributedObject {
   }
 
   public static String getEmail() {
-    Personalize person = (Personalize) currentPersonalization.get();
+    Personalize person = currentPersonalization.get();
     if ((person != null) && (person.user > 0)) {
       return User.getEmail(person.user);
     }
@@ -158,7 +166,7 @@ public final class Personalize extends AttributedObject {
   }
 
   public static void setEmail(String email) {
-    Personalize person = (Personalize) currentPersonalization.get();
+    Personalize person = currentPersonalization.get();
     if (person.user > 0) {
       User.setEmail(person.user, email);
     }

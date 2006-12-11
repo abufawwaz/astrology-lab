@@ -47,7 +47,7 @@ public class DisplayProjectDescription extends HTMLFormDisplay {
 
       while (records.hasNext()) {
         FeedbackRecord record = records.next();
-        boolean isAuthor = (record.getAuthor() == Personalize.getUser());
+        boolean isAuthor = (record.getAuthor() == Personalize.getUser(false));
 
         buffer.append("<tr>");
         buffer.append("<td>");

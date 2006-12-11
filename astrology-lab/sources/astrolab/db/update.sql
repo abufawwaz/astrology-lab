@@ -87,3 +87,5 @@ insert into text values (10002022, NULL, 'user.selection.y2', 'selection.y2', 's
 insert into text values (4000034, NULL, NULL, 'Display formulae chart', 'Display formulae chart');
 insert into views values (55, 'astrolab.formula.display.ComponentChartFormulae');
 insert into actions values (4000034, 4000016, NULL, NULL, NULL, NULL, 55, NULL);
+
+insert into views values (56, 'astrolab.web.entrance.DisplayPersonalData');

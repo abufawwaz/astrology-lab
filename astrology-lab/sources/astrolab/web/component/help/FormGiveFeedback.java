@@ -43,7 +43,7 @@ public class FormGiveFeedback extends HTMLFormDisplay {
     FeedbackRecordIterator records = FeedbackRecordIterator.iterate(request, 0, FeedbackRecordIterator.SORT_BY_VOTE);
     while (records.hasNext()) {
       FeedbackRecord record = records.next();
-      boolean isAuthor = (record.getAuthor() == Personalize.getUser());
+      boolean isAuthor = (record.getAuthor() == Personalize.getUser(false));
       buffer.append("<tr>");
       buffer.append("<td>");
       if (!isAuthor && !record.hasApproved()) {

@@ -14,13 +14,13 @@ public class Log {
 
   public static void log(String message) {
     if ((mode.get() == null) || !mode.get()) {
-      System.err.println(Thread.currentThread().getName() + " " + new Date().toString() + " " + Personalize.getUser() + ": " + message);
+      System.err.println(Thread.currentThread().getName() + " " + new Date().toString() + " " + Personalize.getUser(false) + ": " + message);
     }
   }
 
   public static void log(String message, Throwable exception) {
     if ((mode.get() == null) || !mode.get()) {
-      System.err.println(Thread.currentThread().getName() + " " + new Date().toString() + " " + Personalize.getUser() + ": Exception: " + message);
+      System.err.println(Thread.currentThread().getName() + " " + new Date().toString() + " " + Personalize.getUser(false) + ": Exception: " + message);
       exception.printStackTrace();
     }
   }
