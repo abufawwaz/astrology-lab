@@ -44,9 +44,11 @@ public class FormEditFormulae extends HTMLFormDisplay {
 
     for (int i = 0; i < 6; i++) {
       buffer.append("<tr>");
+      buffer.append("<td>+</td>");
       buffer.append("<td>");
       ComponentSelectNumber.fill(buffer, "formulae_element_" + i + "_coefficient");
       buffer.append("</td>");
+      buffer.append("<td>x</td>");
       buffer.append("<td>");
       ComponentSelectChoice.fill(buffer, ELEMENTS, ELEMENT_IDS, ELEMENTS[0], "formulae_element_" + i);
       buffer.append("</td>");

@@ -19,6 +19,8 @@ public class ComponentChartStatistics extends SVGDisplay {
   private Time from_time;
   private Time to_time;
 
+  protected int strokeWidth = 1;
+
   public void fillBodyContent(Request request, LocalizedStringBuffer buffer) {
     if (list == null) {
       return;
@@ -95,10 +97,11 @@ public class ComponentChartStatistics extends SVGDisplay {
     }
 
     buffer.append("preserveAspectRatio='none' viewBox='" + firstRecordTime + " 0 " + (lastRecordTime - firstRecordTime) + " " + maxValue + "'");
+    strokeWidth = Math.max(strokeWidth, (lastRecordTime - firstRecordTime) / 1000);
   }
 
   protected String decorateLine() {
-    return "stroke:green;stroke-width:3";
+    return "stroke:green;stroke-width:" + strokeWidth;
   }
 
   protected int calculateValue(StatisticsRecord record) {

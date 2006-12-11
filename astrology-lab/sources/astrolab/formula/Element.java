@@ -48,7 +48,13 @@ public class Element {
   }
 
   public String toString() {
-    return ((coefficient > 0) ? "+" : "") + coefficient + "x" + text;
+    if (Double.isNaN(coefficient)) {
+      return text;
+    } else if (coefficient >= 0) {
+      return "+" + coefficient + "x" + text;
+    } else {
+      return coefficient + "x" + text;
+    }
   }
 
 }
