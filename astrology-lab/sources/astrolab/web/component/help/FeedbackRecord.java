@@ -56,11 +56,13 @@ class FeedbackRecord {
   }
 
   public static void approve(int person, int project, int message) {
-    Database.execute("UPDATE help_feedback SET approve='yes' WHERE id=" + message + " and user_id=" + person);
+    Database.execute("DELETE FROM help_feedback WHERE id=" + message + " and user_id=" + person);
+    Database.execute("INSERT INTO help_feedback VALUES (" + message + ", " + person + ", 'yes')");
   }
 
   public static void disapprove(int person, int project, int message) {
-    Database.execute("UPDATE help_feedback SET approve='no' WHERE id=" + message + " and user_id=" + person);
+    Database.execute("DELETE FROM help_feedback WHERE id=" + message + " and user_id=" + person);
+    Database.execute("INSERT INTO help_feedback VALUES (" + message + ", " + person + ", 'no')");
   }
 
 }
