@@ -1,6 +1,5 @@
 package astrolab.web.component.help;
 
-import astrolab.db.Action;
 import astrolab.db.Personalize;
 import astrolab.db.Text;
 import astrolab.web.HTMLFormDisplay;
@@ -10,12 +9,13 @@ import astrolab.web.server.content.LocalizedStringBuffer;
 public class FormGiveFeedback extends HTMLFormDisplay {
 
   public FormGiveFeedback() {
-    super(Action.getAction(-1, -1, HTMLFormDisplay.getId(FormGiveFeedback.class)));
+    super(HTMLFormDisplay.getId(FormGiveFeedback.class), true);
   }
 
   public void fillBodyContent(Request request, LocalizedStringBuffer buffer) {
     operate(request);
 
+    buffer.append("<style type='text/css'>textarea { width:95%; }</style>");
     buffer.append("<input type='hidden' name='approve' value='-1' />");
     buffer.append("<input type='hidden' name='disapprove' value='-1' />");
     buffer.append("<table border='0'>");
