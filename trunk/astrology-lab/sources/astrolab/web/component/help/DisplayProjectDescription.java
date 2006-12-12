@@ -21,6 +21,7 @@ public class DisplayProjectDescription extends HTMLFormDisplay {
       buffer.localize(project);
       buffer.append("</h2></center>");
 
+      buffer.append("<style type='text/css'>textarea { width:95%; }</style>");
       buffer.append("<input type='hidden' name='approve' value='-1' />");
       buffer.append("<input type='hidden' name='disapprove' value='-1' />");
       buffer.append("<table width='100%' border='0'>");
@@ -77,7 +78,7 @@ public class DisplayProjectDescription extends HTMLFormDisplay {
 
       buffer.append("<tr>");
       buffer.append("\r\n<td><center>");
-      buffer.append("<textarea name='feedback' cols='65%' rows='10'></textarea>");
+      buffer.append("<textarea name='feedback' cols='80%' rows='10'></textarea>");
       buffer.append("</center></td>");
       buffer.append("\r\n<td colspan='2' valign='bottom'><center>");
       buffer.append("<input type='submit' value='");
