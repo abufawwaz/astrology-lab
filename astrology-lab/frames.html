@@ -219,12 +219,12 @@ function addPane(_id, _src, _new, _width, _height, _x, _y) {
 }
 
   function refreshAllPanes(exceptPane) {
-    for (frame = 0; frame < window.frames.length; frame++) {
-      if (window.frames[frame] != exceptPane) {
-        if (window.frames[frame].document.forms.length > 0) {
-          window.frames[frame].location.href = window.frames[frame].location.href
+    for (frame = 0; frame < top.window.frames.length; frame++) {
+      if (top.window.frames[frame] != exceptPane) {
+        if (top.window.frames[frame].document.forms && top.window.frames[frame].document.forms.length > 0) {
+          top.window.frames[frame].location.href = top.window.frames[frame].location.href
         } else {
-          window.frames[frame].location.reload()
+          top.window.frames[frame].location.reload()
         }
       }
     }
