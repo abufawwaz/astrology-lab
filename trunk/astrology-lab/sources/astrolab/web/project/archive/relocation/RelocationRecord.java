@@ -6,7 +6,6 @@ import java.util.Date;
 import astrolab.db.Database;
 import astrolab.db.Event;
 import astrolab.db.Text;
-import astrolab.web.project.archive.natal.NatalRecord;
 
 public class RelocationRecord extends Event {
 
@@ -35,9 +34,8 @@ public class RelocationRecord extends Event {
 
   public static int getLocationOfPerson(int person, long timestamp) {
     String sqltimestamp = new Timestamp(timestamp).toString();
-    String sqlNatal = "SELECT location, event_time FROM archive, " + NatalRecord.TABLENAME + " WHERE archive.event_id=" + NatalRecord.TABLENAME + ".event_id AND archive.subject_id=" + person;
-    String sqlRelocation = "SELECT location, event_time FROM archive, " + TABLENAME + " WHERE archive.event_id=" + TABLENAME + ".event_id AND archive.subject_id=" + person + " AND archive.event_time < '" + sqltimestamp + "' ORDER BY location, event_time DESC";
-    return Integer.parseInt(Database.query(sqlNatal + " UNION " + sqlRelocation));
+    String sql = "SELECT location, event_time FROM archive, " + TABLENAME + " WHERE (archive.event_id=" + TABLENAME + ".event_id OR archive.event_id=" + person + ") AND archive.subject_id=" + person + " AND archive.event_time < '" + sqltimestamp + "' ORDER BY event_time DESC";
+    return Integer.parseInt(Database.query(sql));
   }
 
 }
