@@ -65,7 +65,6 @@ public class FormGiveFeedback extends HTMLFormDisplay {
       buffer.append("</td>");
       buffer.append("<td>");
       buffer.localize(record.getId());
-System.out.println(" author of " + record.getId() + " is " + record.getAuthor());
       buffer.signature(record.getAuthor());
       buffer.append("</td>");
       buffer.append("</tr>");

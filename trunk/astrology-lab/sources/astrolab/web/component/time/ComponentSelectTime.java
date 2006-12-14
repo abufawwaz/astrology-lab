@@ -7,7 +7,13 @@ import astrolab.tools.Template;
 import astrolab.web.server.Request;
 import astrolab.web.server.content.LocalizedStringBuffer;
 
+// TODO: combine with location!
 public class ComponentSelectTime {
+
+  /**
+   * @deprecated will be private soon!
+   */
+  public static final String PARAMETER_KEY = "_date";
 
   private static String RAW_CONTENTS = Template.template("astrolab/web/component/time/time_chooser.html");
 
@@ -32,7 +38,7 @@ public class ComponentSelectTime {
   }
 
   public static int retrieve(Request request) {
-    return Integer.parseInt(request.get(Request.TEXT_DATE));
+    return Integer.parseInt(request.get(PARAMETER_KEY));
   }
 
 }

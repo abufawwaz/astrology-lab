@@ -6,6 +6,8 @@ import astrolab.web.server.content.LocalizedStringBuffer;
 
 public class ComponentSelectAccuracy {
 
+  private final static String CHOICE_ACCURACY = "_accuracy";
+
   private final static String[] ENUMERATION = new String[] {
     Event.ACCURACY_SECOND,
     Event.ACCURACY_MINUTE,
@@ -21,7 +23,7 @@ public class ComponentSelectAccuracy {
   };
 
   public static void fill(LocalizedStringBuffer buffer) {
-    buffer.append("\r\n<select id='" + Request.CHOICE_ACCURACY + "' name='" + Request.CHOICE_ACCURACY + "'>");
+    buffer.append("\r\n<select id='" + CHOICE_ACCURACY + "' name='" + CHOICE_ACCURACY + "'>");
     for (int i = 0; i < ENUMERATION.length; i++) {
       buffer.append("\r\n\t<option value='" + ENUMERATION[i] + "'>");
       buffer.localize(ENUMERATION[i]);
@@ -31,7 +33,7 @@ public class ComponentSelectAccuracy {
   }
 
   public static void fill(LocalizedStringBuffer buffer, String selected) {
-    buffer.append("\r\n<select id='" + Request.CHOICE_ACCURACY + "' name='" + Request.CHOICE_ACCURACY + "'>");
+    buffer.append("\r\n<select id='" + CHOICE_ACCURACY + "' name='" + CHOICE_ACCURACY + "'>");
     for (int i = 0; i < ENUMERATION.length; i++) {
       buffer.append("\r\n\t<option value='" + ENUMERATION[i] + "'");
       if (ENUMERATION[i].equals(selected)) {
@@ -45,6 +47,6 @@ public class ComponentSelectAccuracy {
   }
 
   public static String retrieve(Request request) {
-    return request.get(Request.CHOICE_ACCURACY);
+    return request.get(CHOICE_ACCURACY);
   }
 }

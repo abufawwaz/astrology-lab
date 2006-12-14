@@ -4,7 +4,6 @@ import java.lang.reflect.Method;
 import java.util.Hashtable;
 
 import astrolab.db.Action;
-import astrolab.db.Personalize;
 import astrolab.web.server.Request;
 import astrolab.web.server.content.LocalizedStringBuffer;
 
@@ -38,13 +37,6 @@ public abstract class Display {
       remember(id.intValue(), classs);
     }
     return id.intValue();
-  }
-
-  public static int getCurrentView(Request request) {
-		return Personalize.getFavourite(-1, Personalize.KEY_VIEW_1, 0);
-  }
-  public static void setCurrentView(int view, Request request) {
-    Personalize.addFavourite(-1, view, Personalize.KEY_VIEW_1);
   }
 
 	public final static Display getView(int intid) {

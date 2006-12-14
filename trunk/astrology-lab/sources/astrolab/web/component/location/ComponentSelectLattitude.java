@@ -5,6 +5,8 @@ import astrolab.web.server.content.LocalizedStringBuffer;
 
 public class ComponentSelectLattitude {
 
+  private final static String CHOICE_LATTITUDE = "_lattitude";
+
   public static void fill(LocalizedStringBuffer buffer) {
     buffer.append("\r\n<script language='JavaScript'>");
     buffer.append("\r\nfunction recalculatelattitude() {");
@@ -12,10 +14,10 @@ public class ComponentSelectLattitude {
     buffer.append("\r\n if ('S' == document.getElementById('__lattitude_2').value) {");
     buffer.append("\r\n  lattitude = -lattitude");
     buffer.append("\r\n }");
-    buffer.append("\r\n document.getElementById('" + Request.CHOICE_LATTITUDE + "').value = lattitude");
+    buffer.append("\r\n document.getElementById('" + CHOICE_LATTITUDE + "').value = lattitude");
     buffer.append("\r\n}");
     buffer.append("\r\n</script>");
-    buffer.append("\r\n<input type='hidden' id='" + Request.CHOICE_LATTITUDE + "' name='" + Request.CHOICE_LATTITUDE + "' />");
+    buffer.append("\r\n<input type='hidden' id='" + CHOICE_LATTITUDE + "' name='" + CHOICE_LATTITUDE + "' />");
     buffer.append("\r\n<select id='__lattitude_1' onchange='recalculatelattitude(); return false;'>");
     for (int i = 0; i < 90; i++) {
       buffer.append("\r\n\t<option value='" + i + "'>" + i + "</option>");
@@ -33,7 +35,7 @@ public class ComponentSelectLattitude {
   }
 
   public static double retrieve(Request request) {
-    String value = request.get(Request.CHOICE_LATTITUDE);
-    return (value.length() > 0) ? Double.parseDouble(request.get(Request.CHOICE_LATTITUDE)) : 0;
+    String value = request.get(CHOICE_LATTITUDE);
+    return (value.length() > 0) ? Double.parseDouble(request.get(CHOICE_LATTITUDE)) : 0;
   }
 }

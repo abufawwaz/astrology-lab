@@ -8,9 +8,6 @@ import astrolab.web.server.Request;
 public final class Personalize extends AttributedObject {
 
   public final static int VALUE_NULL = -1;
-
-  public final static int KEY_VIEW_1 = 0;
-  public final static int KEY_VIEW_2 = 1;
 	public final static int KEY_ATTRIBUTE = 2;
 
   public final static String ACCEPTED_LANGUAGES = "en,bg";
@@ -74,7 +71,7 @@ public final class Personalize extends AttributedObject {
       return person.user;
     } else if (requireReal) {
       long time = System.currentTimeMillis();
-      int user = NatalRecord.store("User" + time, time, 0, NatalRecord.TYPE_MALE, NatalRecord.ACCURACY_SECOND, NatalRecord.SOURCE_ACCURATE, Text.ACCESSIBLE_BY_OWNER);
+      int user = NatalRecord.store(-1, "User" + time, time, 0, NatalRecord.TYPE_MALE, NatalRecord.ACCURACY_SECOND, NatalRecord.SOURCE_ACCURATE, Text.ACCESSIBLE_BY_OWNER);
       Request.getCurrentRequest().getConnection().getOutput().setCookie("session", String.valueOf(user));
       return user;
     } else {

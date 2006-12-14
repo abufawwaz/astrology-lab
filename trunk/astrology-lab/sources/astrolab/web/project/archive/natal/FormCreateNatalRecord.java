@@ -9,6 +9,7 @@ import astrolab.web.component.ComponentSelectSource;
 import astrolab.web.component.location.ComponentSelectLocation;
 import astrolab.web.component.time.ComponentSelectTime;
 import astrolab.web.server.Request;
+import astrolab.web.server.RequestParameters;
 import astrolab.web.server.content.LocalizedStringBuffer;
 
 public class FormCreateNatalRecord extends HTMLFormDisplay {
@@ -33,7 +34,7 @@ public class FormCreateNatalRecord extends HTMLFormDisplay {
     buffer.append("</option>");
     buffer.append("</select>");
     buffer.append("</td>");
-    buffer.append("<td><input id=\"" + Request.TEXT_NAME + "\" type='text' name='" + Request.TEXT_NAME + "' value='");
+    buffer.append("<td><input id=\"" + RequestParameters.TEXT_NAME + "\" type='text' name='" + RequestParameters.TEXT_NAME + "' value='");
     buffer.localize("... not set ...");
     buffer.append("' /></td>");
     buffer.append("</tr>");
@@ -50,7 +51,7 @@ public class FormCreateNatalRecord extends HTMLFormDisplay {
     buffer.localize("Time of occurance");
     buffer.append(":</td>");
     buffer.append("<td>");
-    ComponentSelectTime.fill(buffer, Request.TEXT_DATE);
+    ComponentSelectTime.fill(buffer, ComponentSelectTime.PARAMETER_KEY);
     buffer.append("</td>");
     buffer.append("</tr>");
     buffer.append("<tr>");

@@ -3,8 +3,12 @@ package astrolab.web.project.archive.diary;
 import astrolab.astronom.Time;
 import astrolab.db.Event;
 import astrolab.web.Modify;
+import astrolab.web.component.ComponentSelectAccuracy;
+import astrolab.web.component.ComponentSelectSource;
+import astrolab.web.component.time.ComponentSelectTime;
 import astrolab.web.project.archive.relocation.RelocationRecord;
 import astrolab.web.server.Request;
+import astrolab.web.server.RequestParameters;
 
 public class ModifyDiaryRecord extends Modify {
 
@@ -12,10 +16,12 @@ public class ModifyDiaryRecord extends Modify {
     try {
       int user = request.getUser();
       // TODO: fix this!
-      int location = RelocationRecord.getLocationOfPerson(user, new Time(request.get(Request.TEXT_DATE), 0).getTimeInMillis());
-      long timestamp = new Time(request.get(Request.TEXT_DATE), location).getTimeInMillis();
+      int location = RelocationRecord.getLocationOfPerson(user, new Time(request.get(ComponentSelectTime.PARAMETER_KEY), 0).getTimeInMillis());
+      long timestamp = new Time(request.get(ComponentSelectTime.PARAMETER_KEY), location).getTimeInMillis();
+      String accuracy = ComponentSelectAccuracy.retrieve(request);
+      String source = ComponentSelectSource.retrieve(request);
 
-      int record = DiaryRecord.store(user, timestamp, request.get(Request.TEXT_NAME), request.get(Request.CHOICE_ACCURACY), request.get(Request.CHOICE_SOURCE));
+      int record = DiaryRecord.store(user, timestamp, request.get(RequestParameters.TEXT_NAME), accuracy, source);
       Event.setSelectedEvent(record, 1);
     } catch (Exception e) {
       e.printStackTrace();

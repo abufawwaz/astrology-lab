@@ -9,6 +9,7 @@ import astrolab.web.component.ComponentSelectSource;
 import astrolab.web.component.time.ComponentSelectTime;
 import astrolab.web.project.archive.relocation.RelocationRecord;
 import astrolab.web.server.Request;
+import astrolab.web.server.RequestParameters;
 import astrolab.web.server.content.LocalizedStringBuffer;
 
 public class FormDiaryRecord extends HTMLFormDisplay {
@@ -26,7 +27,7 @@ public class FormDiaryRecord extends HTMLFormDisplay {
     buffer.append("<td>");
     buffer.localize("Description");
     buffer.append(":</td>");
-    buffer.append("<td><textarea id=\"" + Request.TEXT_NAME + "\" name='" + Request.TEXT_NAME + "' title='");
+    buffer.append("<td><textarea id=\"" + RequestParameters.TEXT_NAME + "\" name='" + RequestParameters.TEXT_NAME + "' title='");
     buffer.localize("Enter the description of the event here!");
     buffer.append("' cols='40' rows='6'></textarea></td>");
     buffer.append("</tr>");
@@ -43,7 +44,7 @@ public class FormDiaryRecord extends HTMLFormDisplay {
     buffer.localize("Time of occurance");
     buffer.append(":</td>");
     buffer.append("<td>");
-    ComponentSelectTime.fill(buffer, Request.TEXT_DATE);
+    ComponentSelectTime.fill(buffer, ComponentSelectTime.PARAMETER_KEY);
     buffer.append("</td>");
     buffer.append("</tr>");
     buffer.append("<tr>");

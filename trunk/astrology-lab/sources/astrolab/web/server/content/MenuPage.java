@@ -1,7 +1,6 @@
 package astrolab.web.server.content;
 
 import java.io.UnsupportedEncodingException;
-import java.util.Properties;
 
 import astrolab.db.Action;
 import astrolab.db.Personalize;
@@ -9,12 +8,13 @@ import astrolab.db.Text;
 import astrolab.web.Display;
 import astrolab.web.server.Connection;
 import astrolab.web.server.Request;
+import astrolab.web.server.RequestParameters;
 import astrolab.web.server.Response;
 
 public class MenuPage extends Request implements Response {
 
-	public MenuPage(Connection connection, int user, Properties headers) {
-    super(connection, user, headers);
+	public MenuPage(Connection connection, int user, RequestParameters parameters) {
+    super(connection, user, parameters);
   }
 
   public Response getResponse() {
@@ -88,7 +88,7 @@ public class MenuPage extends Request implements Response {
   }
 
   private void listFolders(LocalizedStringBuffer buffer, int[] path, int offset, String pathtext, String tab) {
-    int view = Display.getCurrentView(this);
+    int view = getCurrentDisplay();
     int folder = (offset == 0) ? -1 : path[offset - 1];
     int[] actions = Action.getFolders(folder);
 

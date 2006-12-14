@@ -2,7 +2,6 @@ package astrolab.web.server;
 
 import java.io.*;
 import java.net.SocketException;
-import java.util.Properties;
 
 import astrolab.db.Personalize;
 import astrolab.tools.Log;
@@ -11,7 +10,7 @@ public class ConnectionInput extends Thread {
 
   private Connection connection;
   private LineNumberReader in;
-  private Properties headers = new Properties();
+  private RequestParameters parameters;
 
   ConnectionInput(InputStream in, Connection connection) {
     setName("client-" + hashCode());
@@ -31,9 +30,12 @@ public class ConnectionInput extends Thread {
         int user;
       	String headline = in.readLine();
         String line;
-        String content = null;
 
-        headers = new Properties();
+        if (headline == null) {
+          break;
+        }
+
+        parameters = new RequestParameters(headline);
         do {
           line = in.readLine();
           if (line == null) {
@@ -42,24 +44,26 @@ public class ConnectionInput extends Thread {
           }
           int colon = line.indexOf(':');
           if (colon > 0) {
-            headers.setProperty(line.substring(0, colon), line.substring(colon + 1).trim());
+            parameters.set(line.substring(0, colon), line.substring(colon + 1).trim());
           }
 
           Log.log("[Client]: " + line);
         } while ((line != null) && (line.length() > 0));
 
-        int contentLength = Integer.parseInt(headers.getProperty("Content-Length", "0"));
+        int contentLength = Integer.parseInt(parameters.get("Content-Length", "0"));
         if (contentLength > 0) {
           char[] contentArray = new char[contentLength];
           in.read(contentArray);
-          content = new String(contentArray);
+          parameters.extractParameters(new String(contentArray));
         }
 
-        user = Integer.parseInt(getCookie("session", "-1"));
+        user = Integer.parseInt(parameters.getCookie("session", "-1"));
         if (user > 0) {
-          Personalize.set(user, headers.getProperty("Accept-Language"));
+          Personalize.set(user, parameters.get("Accept-Language"));
         }
-        request = process(headline, headers, user, content);
+
+        Log.log("Received request " + parameters);
+        request = connection.getProcessor().process(parameters, user);
         if (request == null) {
         	break;
         }
@@ -69,34 +73,6 @@ public class ConnectionInput extends Thread {
     } catch (Exception e) {
       Log.log("[Client]: ", e);
     }
-  }
-
-  public String getCookie(String name, String defaultValue) {
-    String cookies = headers.getProperty("Cookie");
-    if (cookies == null) {
-      return defaultValue;
-    }
-    int index1 = cookies.indexOf(name);
-    if (index1 < 0) {
-      return defaultValue;
-    }
-    int index2 = cookies.indexOf('=', index1);
-    int index3 = cookies.indexOf(';', index2);
-    return (index3 > 0) ? cookies.substring(index2 + 1, index3).trim() : cookies.substring(index2 + 1).trim();
-  }
-
-  private Request process(String request, Properties headers, int user, String content) {
-	  if (request == null) return null;
-    Log.log("[Client]: " + request);
-    int index = request.indexOf(" ");
-    if (request.charAt(index + 1) == '/') {
-      index++;
-    }
-    String transforms = request.substring(index + 1, request.lastIndexOf(" ")).trim();
-    if (content != null) {
-      transforms += ((transforms.indexOf('?') >= 0) ? "&" : "?") + content;
-    }
-    return connection.getProcessor().process(transforms, headers, user);
   }
 
 }
