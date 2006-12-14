@@ -40,7 +40,7 @@ public class FeedbackRecordIterator extends RecordIterator {
     "WHERE (TABLE1.app1 IS NOT NULL OR TABLE2.app2 IS NOT NULL) AND TABLE3.app3_id IS NOT NULL";
 
     if (sort == SORT_BY_VOTE) {
-      return new FeedbackRecordIterator(Database.executeQuery(QUERY + " ORDER BY TABLE1.app1 DESC, TABLE2.app2 DESC, text.id"));
+      return new FeedbackRecordIterator(Database.executeQuery(QUERY + " ORDER BY TABLE1.app1 DESC, TABLE2.app2, text.id"));
     } else {
       return new FeedbackRecordIterator(Database.executeQuery(QUERY + " ORDER BY text.id"));
     }
