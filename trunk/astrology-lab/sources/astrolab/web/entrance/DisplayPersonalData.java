@@ -39,6 +39,11 @@ public class DisplayPersonalData extends HTMLDisplay {
       buffer.append("<font color='red'>");
       buffer.localize("Enter your name so that other participants can see it!");
       buffer.append("</font>");
+      buffer.append("<hr />");
+      buffer.append("If you already are registered, please, go to your mail inbox an use the entrance link.");
+      buffer.append("<br />");
+      buffer.append("If you don't have an entrance link you either are not registered or you have not provided a valid e-mail.");
+      buffer.append("<br />");
     }
     buffer.append("<hr />");
 
@@ -60,6 +65,7 @@ public class DisplayPersonalData extends HTMLDisplay {
 
     buffer.localize("SVG Viewer");
     buffer.append(":");
+    new EntranceCheckForSVGViewer().fillBodyContent(request, buffer);
     buffer.append("<hr />");
   }
 

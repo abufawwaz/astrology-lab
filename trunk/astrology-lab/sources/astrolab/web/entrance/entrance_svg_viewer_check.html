@@ -1,28 +1,19 @@
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:svg="http://www.w3.org/2000/svg" xml:lang="en">
-  <head>
-    <title>SVG embedded inline in XHTML</title>
-  </head>
-  <body>
+
     <object id="AdobeSVG" classid="clsid:78156a80-c6a1-4bbf-8e6a-3cd390eeb4e2" >
       There is no SVG viewer. The site requires such so, please, install one!
-      <iframe id="svgViewerInsaller" src="http://www.adobe.com/svg/viewer/install/main.html" width="100%" height="85%">
+      <iframe id="svgViewerInsaller" src="http://www.adobe.com/svg/viewer/install/main.html" width="90%" height="300">
       </iframe>
     </object>
     <?import namespace="svg" implementation="#AdobeSVG"?>
 
-    <svg:svg width="300" height="200">
-      <svg:script language="JavaScript">
-       <![CDATA[
-         alert("The site has SVG Viewer plug-in");
-       ]]>
-      </svg:script>
+    <svg:svg width="60" height="15">
+      <svg:g>
+       <svg:text x='10' y='10'>yes</svg:text>
+      </svg:g>
     </svg:svg>
  
     <script language="JavaScript">
       if (!document.getElementById("svgViewerInsaller")) {
         document.cookie = "svg-viewer=yes; expires=Sun, 2-Jan-2050 01:00:00 GMT"
-        document.location.reload()
       }
     </script>
-  </body>
-</html>

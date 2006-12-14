@@ -9,8 +9,7 @@ public class DisplayEntrance extends HTMLDisplay implements Entrance {
   private static Entrance[] entrance = new Entrance[] {
     new EntranceUnknownBrowser(),
     new EntranceUnknownName(),
-    new EntranceUnknownEmail(),
-    new EntranceCheckForSVGViewer()
+    new EntranceUnknownEmail()
   };
 
   public void fillBodyContent(Request request, LocalizedStringBuffer buffer) {
