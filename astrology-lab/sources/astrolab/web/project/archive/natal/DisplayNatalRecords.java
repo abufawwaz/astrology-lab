@@ -7,6 +7,7 @@ import astrolab.web.Display;
 import astrolab.web.HTMLFormDisplay;
 import astrolab.web.component.ComponentSelectEvent;
 import astrolab.web.server.Request;
+import astrolab.web.server.RequestParameters;
 import astrolab.web.server.content.LocalizedStringBuffer;
 
 public class DisplayNatalRecords extends HTMLFormDisplay {
@@ -26,7 +27,7 @@ public class DisplayNatalRecords extends HTMLFormDisplay {
     buffer.append("<hr />");
 
     // Search bar
-    buffer.append("<input type='text' id='" + Request.TEXT_NAME + "' name='" + Request.TEXT_NAME + "' value='' title='");
+    buffer.append("<input type='text' id='" + RequestParameters.TEXT_NAME + "' name='" + RequestParameters.TEXT_NAME + "' value='' title='");
     buffer.localize("Enter part of name or birthplace");
     buffer.append("' />");
     buffer.append("<input type='submit' value='");
@@ -35,7 +36,7 @@ public class DisplayNatalRecords extends HTMLFormDisplay {
 
     buffer.append("<hr />");
 
-    String text = request.get(Request.TEXT_NAME);
+    String text = request.get(RequestParameters.TEXT_NAME);
 
     if ((text != null) && (text.trim().length() > 0)) {
       ComponentSelectEvent.fill(buffer, request, EventIterator.iterate(text));

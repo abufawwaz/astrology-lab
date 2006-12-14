@@ -3,6 +3,7 @@ package astrolab.web.project.finance.products;
 import astrolab.db.Action;
 import astrolab.web.HTMLFormDisplay;
 import astrolab.web.server.Request;
+import astrolab.web.server.RequestParameters;
 import astrolab.web.server.content.LocalizedStringBuffer;
 
 public class FormAddProduct extends HTMLFormDisplay {
@@ -17,7 +18,7 @@ public class FormAddProduct extends HTMLFormDisplay {
     buffer.append("<td>");
     buffer.localize("Product");
     buffer.append(":</td>");
-    buffer.append("<td><input id='" + Request.TEXT_NAME + "' type='text' name='" + Request.TEXT_NAME + "' value='");
+    buffer.append("<td><input id='" + RequestParameters.TEXT_NAME + "' type='text' name='" + RequestParameters.TEXT_NAME + "' value='");
     buffer.localize("... not set ...");
     buffer.append("' /></td>");
     buffer.append("</tr>");

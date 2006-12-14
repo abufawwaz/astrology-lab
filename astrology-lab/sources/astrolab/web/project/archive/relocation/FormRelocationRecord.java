@@ -26,7 +26,7 @@ public class FormRelocationRecord extends HTMLFormDisplay {
     buffer.append("<tr>");
     buffer.append("<td>Time of relocation:</td>");
     buffer.append("<td>");
-    ComponentSelectTime.fill(buffer, Request.TEXT_DATE);
+    ComponentSelectTime.fill(buffer, ComponentSelectTime.PARAMETER_KEY);
     buffer.append("</td>");
     buffer.append("</tr>");
     buffer.append("<tr>");

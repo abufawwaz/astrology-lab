@@ -7,7 +7,7 @@ import astrolab.web.HTMLDisplay;
 import astrolab.web.server.Request;
 import astrolab.web.server.content.LocalizedStringBuffer;
 
-class EntranceCheckForSVGViewer extends HTMLDisplay {
+class EntranceCheckSVGViewer extends HTMLDisplay {
 
   private static String FILENAME = "astrolab/web/entrance/entrance_svg_viewer_check.html";
   private static String CONTENTS = "";
@@ -15,7 +15,7 @@ class EntranceCheckForSVGViewer extends HTMLDisplay {
   static {
     try {
       byte[] BYTES_CONTENTS;
-      InputStream fis = EntranceCheckForSVGViewer.class.getClassLoader().getResourceAsStream(FILENAME);
+      InputStream fis = EntranceCheckSVGViewer.class.getClassLoader().getResourceAsStream(FILENAME);
       int read;
       byte[] data = new byte[500];
       ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -33,7 +33,7 @@ class EntranceCheckForSVGViewer extends HTMLDisplay {
   }
 
   public void fillBodyContent(Request request, LocalizedStringBuffer buffer) {
-    if (request.getHeader("User-Agent").contains("MSIE") && "no".equalsIgnoreCase(request.getConnection().getInput().getCookie("svg-viewer", "no"))) {
+    if (request.getParameters().get("User-Agent").contains("MSIE") && "no".equalsIgnoreCase(request.getParameters().getCookie("svg-viewer", "no"))) {
       buffer.append(CONTENTS);
     } else {
       buffer.append("yes");

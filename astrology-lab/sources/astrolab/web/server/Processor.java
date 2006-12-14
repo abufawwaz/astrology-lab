@@ -1,12 +1,12 @@
 package astrolab.web.server;
 
 import java.util.HashMap;
-import java.util.Properties;
 
 import astrolab.db.Action;
+import astrolab.db.Personalize;
+import astrolab.tools.Log;
 import astrolab.web.Display;
 import astrolab.web.Modify;
-import astrolab.web.entrance.DisplayEntrance;
 import astrolab.web.server.content.MenuPage;
 import astrolab.web.server.content.StaticPage;
 
@@ -14,34 +14,29 @@ public class Processor {
 
   private Connection connection;
 
-	private static HashMap staticRequests = new HashMap();
+	private static HashMap<String,StaticPage> staticRequests = new HashMap<String,StaticPage>();
 
 	Processor(Connection connection) {
     this.connection = connection;
   }
 
-	Request process(String rawRequestText, Properties headers, int raw_user) {
-    int user = raw_user;
-    int paramIndex = rawRequestText.indexOf('?');
+	Request process(RequestParameters parameters, int raw_user) {
     Request request;
+    String requestAddress = parameters.get("GET");
 
-    headers.setProperty("GET", (paramIndex < 0) ? rawRequestText : rawRequestText.substring(0, paramIndex));
+    int user = determineUser(parameters, raw_user);
 
-    if (rawRequestText.indexOf("menu") >= 0) {
-      request = new MenuPage(connection, user, headers);
-    } else if (staticRequests.containsKey((paramIndex < 0) ? rawRequestText : rawRequestText.substring(0, paramIndex))) {
-      request = (Request) staticRequests.get((paramIndex < 0) ? rawRequestText : rawRequestText.substring(0, paramIndex));
-      request = new StaticPage((StaticPage) request, connection, user, headers);
+    if (requestAddress.indexOf("menu") >= 0) {
+      request = new MenuPage(connection, user, parameters);
+    } else if (staticRequests.containsKey(requestAddress)) {
+      request = getStaticPage(requestAddress);
     } else {
-      request = new Request(connection, user, headers);
-    }
-
-    if (paramIndex >= 0) {
-      request.extractParameters(rawRequestText.substring(paramIndex + 1));
+      request = new Request(connection, user, parameters);
     }
 
     if (request.getRequestedDisplay() >= 0) {
-      request.setDisplay(Display.getView(request.getRequestedDisplay()));
+      int display = request.getRequestedDisplay();
+      request.setDisplay(Display.getView(display));
     } else {
       process(request, request.getAction());
     }
@@ -52,14 +47,9 @@ public class Processor {
 	}
 
   private void process(Request request, int arg_action) {
-    int from_view = Display.getCurrentView(request);
+    int from_view = request.getCurrentDisplay();
     int action = determineAction(arg_action, from_view);
 
-//    DisplayEntrance entrance = new DisplayEntrance();
-//
-//    if ((arg_action < 0) && (entrance.isApplicable(request))) {
-//      request.setDisplay(entrance);
-//    } else
     if (action > 0) {
       String to_view = Action.getTarget(action, from_view);
       String injection = Action.getExecution(action, from_view);
@@ -70,10 +60,8 @@ public class Processor {
 
       if (to_view != null) {
         request.setDisplay(Display.getView(Integer.parseInt(to_view)));
-        Display.setCurrentView(Integer.parseInt(to_view), request);
       } else {
         request.setDisplay(Display.getView(0));
-        Display.setCurrentView(0, request);
       }
     }
   }
@@ -89,9 +77,28 @@ public class Processor {
     return action;
   }
 
+  private final int determineUser(RequestParameters parameters, int raw_user) {
+    int user = raw_user;
+    String url = parameters.get("GET");
+    String referer = parameters.get("Referer");
+    String session = parameters.get("session");
+
+    if (url.length() == 0) {
+      if ((referer != null) && (referer.indexOf("mail") >= 0) && (session != null)) {
+        user = Integer.parseInt(session);
+        Log.log("Referer '" + referer + "' trusted to authenticate user " + user + ".");
+        connection.getOutput().setCookie("session", session);
+        Personalize.set(user, Personalize.LANGUAGE_EN);
+      }
+    }
+
+    return raw_user;
+  }
+
   static {
     registerStaticPage("favicon.ico", "favicon.ico", "image/x-icon");
     registerStaticPage("", "frames.html", null);
+    registerStaticPage("/", "frames.html", null);
   }
 
   private static void registerStaticPage(String key, String filename, String type) {

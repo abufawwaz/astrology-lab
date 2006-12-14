@@ -6,6 +6,7 @@ import astrolab.web.Modify;
 import astrolab.web.component.ComponentSelectAccuracy;
 import astrolab.web.component.ComponentSelectSource;
 import astrolab.web.component.location.ComponentSelectLocation;
+import astrolab.web.component.time.ComponentSelectTime;
 import astrolab.web.server.Request;
 
 public class ModifyRelocationRecord extends Modify {
@@ -14,7 +15,8 @@ public class ModifyRelocationRecord extends Modify {
     try {
       int user = request.getUser();
       int location = ComponentSelectLocation.retrieve(request);
-      long timestamp = new Time(request.get(Request.TEXT_DATE), location).getTimeInMillis();
+
+      long timestamp = new Time(request.get(ComponentSelectTime.PARAMETER_KEY), location).getTimeInMillis();
       String accuracy = ComponentSelectAccuracy.retrieve(request);
       String source = ComponentSelectSource.retrieve(request);
 

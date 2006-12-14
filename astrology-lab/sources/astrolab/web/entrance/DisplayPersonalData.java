@@ -29,43 +29,17 @@ public class DisplayPersonalData extends HTMLDisplay {
 
     buffer.localize("Name");
     buffer.append(":");
-    if (!anonymous) {
-      buffer.localize(user);
-    } else {
-      buffer.append("<a href='javascript:alert(\"Not implemented yet!\")'>");
-      buffer.localize("enter");
-      buffer.append("</a>");
-      buffer.append("<br />");
-      buffer.append("<font color='red'>");
-      buffer.localize("Enter your name so that other participants can see it!");
-      buffer.append("</font>");
-      buffer.append("<hr />");
-      buffer.append("If you already are registered, please, go to your mail inbox an use the entrance link.");
-      buffer.append("<br />");
-      buffer.append("If you don't have an entrance link you either are not registered or you have not provided a valid e-mail.");
-      buffer.append("<br />");
-    }
+    new EntranceCheckName().fillBodyContent(request, buffer);
     buffer.append("<hr />");
 
-    String email = Personalize.getEmail();
     buffer.localize("E-mail");
     buffer.append(":");
-    if (email != null) {
-      buffer.append(email);
-    } else {
-      buffer.append("<a href='javascript:alert(\"Not implemented yet!\")'>");
-      buffer.localize("enter");
-      buffer.append("</a>");
-      buffer.append("<br />");
-      buffer.append("<font color='red'>");
-      buffer.localize("Enter your e-mail address to activate your account!");
-      buffer.append("</font>");
-    }
+    new EntranceCheckEmail().fillBodyContent(request, buffer);
     buffer.append("<hr />");
 
     buffer.localize("SVG Viewer");
     buffer.append(":");
-    new EntranceCheckForSVGViewer().fillBodyContent(request, buffer);
+    new EntranceCheckSVGViewer().fillBodyContent(request, buffer);
     buffer.append("<hr />");
   }
 

@@ -5,15 +5,17 @@ import astrolab.db.Text;
 import astrolab.web.Modify;
 import astrolab.web.component.ComponentSelectChoice;
 import astrolab.web.component.ComponentSelectNumber;
+import astrolab.web.component.time.ComponentSelectTime;
 import astrolab.web.project.archive.relocation.RelocationRecord;
 import astrolab.web.project.finance.products.ComponentSelectProduct;
 import astrolab.web.server.Request;
+import astrolab.web.server.RequestParameters;
 
 public class ModifyPurchase extends Modify {
 
 	public void operate(Request request) {
     try {
-      String name = request.get(Request.TEXT_NAME);
+      String name = request.get(RequestParameters.TEXT_NAME);
       if (Text.getId(name) == 0) {
         return;
       }
@@ -24,8 +26,8 @@ public class ModifyPurchase extends Modify {
       String currency = ComponentSelectChoice.retrieve(request, "_currency");
       double quantity = ComponentSelectNumber.retrieve(request, "_quantity");
       String measure = ComponentSelectChoice.retrieve(request, "_measure");
-      int location = RelocationRecord.getLocationOfPerson(user, new Time(request.get(Request.TEXT_DATE), 0).getTimeInMillis());
-      long timestamp = new Time(request.get(Request.TEXT_DATE), location).getTimeInMillis();
+      int location = RelocationRecord.getLocationOfPerson(user, new Time(request.get(ComponentSelectTime.PARAMETER_KEY), 0).getTimeInMillis());
+      long timestamp = new Time(request.get(ComponentSelectTime.PARAMETER_KEY), location).getTimeInMillis();
 
       Purchase.store(user, operation, 0, item_type, price, currency, quantity, measure, timestamp);
     } catch (Exception e) {

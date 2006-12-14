@@ -7,10 +7,12 @@ import astrolab.web.HTMLFormDisplay;
 import astrolab.web.Modify;
 import astrolab.web.component.ComponentSelectAccuracy;
 import astrolab.web.component.ComponentSelectChoice;
+import astrolab.web.component.ComponentSelectNumber;
 import astrolab.web.component.ComponentSelectSource;
 import astrolab.web.component.location.ComponentSelectLocation;
 import astrolab.web.component.time.ComponentSelectTime;
 import astrolab.web.server.Request;
+import astrolab.web.server.RequestParameters;
 import astrolab.web.server.content.LocalizedStringBuffer;
 
 public class FormEditNatalRecord extends HTMLFormDisplay {
@@ -22,6 +24,7 @@ public class FormEditNatalRecord extends HTMLFormDisplay {
 	public void fillBodyContent(Request request, LocalizedStringBuffer buffer) {
     Event record = Event.getSelectedEvent();
 
+    ComponentSelectNumber.fillHidden(buffer, "_event_id", record.getEventId());
     buffer.append("<table border='0'>");
     buffer.append("<tr>");
     buffer.append("<td>");
@@ -49,7 +52,7 @@ public class FormEditNatalRecord extends HTMLFormDisplay {
     buffer.append("</option>");
     buffer.append("</select>");
     buffer.append("</td>");
-    buffer.append("<td><input id='" + Request.TEXT_NAME + "' type='text' name='" + Request.TEXT_NAME + "' value='");
+    buffer.append("<td><input id='" + RequestParameters.TEXT_NAME + "' type='text' name='" + RequestParameters.TEXT_NAME + "' value='");
     buffer.localize(record.getSubject());
     buffer.append("' /></td>");
     buffer.append("</tr>");
@@ -66,7 +69,7 @@ public class FormEditNatalRecord extends HTMLFormDisplay {
     buffer.localize("Time of occurance");
     buffer.append(":</td>");
     buffer.append("<td>");
-    ComponentSelectTime.fill(buffer, record.getTime(), Request.TEXT_DATE);
+    ComponentSelectTime.fill(buffer, record.getTime(), ComponentSelectTime.PARAMETER_KEY);
     buffer.append("</td>");
     buffer.append("</tr>");
     buffer.append("<tr>");

@@ -6,6 +6,8 @@ import astrolab.web.server.content.LocalizedStringBuffer;
 
 public class ComponentSelectSource {
 
+  private final static String CHOICE_SOURCE = "_source";
+
   private final static String[] ENUMERATION = new String[] {
     Event.SOURCE_ACCURATE,
     Event.SOURCE_RECTIFIED,
@@ -15,7 +17,7 @@ public class ComponentSelectSource {
   };
 
   public static void fill(LocalizedStringBuffer buffer) {
-    buffer.append("\r\n<select id='" + Request.CHOICE_SOURCE + "' name='" + Request.CHOICE_SOURCE + "'>");
+    buffer.append("\r\n<select id='" + CHOICE_SOURCE + "' name='" + CHOICE_SOURCE + "'>");
     for (int i = 0; i < ENUMERATION.length; i++) {
       buffer.append("\r\n\t<option value='" + ENUMERATION[i] + "'>");
       buffer.localize(ENUMERATION[i]);
@@ -25,7 +27,7 @@ public class ComponentSelectSource {
   }
 
   public static void fill(LocalizedStringBuffer buffer, String selected) {
-    buffer.append("\r\n<select id=\"" + Request.CHOICE_SOURCE + "\" name='" + Request.CHOICE_SOURCE + "'>");
+    buffer.append("\r\n<select id=\"" + CHOICE_SOURCE + "\" name='" + CHOICE_SOURCE + "'>");
     for (int i = 0; i < ENUMERATION.length; i++) {
       buffer.append("\r\n\t<option value='" + ENUMERATION[i] + "'");
       if (ENUMERATION[i].equals(selected)) {
@@ -39,6 +41,6 @@ public class ComponentSelectSource {
   }
 
   public static String retrieve(Request request) {
-    return request.get(Request.CHOICE_SOURCE);
+    return request.get(CHOICE_SOURCE);
   }
 }

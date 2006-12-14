@@ -61,7 +61,7 @@ public class FormAddPurchase extends HTMLFormDisplay {
     buffer.localize("Time");
     buffer.append(":</td>");
     buffer.append("<td>");
-    ComponentSelectTime.fill(buffer, Request.TEXT_DATE);
+    ComponentSelectTime.fill(buffer, ComponentSelectTime.PARAMETER_KEY);
     buffer.append("</td>");
     buffer.append("</tr>");
 

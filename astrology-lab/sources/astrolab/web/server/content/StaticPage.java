@@ -3,10 +3,9 @@ package astrolab.web.server.content;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.util.Properties;
 
-import astrolab.web.server.Connection;
 import astrolab.web.server.Request;
+import astrolab.web.server.RequestParameters;
 import astrolab.web.server.Response;
 
 public class StaticPage extends Request implements Response {
@@ -16,7 +15,7 @@ public class StaticPage extends Request implements Response {
   private String type;
 
   public StaticPage(String filename, String type) {
-    super(null, 0, new Properties());
+    super(null, 0, new RequestParameters("GET " + filename + " HTTP/1.1"));
 
     this.filename = filename;
     this.type = type;
@@ -35,14 +34,6 @@ public class StaticPage extends Request implements Response {
     } catch (Exception e) {
       e.printStackTrace();
     }
-  }
-
-  public StaticPage(StaticPage page, Connection connection, int user, Properties headers) {
-    super(connection, user, headers);
-
-    this.filename = page.filename;
-    this.type = page.type;
-    this.CONTENTS = page.CONTENTS;
   }
 
   public Response getResponse() {
