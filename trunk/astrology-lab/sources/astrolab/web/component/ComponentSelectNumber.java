@@ -15,7 +15,8 @@ public class ComponentSelectNumber {
 
   public static double retrieve(Request request, String choice_id) {
     try {
-      return Double.parseDouble(request.get(choice_id));
+      String value = request.get(choice_id);
+      return (value != null) ? Double.parseDouble(request.get(choice_id)) : 0.0;
     } catch (Exception e) {
       e.printStackTrace();
       return 0.0;
