@@ -186,10 +186,12 @@ function addPane(_id, _src, _new, _width, _height, _x, _y) {
  var _iframe = document.createElement("iframe")
  _iframe.allowtransparency='true'
  _iframe.setAttribute('id', '_obj_frame_id_' + _id)
- _iframe.setAttribute('frameborder', '0')
- _iframe.frameborder=0
- _iframe.marginwidth=0
- _iframe.marginheight=0
+ _iframe.allowTransparency='true'
+ _iframe.setAttribute('style', 'backgroundColor:transparent')
+ _iframe.border=0
+ _iframe.frameBorder=0
+ _iframe.marginWidth=0
+ _iframe.marginHeight=0
  _iframe.width=(_width) ? _width : 500
  _iframe.height=(_height) ? _height : 500
  _td2.appendChild(_iframe)
@@ -221,7 +223,7 @@ function addPane(_id, _src, _new, _width, _height, _x, _y) {
   function refreshAllPanes(exceptPane) {
     for (frame = 0; frame < top.window.frames.length; frame++) {
       if (top.window.frames[frame] != exceptPane) {
-        if (top.window.frames[frame].document.forms && top.window.frames[frame].document.forms.length > 0) {
+        if (top.window.frames[frame].location.pathname == '/post.html') {
           top.window.frames[frame].location.href = top.window.frames[frame].location.href
         } else {
           top.window.frames[frame].location.reload()
