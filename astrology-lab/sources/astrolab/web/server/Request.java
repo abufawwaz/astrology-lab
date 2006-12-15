@@ -64,8 +64,8 @@ public class Request {
     return Integer.parseInt(parameters.get("_a", "-1"));
   }
 
-  public int getCurrentDisplay() {
-    return Integer.parseInt(parameters.get("_v", "-1"));
+  public int getReferrerDisplay() {
+    return Integer.parseInt(parameters.get("_rd", "-1"));
   }
 
   public int getRequestedDisplay() {
