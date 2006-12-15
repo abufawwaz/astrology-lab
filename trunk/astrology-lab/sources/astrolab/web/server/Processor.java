@@ -35,6 +35,10 @@ public class Processor {
     }
 
     if (request.getRequestedDisplay() >= 0) {
+      if (request.getRequestedModify() >= 0) {
+        int modify = request.getRequestedModify();
+        request.setModify(Modify.getView(modify));
+      }
       int display = request.getRequestedDisplay();
       request.setDisplay(Display.getView(display));
     } else {

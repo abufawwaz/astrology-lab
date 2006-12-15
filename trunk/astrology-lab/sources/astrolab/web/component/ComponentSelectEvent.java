@@ -2,6 +2,9 @@ package astrolab.web.component;
 
 import astrolab.db.Event;
 import astrolab.db.EventIterator;
+import astrolab.web.Display;
+import astrolab.web.Modify;
+import astrolab.web.project.archive.SelectEvent;
 import astrolab.web.server.Request;
 import astrolab.web.server.content.LocalizedStringBuffer;
 
@@ -78,7 +81,12 @@ public class ComponentSelectEvent {
       buffer.append(position);
       buffer.append("</b>");
     } else {
-      buffer.append("<a href='root.html?_s=");
+      buffer.append("<a href='root.html?_d=");
+      buffer.append(Display.getId(request.getDisplay().getClass()));
+
+      buffer.append("&amp;_m=");
+      buffer.append(Modify.getId(SelectEvent.class));
+      buffer.append("&amp;_s=");
 
       for (int s = 0; s < position - 1; s++) {
         buffer.append(selection[s]);

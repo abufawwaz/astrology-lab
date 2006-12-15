@@ -72,6 +72,10 @@ public class Request {
     return Integer.parseInt(parameters.get("_d", "-1"));
   }
 
+  public int getRequestedModify() {
+    return Integer.parseInt(parameters.get("_m", "-1"));
+  }
+
   public int[] getSelection() {
     int[] selection;
     String parameterValue = parameters.get("_s");
