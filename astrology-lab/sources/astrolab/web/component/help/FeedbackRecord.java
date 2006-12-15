@@ -46,11 +46,15 @@ class FeedbackRecord {
   }
 
   public static int store(int person, int project, String message) {
-    int id = Text.reserve(message, Text.TYPE_HELP_FEEDBACK);
+    int id = Text.getId(message);
 
-    Database.execute("DELETE FROM help_project WHERE comment_id = " + id);
-    Database.execute("INSERT INTO help_project VALUES (" + id + ", " + person + ", " + project + ")");
-    Database.execute("INSERT INTO help_feedback VALUES (" + id + ", " + person + ", 'yes')");
+    if (id < 0) {
+      id = Text.reserve(message, Text.TYPE_HELP_FEEDBACK);
+
+      Database.execute("INSERT INTO help_project VALUES (" + id + ", " + person + ", " + project + ")");
+    }
+
+    approve(person, project, id);
 
     return id;
   }
