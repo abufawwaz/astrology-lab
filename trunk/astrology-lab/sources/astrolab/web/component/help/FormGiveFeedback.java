@@ -1,8 +1,11 @@
 package astrolab.web.component.help;
 
+import java.util.Properties;
+
 import astrolab.db.Personalize;
 import astrolab.db.Text;
 import astrolab.web.HTMLFormDisplay;
+import astrolab.web.component.ComponentLink;
 import astrolab.web.server.Request;
 import astrolab.web.server.content.LocalizedStringBuffer;
 
@@ -16,8 +19,6 @@ public class FormGiveFeedback extends HTMLFormDisplay {
     operate(request);
 
     buffer.append("<style type='text/css'>textarea { width:95%; }</style>");
-    buffer.append("<input type='hidden' name='approve' value='-1' />");
-    buffer.append("<input type='hidden' name='disapprove' value='-1' />");
     buffer.append("<table border='0'>");
     buffer.append("<tr>");
     buffer.append("<th width='30'>");
@@ -47,20 +48,20 @@ public class FormGiveFeedback extends HTMLFormDisplay {
       buffer.append("<tr>");
       buffer.append("<td>");
       if (!isAuthor && !record.hasApproved()) {
-        buffer.append("<a href='javascript:document.forms[0].approve.value=" + record.getId() + ";document.forms[0].submit();'>");
-      }
-      buffer.append(record.getApproves());
-      if (!isAuthor && !record.hasApproved()) {
-        buffer.append("</a>");
+        Properties parameters = new Properties();
+        parameters.put("approve", String.valueOf(record.getId()));
+        ComponentLink.fillLink(buffer, FormGiveFeedback.class, parameters, String.valueOf(record.getApproves()));
+      } else {
+        buffer.append(record.getApproves());
       }
       buffer.append("</td>");
       buffer.append("<td>");
       if (!isAuthor && !record.hasDisapproved()) {
-        buffer.append("<a href='javascript:document.forms[0].disapprove.value=" + record.getId() + ";document.forms[0].submit();'>");
-      }
-      buffer.append(record.getDisapproves());
-      if (!isAuthor && !record.hasDisapproved()) {
-        buffer.append("</a>");
+        Properties parameters = new Properties();
+        parameters.put("disapprove", String.valueOf(record.getId()));
+        ComponentLink.fillLink(buffer, FormGiveFeedback.class, parameters, String.valueOf(record.getDisapproves()));
+      } else {
+        buffer.append(record.getDisapproves());
       }
       buffer.append("</td>");
       buffer.append("<td>");
