@@ -1,8 +1,9 @@
 package astrolab.web.component;
 
+import java.util.Properties;
+
 import astrolab.db.Event;
 import astrolab.db.EventIterator;
-import astrolab.web.Display;
 import astrolab.web.Modify;
 import astrolab.web.project.archive.SelectEvent;
 import astrolab.web.server.Request;
@@ -81,28 +82,24 @@ public class ComponentSelectEvent {
       buffer.append(position);
       buffer.append("</b>");
     } else {
-      buffer.append("<a href='root.html?_d=");
-      buffer.append(Display.getId(request.getDisplay().getClass()));
-
-      buffer.append("&amp;_m=");
-      buffer.append(Modify.getId(SelectEvent.class));
-      buffer.append("&amp;_s=");
+      StringBuffer selectionBuffer = new StringBuffer();
+      Properties parameters = new Properties();
 
       for (int s = 0; s < position - 1; s++) {
-        buffer.append(selection[s]);
-        buffer.append(":");
+        selectionBuffer.append(selection[s]);
+        selectionBuffer.append(":");
       }
   
-      buffer.append(event);
+      selectionBuffer.append(event);
 
       for (int s = position; s < selection.length; s++) {
-        buffer.append(":");
-        buffer.append(selection[s]);
+        selectionBuffer.append(":");
+        selectionBuffer.append(selection[s]);
       }
 
-      buffer.append("'>");
-      buffer.append(position);
-      buffer.append("</a>");
+      parameters.put("_m", String.valueOf(Modify.getId(SelectEvent.class)));
+      parameters.put("_s", selectionBuffer.toString());
+      ComponentLink.fillLink(buffer, request.getDisplay().getClass(), parameters, String.valueOf(position));
     }
     buffer.append("</td>");
     return isSelected;
