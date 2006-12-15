@@ -51,7 +51,7 @@ public class Processor {
 	}
 
   private void process(Request request, int arg_action) {
-    int from_view = request.getCurrentDisplay();
+    int from_view = request.getReferrerDisplay();
     int action = determineAction(arg_action, from_view);
 
     if (action > 0) {

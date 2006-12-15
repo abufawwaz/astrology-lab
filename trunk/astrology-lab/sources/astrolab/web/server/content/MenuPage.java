@@ -88,7 +88,7 @@ public class MenuPage extends Request implements Response {
   }
 
   private void listFolders(LocalizedStringBuffer buffer, int[] path, int offset, String pathtext, String tab) {
-    int view = getCurrentDisplay();
+    int view = getReferrerDisplay();
     int folder = (offset == 0) ? -1 : path[offset - 1];
     int[] actions = Action.getFolders(folder);
 
