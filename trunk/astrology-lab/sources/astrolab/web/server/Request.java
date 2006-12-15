@@ -10,8 +10,6 @@ public class Request {
 
   private static ThreadLocal<Request> currentRequest = new ThreadLocal<Request>();
 
-  private boolean hasDatabaseChange = false;
-
   private int user = -1;
 
   private Connection connection;
@@ -31,18 +29,6 @@ public class Request {
 
   public static Request getCurrentRequest() {
     return currentRequest.get(); 
-  }
-
-  public static boolean hasDatabaseChange() {
-    Request request = getCurrentRequest();
-    return (request != null) ? request.hasDatabaseChange : false;
-  }
-
-  public static void markDatabaseChange(boolean flag) {
-    Request request = getCurrentRequest();
-    if (request != null) {
-      request.hasDatabaseChange = flag;
-    }
   }
 
   /*

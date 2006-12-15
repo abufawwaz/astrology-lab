@@ -45,7 +45,6 @@ public class Processor {
       process(request, request.getAction());
     }
 
-    Request.markDatabaseChange(false);
     connection.getOutput().respond(request);
     return request;
 	}

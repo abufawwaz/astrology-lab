@@ -18,7 +18,8 @@ public abstract class HTMLDisplay extends Display {
     buffer.append("\r\n<head>");
     buffer.append("\r\n\t<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />");
     buffer.append("\r\n</head>");
-    if (Request.hasDatabaseChange()) {
+
+    if ("1".equals(request.getParameters().get("_reload", "1"))) {
       buffer.append("\r\n<body style='background-color:transparent' onload='top.refreshAllPanes(this)'>");
     } else {
       buffer.append("\r\n<body style='background-color:transparent'>");
