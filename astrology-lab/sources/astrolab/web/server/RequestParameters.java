@@ -63,7 +63,7 @@ public class RequestParameters {
   }
 
   private final String unescape(String text) {
-    byte[] bytes = text.getBytes();
+    byte[] bytes = (text != null) ? text.getBytes() : new byte[0];
     String result = "";
 
     for (int i = 0; i < bytes.length; i++) {
