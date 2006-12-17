@@ -80,6 +80,8 @@ public abstract class DisplayTree extends HTMLDisplay {
       buffer.append("', false)); window.location.href='?_d=");
       buffer.append(id);
       buffer.append("&amp;");
+      buffer.append("_reload=0");
+      buffer.append("&amp;");
       buffer.append(choiceId);
       buffer.append("=");
       buffer.append(child.getId());
