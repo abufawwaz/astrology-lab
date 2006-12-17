@@ -34,8 +34,9 @@ public class RelocationRecord extends Event {
 
   public static int getLocationOfPerson(int person, long timestamp) {
     String sqltimestamp = new Timestamp(timestamp).toString();
-    String sql = "SELECT location, event_time FROM archive, " + TABLENAME + " WHERE (archive.event_id=" + TABLENAME + ".event_id OR archive.event_id=" + person + ") AND archive.subject_id=" + person + " AND archive.event_time < '" + sqltimestamp + "' ORDER BY event_time DESC";
-    return Integer.parseInt(Database.query(sql));
+    String sqlNatal = "SELECT location, event_time FROM archive WHERE archive.event_id=" + person;
+    String sqlRelocation = "SELECT location, event_time FROM archive, " + TABLENAME + " WHERE archive.event_id=" + TABLENAME + ".event_id AND archive.subject_id=" + person + " AND archive.event_time < '" + sqltimestamp + "' ORDER BY event_time DESC";
+    return Integer.parseInt(Database.query(sqlNatal + " UNION " + sqlRelocation));
   }
 
 }
