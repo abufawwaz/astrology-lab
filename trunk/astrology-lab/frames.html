@@ -223,7 +223,7 @@ function addPane(_id, _src, _new, _width, _height, _x, _y) {
   function refreshAllPanes(exceptPane) {
     for (frame = 0; frame < top.window.frames.length; frame++) {
       if (top.window.frames[frame] != exceptPane) {
-        isPost = top.window.frames[frame].location.pathname != '/post.html'
+        isPost = top.window.frames[frame].location.pathname == '/post.html'
         isNoReload = top.window.frames[frame].location.href.toString().indexOf('&_reload=0') > 0
         if (!isNoReload) {
           top.window.frames[frame].location.href = top.window.frames[frame].location.href + '&_reload=0'
