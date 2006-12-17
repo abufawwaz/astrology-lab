@@ -112,7 +112,7 @@ public final class Personalize extends AttributedObject {
 
   public static void addFavourite(int int_view, int favour) {
     Personalize person = currentPersonalization.get();
-    if (person == null || person.user < 0) {
+    if (person == null || person.user < 0 || favour < 0) {
       System.out.println("No personalization for anonymous user!");
       return;
     }
@@ -130,7 +130,8 @@ public final class Personalize extends AttributedObject {
     }
   }
 
-  public static void addFavourite(int int_view, int favour, int order) {
+  public static void addFavourite(int int_view, int _favour, int order) {
+    int favour = (_favour >= 0) ? _favour : VALUE_NULL;
     Personalize person = currentPersonalization.get();
     if (person == null || person.user < 0) {
       System.out.println("No personalization for anonymous user!");
