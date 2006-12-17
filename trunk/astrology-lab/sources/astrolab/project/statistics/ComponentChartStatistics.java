@@ -97,7 +97,6 @@ public class ComponentChartStatistics extends SVGDisplay {
     }
 
     buffer.append("preserveAspectRatio='none' viewBox='" + firstRecordTime + " 0 " + (lastRecordTime - firstRecordTime) + " " + maxValue + "'");
-    strokeWidth = Math.max(strokeWidth, (lastRecordTime - firstRecordTime) / 1000);
   }
 
   protected String decorateLine() {
