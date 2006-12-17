@@ -34,6 +34,7 @@ public class ConnectionInput extends Thread {
         if (headline == null) {
           break;
         }
+        Log.log("[Client]: " + headline);
 
         parameters = new RequestParameters(headline);
         do {
