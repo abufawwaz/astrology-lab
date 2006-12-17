@@ -73,16 +73,14 @@ public class RequestParameters {
         int ch;
         String code = "" + (char) bytes[i + 1] + "" + (char) bytes[i + 2];
         if (code.startsWith("D0") && ((char) bytes[i + 3] == '%')) {
-//          ch = Integer.parseInt(code + (char) bytes[i + 4] + "" + (char) bytes[i + 5], 16) - Integer.parseInt("D0B0", 16) + ((int) 'ï¿½'); 
-//          ch = Integer.parseInt(code + (char) bytes[i + 4] + "" + (char) bytes[i + 5], 16) - Integer.parseInt("D0B0", 16) + ((int) 'Ğ°'); // a
-          ch = Integer.parseInt(code + (char) bytes[i + 4] + "" + (char) bytes[i + 5], 16) - Integer.parseInt("D0B0", 16) + ((int) 'à'); // a
-System.err.println(" a: " + ((int) 'à'));
+//          ch = Integer.parseInt(code + (char) bytes[i + 4] + "" + (char) bytes[i + 5], 16) - Integer.parseInt("D0B0", 16) + ((int) 'ï¿½');
+          ch = Integer.parseInt(code + (char) bytes[i + 4] + "" + (char) bytes[i + 5], 16) - Integer.parseInt("D0B0", 16) + 1072; // 'Ğ°' (a) home Linux
+//          ch = Integer.parseInt(code + (char) bytes[i + 4] + "" + (char) bytes[i + 5], 16) - Integer.parseInt("D0B0", 16) + ((int) 'ï¿½'); // a
           i += 5;
         } else if (code.startsWith("D1") && ((char) bytes[i + 3] == '%')) {
 //            ch = Integer.parseInt(code + (char) bytes[i + 4] + "" + (char) bytes[i + 5], 16) - Integer.parseInt("D180", 16) + ((int) 'ï¿½'); 
-//          ch = Integer.parseInt(code + (char) bytes[i + 4] + "" + (char) bytes[i + 5], 16) - Integer.parseInt("D180", 16) + ((int) 'Ñ€'); // r
-          ch = Integer.parseInt(code + (char) bytes[i + 4] + "" + (char) bytes[i + 5], 16) - Integer.parseInt("D180", 16) + ((int) 'ğ'); // r
-System.err.println(" a: " + ((int) 'ğ'));
+          ch = Integer.parseInt(code + (char) bytes[i + 4] + "" + (char) bytes[i + 5], 16) - Integer.parseInt("D180", 16) + 1088; // 'Ñ€' (r) home Linux
+//          ch = Integer.parseInt(code + (char) bytes[i + 4] + "" + (char) bytes[i + 5], 16) - Integer.parseInt("D180", 16) + ((int) 'ï¿½'); // r
           i += 5;
         } else {
           ch = Integer.parseInt("" + (char) bytes[i + 1] + "" + (char) bytes[i + 2], 16);
