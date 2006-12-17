@@ -84,7 +84,7 @@ insert into text values (10002020, NULL, 'user.selection.x1', 'selection.x1', 's
 insert into text values (10002021, NULL, 'user.selection.x2', 'selection.x2', 'selection.x2');
 insert into text values (10002022, NULL, 'user.selection.y2', 'selection.y2', 'selection.y2');
 
-insert into text values (4000034, NULL, NULL, 'Display formulae chart', 'Display formulae chart');
+insert into text values (4000034, NULL, NULL, 'Display formulae chart', 'Покажи показания на формулата');
 insert into views values (55, 'astrolab.formula.display.ComponentChartFormulae');
 insert into actions values (4000034, 4000016, NULL, NULL, NULL, NULL, 55, NULL);
 

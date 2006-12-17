@@ -10,6 +10,8 @@ drop table project_financial_products;
 drop table project_sleep;
 drop table help_feedback;
 drop table help_project;
+drop table formula_elements;
+drop table formula_description;
 drop table favourites;
 drop table action_group;
 drop table actions;
