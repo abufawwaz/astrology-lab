@@ -41,7 +41,7 @@ public class ComponentTree {
     Properties parameters = new Properties();
     parameters.put("{1}", String.valueOf(selection.getId()));
     parameters.put("{2}", selection.getText(false));
-    parameters.put("{3}", "/root.html?_d=" + tree.getId());
+    parameters.put("{3}", "/tree.html?_d=" + tree.getId());
     parameters.put("{4}", tree.getChoiceId());
     buffer.append(populate(parameters));
   }
