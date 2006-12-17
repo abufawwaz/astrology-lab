@@ -31,7 +31,8 @@ public class StatisticsRecordIterator extends EventIterator {
         " WHERE project_id = " + project +
         " AND archive.event_id = project_statistics_value.event_id" +
         ((from_time != null) ? " AND event_time >= '" + from_time.toMySQLString() + "'" : "") +
-        ((to_time != null) ? " AND event_time <= '" + to_time.toMySQLString() + "'" : "");
+        ((to_time != null) ? " AND event_time <= '" + to_time.toMySQLString() + "'" : "") +
+        " ORDER BY event_time";
     return new StatisticsRecordIterator(Database.executeQuery(query));
   }
 
