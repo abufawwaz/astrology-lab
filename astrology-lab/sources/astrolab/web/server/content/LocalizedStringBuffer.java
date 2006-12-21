@@ -19,11 +19,11 @@ public class LocalizedStringBuffer {
   }
 
   public void localize(String text) {
-    append(bbcode(Text.getText(text)));
+    append(bbcode(Text.getSVGText(text)));
   }
 
   public void localize(int id) {
-    String text = Text.getText(id);
+    String text = Text.getSVGText(id);
     if (text != null) {
       append(bbcode(text));
     }

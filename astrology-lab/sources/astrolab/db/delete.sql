@@ -22,4 +22,5 @@ drop table locations;
 drop table project;
 drop table users;
 drop table types;
+drop table svg;
 drop table text;

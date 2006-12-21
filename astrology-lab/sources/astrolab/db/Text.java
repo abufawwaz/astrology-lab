@@ -108,6 +108,12 @@ public class Text {
     return value;
   }
 
+  public static String getSVGText(int id) {
+    String accessible_by = constructAccessibleBy(String.valueOf(id));
+    String value = Database.query("SELECT svg.svg from svg, text where text.id=svg.id AND svg.id = " + id + accessible_by);
+    return (value != null) ? "<svg:svg width='20' height='20' viewBox='-100 -100 200 200'>" + value + "</svg:svg>" : getText(id);
+  }
+
   public static String getText(String id) {
     String language = Personalize.getLanguage();
     String accessible_by = constructAccessibleBy(id);
@@ -116,6 +122,18 @@ public class Text {
       value = Database.query("SELECT en from text where descrid = '" + id + "'" + accessible_by);
     }
     return (value != null) ? value : id;
+  }
+
+  public static String getSVG(String id) {
+    String accessible_by = constructAccessibleBy(id);
+    String value = Database.query("SELECT svg.svg from svg, text where text.id=svg.id AND (text.descrid = '" + id + "' or text.en = '" + id + "')" + accessible_by);
+    return (value != null) ? value : "<svg:text font-size='100'>" + getText(id) + "</svg:text>";
+  }
+
+  public static String getSVGText(String id) {
+    String accessible_by = constructAccessibleBy(id);
+    String value = Database.query("SELECT svg.svg from svg, text where text.id=svg.id AND (text.descrid = '" + id + "' or text.en = '" + id + "')" + accessible_by);
+    return (value != null) ? "<svg:svg width='20' height='20' viewBox='-100 -100 200 200'>" + value + "</svg:svg>" : getText(id);
   }
 
   private final static String constructAccessibleBy(String id) {
