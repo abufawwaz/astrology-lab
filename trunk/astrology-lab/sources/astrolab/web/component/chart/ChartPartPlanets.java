@@ -7,6 +7,7 @@ import astrolab.astronom.fiction.PointGamma;
 import astrolab.astronom.planet.Planet;
 import astrolab.astronom.planet.SolarSystem;
 import astrolab.db.Event;
+import astrolab.db.Text;
 import astrolab.web.SVGDisplay;
 import astrolab.web.server.Request;
 import astrolab.web.server.content.LocalizedStringBuffer;
@@ -45,12 +46,8 @@ public class ChartPartPlanets extends SVGDisplay {
 	}
 
 	private void fillPlanet(ActivePoint point, double offset, int index, LocalizedStringBuffer buffer) {
-		buffer.append("\r\n\t<g transform='translate(" + ((int) (x - (radius - 90) * Math.cos(offset))) + ", " + ((int) (y + (radius - 90) * Math.sin(offset))) + ")'>");
-		if (point.getIcon() != null) {
-			buffer.append(point.getIcon());
-		} else {
-			buffer.append("\r\n\t<text x='5' y='5'>" + (index == -1 ? "?" : PLANETS[index]) + "</text>");
-		}
+		buffer.append("\r\n\t<g transform='translate(" + ((int) (x - (radius - 90) * Math.cos(offset))) + ", " + ((int) (y + (radius - 90) * Math.sin(offset))) + ") scale(0.1)'>");
+    buffer.append(Text.getSVG(point.getName()));
 		buffer.append("\r\n\t</g>");
 	}
 
