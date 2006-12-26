@@ -13,16 +13,17 @@ import astrolab.web.server.content.LocalizedStringBuffer;
 
 public class ComponentChartStatistics extends SVGDisplay {
 
-  private final static int POLYGON_GROUP_SIZE = 30;
-
   private ArrayList<StatisticsRecord> list = null;
   private Time from_time;
   private Time to_time;
 
   protected int strokeWidth = 1;
+  private int recordsPerChart = 50;
+  private int timeSlice = 100000000;
 
   public void fillBodyContent(Request request, LocalizedStringBuffer buffer) {
-    if (list == null) {
+    if ((list == null) || (list.size() == 0)) {
+      // no statistic records -> no chart
       return;
     }
 
@@ -32,28 +33,39 @@ public class ComponentChartStatistics extends SVGDisplay {
     buffer.append((to_time != null) ? to_time.toSimpleString() : "End");
     buffer.append("</text>");
 
-    int lastx = 0;
-    int lasty = 0;
     buffer.append("<g style='fill:none;");
     buffer.append(decorateLine());
     buffer.append("'>");
-    for (int i = 0; i < list.size(); i += POLYGON_GROUP_SIZE) {
-      buffer.append("<polyline points='");
-      buffer.append(lastx);
-      buffer.append(",");
-      buffer.append(lasty);
-      buffer.append(" ");
-      for (int j = 0; (j < POLYGON_GROUP_SIZE) && (i + j < list.size()); j++) {
-        StatisticsRecord record = list.get(i + j);
-        lastx = (int) (record.getTime().getTimeInMillis() / 1000000);
-        buffer.append(lastx);
-        buffer.append(",");
-        lasty = calculateValue(record);
-        buffer.append(lasty);
-        buffer.append(" ");
-      }
+
+    for (int i = 0; i < list.size(); i++) {
+      StatisticsRecord record = list.get(i);
+      int x = (int) (record.getTime().getTimeInMillis() / timeSlice);
+
+      buffer.append("<line x1='");
+      buffer.append(x);
+      buffer.append("' y1='");
+      buffer.append((int) record.getMinValue());
+      buffer.append("' x2='");
+      buffer.append(x);
+      buffer.append("' y2='");
+      buffer.append((int) record.getMaxValue());
       buffer.append("' />");
     }
+
+    StatisticsRecord record = list.get(0);
+    buffer.append("<polyline points='");
+    buffer.append((int) (record.getTime().getTimeInMillis() / timeSlice));
+    buffer.append(",");
+    buffer.append((int) record.getValue());
+    buffer.append(" ");
+    for (int i = 1; i < list.size(); i++) {
+      record = list.get(i);
+      buffer.append((int) (record.getTime().getTimeInMillis() / timeSlice));
+      buffer.append(",");
+      buffer.append((int) record.getValue());
+      buffer.append(" ");
+    }
+    buffer.append("' />");
     buffer.append("</g>");
   }
 
@@ -63,7 +75,7 @@ public class ComponentChartStatistics extends SVGDisplay {
     int maxValue = Personalize.getFavourite(-1, Text.getId("user.selection.y2"), -1);
     boolean yChanged = false;
 
-    StatisticsRecordIterator iterator = StatisticsRecordIterator.iterate(from_time, to_time);
+    StatisticsRecordIterator iterator = StatisticsRecordIterator.iterate(recordsPerChart);
     if (!iterator.hasNext()) {
       System.err.println("NO records !!!");
       return;
@@ -72,7 +84,7 @@ public class ComponentChartStatistics extends SVGDisplay {
     list = new ArrayList<StatisticsRecord>();
     while (iterator.hasNext()) {
       StatisticsRecord record = (StatisticsRecord) iterator.next();
-      int value = calculateValue(record);
+      int value = (int) record.getValue();
 
       list.add(record);
 
@@ -82,12 +94,12 @@ public class ComponentChartStatistics extends SVGDisplay {
       }
     }
 
-    int firstRecordTime = (int) (list.get(0).getTime().getTimeInMillis() / 1000000);
+    int firstRecordTime = (int) (list.get(0).getTime().getTimeInMillis() / timeSlice);
     if (from_time == null) {
       Personalize.addFavourite(-1, firstRecordTime, Text.getId("user.selection.x1"));
     }
 
-    int lastRecordTime = (int) (list.get(list.size() - 1).getTime().getTimeInMillis() / 1000000);
+    int lastRecordTime = (int) (list.get(list.size() - 1).getTime().getTimeInMillis() / timeSlice);
     if (to_time == null) {
       Personalize.addFavourite(-1, lastRecordTime, Text.getId("user.selection.x2"));
     }
@@ -103,10 +115,6 @@ public class ComponentChartStatistics extends SVGDisplay {
     return "stroke:green;stroke-width:" + strokeWidth;
   }
 
-  protected int calculateValue(StatisticsRecord record) {
-    return (int) record.getValue();
-  }
-
   private final Time getTime(Request request, int time_id) {
     int user = request.getUser();
     // TODO: fix this! Get the location and time of the selection
@@ -114,7 +122,7 @@ public class ComponentChartStatistics extends SVGDisplay {
     Time time = null;
     int time_data = Personalize.getFavourite(-1, time_id, -1);
     if (time_data != -1) {
-      time = new Time(((long) time_data) * 1000000, location.getTimeZone());
+      time = new Time(((long) time_data) * timeSlice, location.getTimeZone());
     }
     return time;
   }
