@@ -10,14 +10,18 @@ public class StatisticsRecord extends Event {
   public final static String TABLENAME = "project_statistics_value";
 
   private double value = Double.NaN;
+  private double minValue = Double.NaN;
+  private double maxValue = Double.NaN;
 
   StatisticsRecord(int id) {
     super(id);
   }
 
-  StatisticsRecord(Event event, double value) {
+  StatisticsRecord(Event event, double value, double minValue, double maxValue) {
     super(event.getEventId(), event.getSubjectId(), event.getTime().getTime(), event.getLocation().getId(), event.getType(), event.getAccuracy(), event.getSource());
     this.value = value;
+    this.minValue = minValue;
+    this.maxValue = maxValue;
   }
 
   public double getValue() {
@@ -25,6 +29,14 @@ public class StatisticsRecord extends Event {
       value = Double.parseDouble(Database.query("SELECT record_value from " + TABLENAME + " WHERE event_id = " + getId()));
     }
     return value;
+  }
+
+  public double getMaxValue() {
+    return (maxValue == Double.NaN) ? getValue() : maxValue;
+  }
+
+  public double getMinValue() {
+    return (minValue == Double.NaN) ? getValue() : minValue;
   }
 
   public static int store(String name, double value, long timestamp, int location, String type, String accuracy, String source, int accessible_by) {
