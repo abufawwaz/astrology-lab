@@ -7,6 +7,7 @@ import astrolab.db.Personalize;
 import astrolab.tools.Log;
 import astrolab.web.Display;
 import astrolab.web.Modify;
+import astrolab.web.resource.Resources;
 import astrolab.web.server.content.MenuPage;
 import astrolab.web.server.content.StaticPage;
 
@@ -46,6 +47,8 @@ public class Processor {
     }
 
     connection.getOutput().respond(request);
+
+    Resources.closeAll();
     return request;
 	}
 
