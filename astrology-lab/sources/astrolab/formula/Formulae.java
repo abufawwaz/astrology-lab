@@ -21,6 +21,8 @@ public class Formulae {
   private double score;
   private FormulaData scoreData = null;
 
+  private String text;
+
   public Formulae(int id, int project, int owner, double score) {
     this.id = id;
     this.project = project;
@@ -31,6 +33,14 @@ public class Formulae {
 
   public Formulae(Element[] element) {
     this.element = element;
+  }
+
+  Formulae(String formulae) {
+    this.text = formulae;
+  }
+
+  public String getAsText() {
+    return text;
   }
 
   public int getId() {

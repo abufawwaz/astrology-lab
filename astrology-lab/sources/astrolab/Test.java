@@ -79,7 +79,7 @@ public class Test {
     fos.close();
   }
 
-  public static void main5(String[] args) throws Exception {
+  public static void main(String[] args) throws Exception {
     getSolarNumbers();
   }
 
@@ -115,7 +115,7 @@ public class Test {
     InMemoryEvent event;
     int number;
 
-    for (int year = 1818; year < 1820; year++) {
+    for (int year = 1950; year < 2006; year++) {
       System.out.println("feed year: " + year);
       LineNumberReader lines = new LineNumberReader(new InputStreamReader(new FileInputStream("./external-data/sunspots/" + year)));
   
@@ -136,10 +136,11 @@ public class Test {
               number = 0;
             }
   
-            event = new InMemoryEvent(-1, -1, date, 5000002, "sunspots", "a day", "accurate");
+//            event = new InMemoryEvent(-1, -1, date, 5000002, "sunspots", "a day", "accurate");
 //            int id = Text.reserve("Stats:Sunspot:" + date.getDate()+"."+(date.getMonth() + 1)+"."+(date.getYear() + 1900), Text.TYPE_EVENT);
+            String sqltimestamp = new Timestamp(date.getTime()).toString();
 //            Event.store(id, 0, date.getTime(), 0, Event.TYPE_EVENT, Event.ACCURACY_DAY, Event.SOURCE_ACCURATE);
-//            Database.execute("INSERT INTO project_statistics_value VALUES (" + id + ", 3000027, " + number + ")");
+            Database.execute("INSERT INTO project_sunspots VALUES ('" + sqltimestamp + "', " + number + ")");
 //            System.out.println("feed: " + date + " = " + number);
 //            plot.feed(event, number);
           }
@@ -154,7 +155,7 @@ public class Test {
 //    }
   }
 
-  public static void main(String[] args) throws Exception {
+  public static void main4(String[] args) throws Exception {
     for (int day = 1; day < 600; day++) {
       int id = Text.reserve("Stats:Random:" + day, Text.TYPE_EVENT);
       Event.store(id, 0, new java.util.Date(107, 11, day).getTime(), 0, Event.TYPE_EVENT, Event.ACCURACY_DAY, Event.SOURCE_ACCURATE);
@@ -193,13 +194,13 @@ public class Test {
     System.out.println(" === ");
   }
 
-  public static void main4(String[] args) throws Exception {
-    System.out.println(" get source ... ");
-    Socket socket = new Socket("jwatt.org", 80);
+  public static void main5(String[] args) throws Exception {
+    System.out.println(" HTTP request ... ");
+    Socket socket = new Socket("www.businessastrologers.com", 80);
     OutputStream out = socket.getOutputStream();
-    out.write("GET /svg/demos/xhtml-with-inline-svg.xhtml HTTP/1.1\r\n".getBytes());
+    out.write("GET /secure/rs_articles.html HTTP/1.1\r\n".getBytes());
 //    out.write("GET /svg/demos/xhtml-with-inline-svg.xhtml HTTP/1.1\r\n".getBytes());
-    out.write("Host: jwatt.org\r\n".getBytes());
+    out.write("Host: www.businessastrologers.com\r\n".getBytes());
     out.write("User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8) Gecko/20051111 Firefox/1.5\r\n".getBytes());
     out.write("Accept: text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5\r\n".getBytes());
     out.write("Accept-Language: en-us,en;q=0.5\r\n".getBytes());

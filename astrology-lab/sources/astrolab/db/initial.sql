@@ -250,9 +250,9 @@ insert into text values (3000021, NULL, NULL, 'Finance', 'Финанси');
 insert into text values (3000022, NULL, NULL, 'Balance', 'Баланс');
 insert into text values (3000023, NULL, NULL, 'Products', 'Продукти');
 insert into text values (3000024, NULL, NULL, 'Personal Office', 'Личен кабинет');
-insert into text values (3000025, NULL, NULL, 'Sleep', 'Сън');
+insert into text values (3000025, NULL, 'sleep', 'Sleep', 'Сън');
 insert into text values (3000026, NULL, NULL, 'Astronomy', 'Астрономия');
-insert into text values (3000027, NULL, NULL, 'Sun Spots', 'Слънчеви петна');
+insert into text values (3000027, NULL, 'sunspots', 'Sun Spots', 'Слънчеви петна');
 
 insert into text values (4000002, NULL, NULL, 'Description', 'Описание');
 insert into text values (4000003, NULL, NULL, 'Chart', 'Карта');
@@ -282,6 +282,10 @@ insert into text values (4000031, NULL, NULL, 'Send invitation', 'Прати п�
 insert into text values (4000032, NULL, NULL, 'Display formula', 'Покажи формули');
 insert into text values (4000033, NULL, NULL, 'Edit formulae', 'Редактирай формула');
 insert into text values (4000034, NULL, NULL, 'Display formulae chart', 'Покажи показания на формулата');
+insert into text values (4000037, NULL, NULL, 'Data Table', 'Data Table');
+insert into text values (4000038, NULL, NULL, 'Data Chart', 'Data Chart');
+insert into text values (4000039, NULL, NULL, 'Data', 'Data');
+insert into text values (4000041, NULL, NULL, 'Track Chart', 'Track Chart');
 
 insert into text values (5000001, NULL, NULL, 'Bulgaria', 'България');
 insert into text values (5000002, NULL, NULL, 'Sofia', 'София');
@@ -530,6 +534,9 @@ insert into views values (53, 'astrolab.formula.display.ModifyFormulae');
 insert into views values (54, 'astrolab.formula.display.FormEditFormulae');
 insert into views values (55, 'astrolab.formula.display.ComponentChartFormulae');
 insert into views values (56, 'astrolab.web.entrance.DisplayPersonalData');
+insert into views values (57, 'astrolab.project.DisplayRecordsTable');
+insert into views values (58, 'astrolab.project.DisplayRecordsChart');
+insert into views values (59, 'astrolab.project.DisplayTrackChart');
 
 insert into actions values (4000002, 4000016, NULL, NULL, NULL, NULL, 45, NULL);
 insert into actions values (4000003, 4000020, 10002016, NULL, NULL, NULL, 4, NULL);
@@ -579,11 +586,15 @@ insert into actions values (4000031, 4000028, NULL, NULL, 46, 47, 46, NULL);
 insert into actions values (4000032, 4000016, NULL, NULL, NULL, NULL, 52, NULL);
 insert into actions values (4000033, 4000016, NULL, NULL, NULL, NULL, 54, NULL);
 insert into actions values (4000034, 4000016, NULL, NULL, NULL, NULL, 55, NULL);
+insert into actions values (4000037, 4000039, NULL, NULL, NULL, NULL, 57, NULL);
+insert into actions values (4000038, 4000039, NULL, NULL, NULL, NULL, 58, NULL);
+insert into actions values (4000041, 4000039, NULL, NULL, NULL, NULL, 59, NULL);
 
 insert into action_group values (4000016, NULL);
 insert into action_group values (4000020, NULL);
 insert into action_group values (4000028, NULL);
 insert into action_group values (4000029, 4000020);
+insert into action_group values (4000039, 4000020);
 
 insert into favourites values (2000001, 0, 2000001, 1, true);
 insert into favourites values (2000001, 0, 2000002, 2, true);
