@@ -2,6 +2,7 @@ package astrolab.db;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -21,16 +22,24 @@ public class Database {
     }
   }
 
-  private static Statement createStatement() throws SQLException {
-  	if (connection == null || connection.isClosed()) {
+  public static Connection getConnection() throws SQLException {
+    if (connection == null || connection.isClosed()) {
       try {
         connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/astrolab?useUnicode=true&connectionCollation=cp1251_bulgarian_ci&characterEncoding=cp1251", "develop", "develop");
       } catch (Exception e) {
         connection = DriverManager.getConnection("jdbc:mysql://astrology-lab.net:3306/astrolab?useUnicode=true&connectionCollation=cp1251_bulgarian_ci&characterEncoding=cp1251", "develop", "develop");
       }
-  	}
+    }
 
-    return connection.createStatement();
+    return connection;
+  }
+
+  private static Statement createStatement() throws SQLException {
+    return getConnection().createStatement();
+  }
+
+  public static PreparedStatement prepareStatement(String statement) throws SQLException {
+    return getConnection().prepareStatement(statement);
   }
 
   public static void execute(String sql) {

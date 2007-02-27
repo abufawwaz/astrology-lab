@@ -6,27 +6,28 @@ import java.util.Iterator;
 import astrolab.astronom.util.Zodiac;
 import astrolab.db.Database;
 import astrolab.db.Personalize;
-import astrolab.db.Text;
 import astrolab.formula.score.FormulaScoreFactory;
+import astrolab.project.Projects;
 import astrolab.project.statistics.StatisticsRecord;
 import astrolab.project.statistics.StatisticsRecordIterator;
 
-public class Formulae {
+public abstract class Formulae {
 
-  private int id;
-  private int project;
-  private int owner;
+  private int id = -1;
+  private int project = -1;
+  private int owner = -1;
   private Element[] element;
 
-  private double score;
+  private double score = -1;
   private FormulaData scoreData = null;
 
   private String text;
 
-  public Formulae(int id, int project, int owner, double score) {
+  public Formulae(int id, int project, int owner, String text, double score) {
     this.id = id;
-    this.project = project;
-    this.owner = owner;
+    this.project = (project > 0) ? project : Projects.getProject().getId();
+    this.owner = (owner > 0) ? owner : Personalize.getUser(true);
+    this.text = text;
     this.score = score;
     this.element = Formulae.readElements(id);
   }
@@ -35,11 +36,11 @@ public class Formulae {
     this.element = element;
   }
 
-  Formulae(String formulae) {
+  public Formulae(String formulae) {
     this.text = formulae;
   }
 
-  public String getAsText() {
+  public String getText() {
     return text;
   }
 
@@ -110,27 +111,6 @@ public class Formulae {
       }
     }
     return text.toString();
-  }
-
-  public static void store(int formulae_slot, Formulae formulae) {
-    if (formulae_slot > 9) {
-      formulae_slot = 9;
-    }
-    int project_id = Personalize.getFavourite(-1, Text.getId("user.session.project"), -1);
-    Element[] elements = formulae.getElements();
-    int user = Personalize.getUser(true);
-    int id = Text.reserve("Formulae:" + project_id + ":" + user + ":" + formulae_slot, Text.TYPE_FORMULAE);
-    double score = formulae.rescore();
-
-    Database.execute("DELETE FROM formula_description WHERE formulae_id = " + id);
-    Database.execute("INSERT INTO formula_description VALUES (" + id + ", " + project_id + ", " + user + ", " + score + ")");
-
-    Database.execute("DELETE FROM formula_elements WHERE formulae_id = " + id);
-    for (int i = 0; i < elements.length; i++) {
-      if (Math.abs(elements[i].getCoefficient()) > 0.0001) {
-        Database.execute("INSERT INTO formula_elements VALUES (" + id + ", " + elements[i].getCoefficient() + ", " + elements[i].getId() + ")");
-      }
-    }
   }
 
   private final static Element[] readElements(int id) {

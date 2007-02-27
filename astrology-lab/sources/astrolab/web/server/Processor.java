@@ -47,8 +47,6 @@ public class Processor {
     }
 
     connection.getOutput().respond(request);
-
-    Resources.closeAll();
     return request;
 	}
 

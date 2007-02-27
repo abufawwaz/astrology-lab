@@ -15,7 +15,7 @@ public class Projects {
     Project project = projects.get(projectName);
 
     if (project == null) {
-      project = new Project(projectName);
+      project = new Project(selectedProjectId, projectName);
       projects.put(projectName, project);
     }
 

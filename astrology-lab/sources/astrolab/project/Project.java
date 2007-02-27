@@ -1,22 +1,34 @@
 package astrolab.project;
 
-import java.sql.Timestamp;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Date;
+import java.util.TimeZone;
 
-import astrolab.astronom.planet.Planet;
-import astrolab.astronom.planet.SolarSystem;
+import astrolab.astronom.Time;
 import astrolab.db.Database;
-import astrolab.project.statistics.InMemoryEvent;
+import astrolab.formula.FormulaeBase;
+import astrolab.formula.FormulaePeriod;
+import astrolab.formula.FormulaeSeries;
 
 public class Project {
 
   final static String TABLE_PREFIX = "project_";
 
+  private int id;
   private String name;
   private ProjectDataKey[] keys;
+  private Time minTime = null;
+  private Time maxTime = null;
 
-  public Project(String name) {
+  public Project(int id, String name) {
+    this.id = id;
     this.name = name;
     listKeys();
+  }
+
+  public int getId() {
+    return id;
   }
 
   public String getName() {
@@ -27,16 +39,66 @@ public class Project {
     return keys;
   }
 
+  public Time getMinTime() {
+    if (minTime == null) {
+      ResultSet set = Database.executeQuery("SELECT time FROM " + Project.TABLE_PREFIX + getName() + " ORDER BY time ASC LIMIT 1");
+      try {
+        if (set.next()) {
+          Date timestamp = set.getTimestamp(1);
+          minTime = new Time(timestamp.getTime(), TimeZone.getDefault()); // TODO: fix the time zone
+        } else {
+          minTime = new Time();
+        }
+      } catch (Exception e) {
+        e.printStackTrace();
+      } finally {
+        try {
+          set.close();
+        } catch (SQLException e) {
+          e.printStackTrace();
+        }
+      }
+    }
+    return minTime;
+  }
+
+  public Time getMaxTime() {
+    if (maxTime == null) {
+      ResultSet set = Database.executeQuery("SELECT time FROM " + Project.TABLE_PREFIX + getName() + " ORDER BY time DESC LIMIT 1");
+      try {
+        if (set.next()) {
+          Date timestamp = set.getTimestamp(1);
+          maxTime = new Time(timestamp.getTime(), TimeZone.getDefault()); // TODO: fix the time zone
+        } else {
+          maxTime = new Time();
+        }
+      } catch (Exception e) {
+        e.printStackTrace();
+      } finally {
+        try {
+          set.close();
+        } catch (SQLException e) {
+          e.printStackTrace();
+        }
+      }
+    }
+    return maxTime;
+  }
+
   public ProjectData getData() {
     return new ProjectData(this);
   }
 
-  public ProjectData getData(String[] formula, String base) {
-    checkKey(base);
-    for (int f = 0; f < formula.length; f++) {
-      checkKey(formula[f]);
+  public ProjectData getData(FormulaeSeries[] series, FormulaeBase base, FormulaePeriod period, Time fromTime, Time toTime) {
+    checkKey(base.getText());
+    for (int f = 0; f < series.length; f++) {
+      checkKey(series[f].getText());
     }
-    return new ProjectData(this, formula, base);
+    String[] keys = new String[series.length];
+    for (int i = 0; i < keys.length; i++) {
+      keys[i] = series[i].getText();
+    }
+    return new ProjectData(this, keys, base.getText(), fromTime, toTime);
   }
 
   private void listKeys() {
@@ -63,25 +125,12 @@ public class Project {
     if (!found) {
       addKey(key);
     }
+
+    ProjectDataFiller.startFiller(key, this);
   }
 
   private void addKey(String key) {
-    double position;
-    SolarSystem solar = new SolarSystem();
-    Planet earth = solar.getPlanet(SolarSystem.EARTH);
-    ProjectData data = new ProjectData(this);
-
-    if (data.begin()) {
-      Database.execute("ALTER TABLE " + TABLE_PREFIX + name + " ADD COLUMN " + key + " DOUBLE");
-
-      do {
-        String sqltimestamp = new Timestamp(data.getTime().getTimeInMillis()).toString();
-        solar.calculate(new InMemoryEvent(data.getTime())); // TODO: calculate based on time!
-        position = solar.getPlanet(key).positionAround(earth);
-        Database.execute("UPDATE " + TABLE_PREFIX + name + " SET " + key + " = " + position + " WHERE time = '" + sqltimestamp + "'");
-      } while (data.move());
-    }
-
+    Database.execute("ALTER TABLE " + TABLE_PREFIX + name + " ADD COLUMN " + key + " DOUBLE, INDEX USING BTREE (" + key + ")");
     listKeys();
   }
 

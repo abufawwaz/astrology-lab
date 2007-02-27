@@ -108,45 +108,34 @@ public class Test {
 
   private static void getSolarNumbers() throws Exception {
 //    FormulaPlot plot = new FormulaPlot(1000, FormulaScoreFactory.SCORE_ACCUMULATIVE, ElementSet.getDefault());
-
-    String line = null;
-    String datatext = null;
-    java.util.Date date;
-    InMemoryEvent event;
-    int number;
-
-    for (int year = 1950; year < 2006; year++) {
-      System.out.println("feed year: " + year);
-      LineNumberReader lines = new LineNumberReader(new InputStreamReader(new FileInputStream("./external-data/sunspots/" + year)));
-  
-      lines.readLine(); // skip title
-      lines.readLine(); // skip first divider
-      lines.readLine(); // skip months line
-      lines.readLine(); // skip second divider
-  
-      for (int day = 1; day < 32; day++) {
-        line = lines.readLine();
-        for (int month = 0; month < 12; month++) {
-          date = new java.util.Date(year - 1900, month, day);
-          datatext = line.substring(month * 6, month * 6 + 4).trim();
-          if (datatext.length() > 0) {
-            try {
-              number =  Integer.parseInt(datatext);
-            } catch (NumberFormatException nfe) {
-              number = 0;
-            }
-  
-//            event = new InMemoryEvent(-1, -1, date, 5000002, "sunspots", "a day", "accurate");
-//            int id = Text.reserve("Stats:Sunspot:" + date.getDate()+"."+(date.getMonth() + 1)+"."+(date.getYear() + 1900), Text.TYPE_EVENT);
-            String sqltimestamp = new Timestamp(date.getTime()).toString();
-//            Event.store(id, 0, date.getTime(), 0, Event.TYPE_EVENT, Event.ACCURACY_DAY, Event.SOURCE_ACCURATE);
-            Database.execute("INSERT INTO project_sunspots VALUES ('" + sqltimestamp + "', " + number + ")");
-//            System.out.println("feed: " + date + " = " + number);
-//            plot.feed(event, number);
-          }
-        }
-      }
-    }
+//
+//    String datatext = null;
+//    java.util.Date date;
+//    InMemoryEvent event;
+//    int number;
+//
+//  
+//      String line = lines.readLine(); // skip header
+//      while ((line == lines.readLine())) {
+//        StringTokenizer tokens = new StringTokenizer(",");
+//        String year = tokens.nextToken().trim();
+//
+//        for (int month = 0; month < 12; month++) {
+//          date = new java.util.Date(year - 1900, month, day);
+//          datatext = line.substring(month * 6, month * 6 + 4).trim();
+//          if (datatext.length() > 0) {
+//            try {
+//              number =  Integer.parseInt(datatext);
+//            } catch (NumberFormatException nfe) {
+//              number = 0;
+//            }
+//
+//            String sqltimestamp = new Timestamp(date.getTime()).toString();
+//            Database.execute("INSERT INTO project_sunspots VALUES ('" + sqltimestamp + "', " + open + ", " + high + ", " + low + ", " + close + ", " + volume + ")");
+//          }
+//        }
+//      }
+//    }
 
 //    System.out.println(" plot: " + plot.toString(20));
 //    while (true) {

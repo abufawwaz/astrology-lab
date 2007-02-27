@@ -47,7 +47,8 @@ public class FormulaGenerator {
       }
     }
 
-    return new Formulae(elements);
+//    return new Formulae(elements);
+    return null;
   }
 
 }

@@ -4,15 +4,30 @@ insert into text values (4000038, NULL, NULL, 'Data Chart', 'Data Chart');
 insert into text values (4000039, NULL, NULL, 'Data', 'Data');
 insert into text values (4000041, NULL, NULL, 'Track Chart', 'Track Chart');
 
+insert into text values (6000079, NULL, 'checked', 'checked', 'отбелязано');
+insert into text values (6000080, NULL, 'unchecked', 'unchecked', 'неотбелязано');
+insert into text values (6000081, NULL, 'red', 'red', 'red');
+insert into text values (6000082, NULL, 'orange', 'orange', 'orange');
+insert into text values (6000083, NULL, 'yellow', 'yellow', 'yellow');
+insert into text values (6000084, NULL, 'green', 'green', 'green');
+insert into text values (6000085, NULL, 'blue', 'blue', 'blue');
+insert into text values (6000086, NULL, 'indigo', 'indigo', 'indigo');
+insert into text values (6000087, NULL, 'black', 'black', 'black');
+insert into text values (6000088, NULL, 'white', 'white', 'white');
+
 insert into action_group values (4000039, 4000020);
 
 insert into views values (57, 'astrolab.project.DisplayRecordsTable');
-insert into views values (58, 'astrolab.project.DisplayRecordsChart');
-insert into views values (59, 'astrolab.project.DisplayTrackChart');
+insert into views values (58, 'astrolab.project.DisplayDataChart');
+insert into views values (60, 'astrolab.formula.display.ModifyFormulaeSetChartBase');
+insert into views values (61, 'astrolab.formula.display.ModifyFormulaeSetChartColor');
+insert into views values (62, 'astrolab.formula.display.ModifyFormulaeSetTime');
 
 insert into actions values (4000037, 4000039, NULL, NULL, NULL, NULL, 57, NULL);
 insert into actions values (4000038, 4000039, NULL, NULL, NULL, NULL, 58, NULL);
 insert into actions values (4000041, 4000039, NULL, NULL, NULL, NULL, 59, NULL);
+//insert into actions values (4000032, 4000016, NULL, NULL, NULL, 60, 52, NULL);
+insert into actions values (4000004, NULL, NULL, NULL, NULL, 62, 52, NULL);
 
 create table project_sunspots (
   time DATETIME,
@@ -36,11 +51,29 @@ insert into project_sunspots values ('2007-01-12 00:00:00', 20);
 insert into project_sunspots values ('2007-01-13 00:00:00', 10);
 
 create table formula (
-  formulae_id INT UNSIGNED NOT NULL REFERENCES text (id),
-  project_id INT UNSIGNED NOT NULL REFERENCES text (id),
+  formulae_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
   owner_id INT UNSIGNED NOT NULL REFERENCES text (id),
   formulae TEXT,
-  score DOUBLE
+
+  PRIMARY KEY (formulae_id)
+) ENGINE=InnoDB;
+
+create table formula_chart (
+  user_id INT UNSIGNED NOT NULL REFERENCES text (id),
+  project_id INT UNSIGNED NOT NULL REFERENCES text (id),
+  formulae_id INT UNSIGNED NOT NULL REFERENCES formula (formulae_id),
+  score DOUBLE,
+  chart_color ENUM ('red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'black')
+) ENGINE=InnoDB;
+
+create table formula_chart_base (
+  user_id INT UNSIGNED NOT NULL REFERENCES text (id),
+  project_id INT UNSIGNED NOT NULL REFERENCES text (id),
+  base_id INT UNSIGNED NOT NULL REFERENCES formula (formulae_id),
+  period_id INT UNSIGNED NOT NULL REFERENCES formula (formulae_id),
+  from_time DATETIME,
+  to_time DATETIME,
+  selected BOOLEAN NOT NULL
 ) ENGINE=InnoDB;
 
 create table svg (
@@ -61,4 +94,32 @@ insert into svg values (6000022, "<svg:g style='stroke:cyan;stroke-width:20;fill
 insert into svg values (6000023, "<svg:g style='stroke:teal;stroke-width:20;fill:none'><svg:path d='M-80 -90 A80 110 0 1 0 80 -90' /><svg:line y1='-80' y2='90' /><svg:line x1='-40' y1='60' x2='40' y2='60' /></svg:g>");
 insert into svg values (6000024, "<svg:g style='stroke:firebrick;stroke-width:20;fill:none'><svg:circle cy='-60' r='30' /><svg:path d='M-80 -90 A80 110 0 1 0 80 -90' /><svg:line y1='20' y2='90' /><svg:line x1='-40' y1='60' x2='40' y2='60' /></svg:g>");
 insert into svg values (6000078, "<svg:path d='M-40 90 L-40 -90 L40 -90' style='stroke:brown;stroke-width:20;fill:none' />");
+insert into svg values (6000079, "<svg:circle r='70' style='fill:green;stroke:black;stroke-width:10' />");
+insert into svg values (6000080, "<svg:circle r='70' style='fill:white;stroke:black;stroke-width:10' />");
+insert into svg values (6000081, "<svg:rect x='-70' y='-70' width='140' height='140' style='fill:red' />");
+insert into svg values (6000082, "<svg:rect x='-70' y='-70' width='140' height='140' style='fill:orange' />");
+insert into svg values (6000083, "<svg:rect x='-70' y='-70' width='140' height='140' style='fill:yellow' />");
+insert into svg values (6000084, "<svg:rect x='-70' y='-70' width='140' height='140' style='fill:green' />");
+insert into svg values (6000085, "<svg:rect x='-70' y='-70' width='140' height='140' style='fill:blue' />");
+insert into svg values (6000086, "<svg:rect x='-70' y='-70' width='140' height='140' style='fill:indigo' />");
+insert into svg values (6000087, "<svg:rect x='-70' y='-70' width='140' height='140' style='fill:black' />");
+insert into svg values (6000088, "<svg:rect x='-70' y='-70' width='140' height='140' style='fill:white;stroke:black;stroke-width:10' />");
+
+insert into text values (3000028, NULL, 'exchange', 'Exchange Market', 'Exchange Market');
+insert into project values (3000028, 3000021, 'white', now(), NULL, 0);
+
+insert into text values (2000005, NULL, NULL, 'EURUSD', 'EURUSD');
+insert into archive values (2000005, 2000005, '1900-01-01 01:01:00', 5000005, 'male', '10 minutes', 'accurate');
+
+create table project_exchange (
+  profile INT UNSIGNED NOT NULL REFERENCES archive (event_id),
+  time DATETIME,
+  open DOUBLE,
+  high DOUBLE,
+  low DOUBLE,
+  close DOUBLE,
+  volume DOUBLE,
+
+  INDEX (time)
+) ENGINE=InnoDB;
 

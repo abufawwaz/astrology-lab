@@ -7,9 +7,8 @@ import java.util.TimeZone;
 import astrolab.astronom.Time;
 import astrolab.db.Database;
 import astrolab.web.resource.CloseableResource;
-import astrolab.web.resource.Resources;
 
-public class ProjectData extends TimeSpan implements CloseableResource {
+public class ProjectData implements CloseableResource {
 
   private ResultSet data;
 
@@ -18,11 +17,11 @@ public class ProjectData extends TimeSpan implements CloseableResource {
   private Time toTime;
 
   ProjectData(Project project) {
-    this(project, new String[0], null);
+    this(project, new String[0], null, project.getMinTime(), project.getMaxTime());
   }
 
-  ProjectData(Project project, String[] keys, String grouping) {
-    // TODO: use TimeSpan.getTimeSpan() within the SQL query
+  ProjectData(Project project, String[] keys, String grouping, Time fromTime, Time toTime) {
+    // TODO: use fromTime and toTime within the SQL query
     StringBuffer keyselect = new StringBuffer();
     for (int i = 0; i < project.getKeys().length; i++) {
       if (grouping != null) {
@@ -42,10 +41,36 @@ public class ProjectData extends TimeSpan implements CloseableResource {
     }
     keyselect.append("time"); // TODO: remove it :)
 
-    String groupby = (grouping != null) ? " GROUP BY round(" + grouping + ")" : " ORDER BY time"; 
-    this.data = Database.executeQuery("SELECT " + keyselect + " FROM " + Project.TABLE_PREFIX + project.getName() + groupby);
+    String timing = "";
+    if (fromTime != null || toTime != null) {
+      timing = " WHERE";
 
-    Resources.add(this);
+      if (fromTime != null) {
+        timing += " time >= '" + fromTime.toMySQLString() + "'";
+      }
+
+      if (toTime != null) {
+        if (fromTime != null) {
+          timing += " AND";
+        }
+        timing += " time <= '" + toTime.toMySQLString() + "'";
+      }
+    }
+
+    int slots = 360; // allow change
+    String groupby;
+    if (grouping != null && !"time".equalsIgnoreCase(grouping)) {
+      groupby = " GROUP BY floor(" + grouping + ")";
+    } else {
+      String fromSQLTime = fromTime.toMySQLString();
+      String toSQLTime = toTime.toMySQLString();
+      String dateDiff = "(datediff('" + toSQLTime + "', '" + fromSQLTime + "') / " + slots + ")";
+      groupby = " GROUP BY floor(TO_DAYS(time) / " + dateDiff + ") * " + dateDiff;
+    }
+
+    this.data = Database.executeQuery("SELECT " + keyselect + " FROM " + Project.TABLE_PREFIX + project.getName() + timing + groupby + " LIMIT " + slots);
+
+//    Resources.add(this);
 
     // determine the timespan
     if (begin()) {
@@ -108,7 +133,7 @@ public class ProjectData extends TimeSpan implements CloseableResource {
 
   public Time getTime() {
     try {
-      return new Time(data.getTimestamp("time").getTime(), TimeZone.getDefault());
+      return new Time(data.getTimestamp("time").getTime(), TimeZone.getDefault()); // TODO: fix the time zone
     } catch (SQLException e) {
       e.printStackTrace();
       return new Time();

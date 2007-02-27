@@ -1,11 +1,17 @@
 package astrolab.formula;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.TimeZone;
 
+import astrolab.astronom.Time;
 import astrolab.db.Database;
 import astrolab.db.Personalize;
 import astrolab.db.RecordIterator;
-import astrolab.db.Text;
+import astrolab.project.Project;
+import astrolab.project.Projects;
 
 public class FormulaIterator extends RecordIterator {
 
@@ -13,26 +19,100 @@ public class FormulaIterator extends RecordIterator {
     super(set);
   }
 
-  public static FormulaIterator iterateBest() {
-    int project_id = Personalize.getFavourite(-1, Text.getId("user.session.project"), -1);
-    String query = "SELECT formulae_id, project_id, owner_id, score FROM formula_description" +
-        " WHERE project_id = " + project_id +
-            " ORDER BY score DESC" +
-            " LIMIT 30";
-    return new FormulaIterator(Database.executeQuery(query));
+  public static FormulaeBase getChartBase() {
+    int userId = Personalize.getUser(true);
+    int projectId = Projects.getProject().getId();
+    String query = "SELECT formula.formulae_id, project_id, owner_id, formulae FROM formula, formula_chart_base" +
+        " WHERE project_id = " + projectId +
+        " AND formula.formulae_id = formula_chart_base.base_id" +
+        " AND user_id = " + userId +
+        " AND selected " +
+        " LIMIT 1";
+    String[][] result = Database.queryList(4, query);
+    if (result == null || result.length == 0) {
+      return new FormulaeBase(0, projectId, userId, "time");
+    } else {
+      return new FormulaeBase(Integer.parseInt(result[0][0]), Integer.parseInt(result[0][1]), Integer.parseInt(result[0][2]), result[0][3]);
+    }
   }
 
-  public static FormulaIterator iterateOwn() {
-    int project_id = Personalize.getFavourite(-1, Text.getId("user.session.project"), -1);
-    String query = "SELECT formulae_id, project_id, owner_id, score FROM formula_description" +
-        " WHERE project_id = " + project_id +
-            " AND owner_id = " + Personalize.getUser(true) +
-            " LIMIT 10";
-    return new FormulaIterator(Database.executeQuery(query));
+  public static FormulaePeriod getChartPeriod() {
+    int userId = Personalize.getUser(true);
+    int projectId = Projects.getProject().getId();
+    String query = "SELECT formula.formulae_id, project_id, owner_id, formulae FROM formula, formula_chart_base" +
+        " WHERE project_id = " + projectId +
+        " AND formula.formulae_id = formula_chart_base.period_id" +
+        " AND user_id = " + userId +
+        " AND selected " +
+        " LIMIT 1";
+    String[][] result = Database.queryList(4, query);
+    if (result == null || result.length == 0) {
+      FormulaeBase base = getChartBase();
+      return new FormulaePeriod(base.getId(), base.getProject(), base.getOwner(), base.getText());
+    } else {
+      return new FormulaePeriod(Integer.parseInt(result[0][0]), Integer.parseInt(result[0][1]), Integer.parseInt(result[0][2]), result[0][3]);
+    }
+  }
+
+  public static FormulaeSeries[] getChartSeries() {
+    int userId = Personalize.getUser(true);
+    int projectId = Projects.getProject().getId();
+    String query = "SELECT formula.formulae_id, project_id, owner_id, formulae, score, chart_color FROM formula, formula_chart" +
+        " WHERE project_id = " + projectId +
+        " AND formula.formulae_id = formula_chart.formulae_id" +
+        " AND user_id = " + userId +
+        " ORDER BY chart_color DESC, formula.formulae_id";
+
+    FormulaIterator iterator = new FormulaIterator(Database.executeQuery(query));
+    ArrayList<Formulae> list = new ArrayList<Formulae>();
+    while (iterator.hasNext()) {
+      list.add((Formulae) iterator.next());
+    }
+    iterator.close();
+    return list.toArray(new FormulaeSeries[0]);
+  }
+
+  public static Time getChartFromTime() {
+    Project project = Projects.getProject();
+    Time result = getChartTime(project, "from_time");
+    return (result != null) ? result : project.getMinTime();
+  }
+
+  public static Time getChartToTime() {
+    Project project = Projects.getProject();
+    Time result = getChartTime(project, "to_time");
+    return (result != null) ? result : project.getMaxTime();
+  }
+
+  private final static Time getChartTime(Project project, String key) {
+    int userId = Personalize.getUser(true);
+    String query = "SELECT " + key + " FROM formula_chart_base" +
+        " WHERE project_id = " + project.getId() +
+        " AND user_id = " + userId +
+        " AND selected " +
+        " LIMIT 1";
+    ResultSet set = Database.executeQuery(query);
+    try {
+      if (set.next()) {
+        Date timestamp = set.getTimestamp(1);
+        if (timestamp != null) {
+          return new Time(timestamp.getTime(), TimeZone.getDefault()); // TODO: fix the time zone
+        }
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    } finally {
+      try {
+        set.close();
+      } catch (SQLException e) {
+        e.printStackTrace();
+      }
+    }
+    return null;
   }
 
   protected Formulae read() throws Exception {
-    return new Formulae(set.getInt(1), set.getInt(2), set.getInt(3), set.getDouble(4));
+    return new FormulaeSeries(set.getInt(1), set.getInt(2), set.getInt(3), set.getString(4), set.getDouble(5), set.getString(6));
   }
 
 }

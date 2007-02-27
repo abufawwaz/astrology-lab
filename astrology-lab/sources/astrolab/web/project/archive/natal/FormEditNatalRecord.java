@@ -69,7 +69,7 @@ public class FormEditNatalRecord extends HTMLFormDisplay {
     buffer.localize("Time of occurance");
     buffer.append(":</td>");
     buffer.append("<td>");
-    ComponentSelectTime.fill(buffer, record.getTime(), ComponentSelectTime.PARAMETER_KEY);
+    ComponentSelectTime.fill(buffer, record.getTime(), ComponentSelectTime.PARAMETER_KEY, false);
     buffer.append("</td>");
     buffer.append("</tr>");
     buffer.append("<tr>");
