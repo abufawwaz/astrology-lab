@@ -225,6 +225,7 @@ insert into text values (2000001, NULL, NULL, 'Stephan Zlatarev', 'Стефан 
 insert into text values (2000002, NULL, NULL, 'Svetlana Stancheva', 'Светлана Станчева');
 insert into text values (2000003, NULL, NULL, 'gufi', 'gufi');
 insert into text values (2000004, NULL, NULL, 'Altrance', 'Altrance');
+insert into text values (2000005, NULL, NULL, 'EURUSD', 'EURUSD');
 
 insert into text values (3000001, NULL, NULL, 'Archive', 'Архив');
 insert into text values (3000002, NULL, NULL, 'Library', 'Библиотека');
@@ -253,6 +254,7 @@ insert into text values (3000024, NULL, NULL, 'Personal Office', 'Личен к�
 insert into text values (3000025, NULL, 'sleep', 'Sleep', 'Сън');
 insert into text values (3000026, NULL, NULL, 'Astronomy', 'Астрономия');
 insert into text values (3000027, NULL, 'sunspots', 'Sun Spots', 'Слънчеви петна');
+insert into text values (3000028, NULL, 'exchange', 'Exchange Market', 'Exchange Market');
 
 insert into text values (4000002, NULL, NULL, 'Description', 'Описание');
 insert into text values (4000003, NULL, NULL, 'Chart', 'Карта');
@@ -371,6 +373,16 @@ insert into text values (6000075, NULL, NULL, 'From', 'От');
 insert into text values (6000076, NULL, NULL, 'To', 'До');
 insert into text values (6000077, NULL, NULL, 'sleeps', 'спи');
 insert into text values (6000078, NULL, 'Gamma', 'Gamma', 'Гама');
+insert into text values (6000079, NULL, 'checked', 'checked', 'отбелязано');
+insert into text values (6000080, NULL, 'unchecked', 'unchecked', 'неотбелязано');
+insert into text values (6000081, NULL, 'red', 'red', 'red');
+insert into text values (6000082, NULL, 'orange', 'orange', 'orange');
+insert into text values (6000083, NULL, 'yellow', 'yellow', 'yellow');
+insert into text values (6000084, NULL, 'green', 'green', 'green');
+insert into text values (6000085, NULL, 'blue', 'blue', 'blue');
+insert into text values (6000086, NULL, 'indigo', 'indigo', 'indigo');
+insert into text values (6000087, NULL, 'black', 'black', 'black');
+insert into text values (6000088, NULL, 'white', 'white', 'white');
 
 insert into text values (8000001, NULL, NULL, 'Food', 'Храна');
 insert into text values (8000002, NULL, NULL, 'Drinks', 'Питиета');
@@ -453,6 +465,7 @@ insert into project values (3000022, 3000021, 'white', now(), NULL, 0);
 insert into project values (3000023, 3000021, 'white', now(), NULL, 0);
 insert into project values (3000025, 3000009, 'white', now(), NULL, 0);
 insert into project values (3000027, 3000026, 'white', now(), NULL, 0);
+insert into project values (3000028, 3000021, 'white', now(), NULL, 0);
 
 insert into locations values (0, 0, 0, 0, 0);
 insert into locations values (5000001,0,0,0,10003001);
@@ -465,6 +478,7 @@ insert into archive values (2000001, 2000001, '1979-01-09 01:30:00', 5000003, 'm
 insert into archive values (2000002, 2000002, '1979-04-01 00:00:00', 5000004, 'female', '10 minutes', 'accurate');
 insert into archive values (2000003, 2000003, '1986-11-23 18:15:00', 5000002, 'female', '10 minutes', 'accurate');
 insert into archive values (2000004, 2000004, '1984-11-23 11:34:00', 5000005, 'male', '10 minutes', 'accurate');
+insert into archive values (2000005, 2000005, '1900-01-01 01:01:00', 5000005, 'male', '10 minutes', 'accurate');
 
 insert into project_human_birth values (2000001);
 insert into project_human_birth values (2000002);
@@ -535,8 +549,7 @@ insert into views values (54, 'astrolab.formula.display.FormEditFormulae');
 insert into views values (55, 'astrolab.formula.display.ComponentChartFormulae');
 insert into views values (56, 'astrolab.web.entrance.DisplayPersonalData');
 insert into views values (57, 'astrolab.project.DisplayRecordsTable');
-insert into views values (58, 'astrolab.project.DisplayRecordsChart');
-insert into views values (59, 'astrolab.project.DisplayTrackChart');
+insert into views values (58, 'astrolab.project.DisplayDataChart');
 
 insert into actions values (4000002, 4000016, NULL, NULL, NULL, NULL, 45, NULL);
 insert into actions values (4000003, 4000020, 10002016, NULL, NULL, NULL, 4, NULL);

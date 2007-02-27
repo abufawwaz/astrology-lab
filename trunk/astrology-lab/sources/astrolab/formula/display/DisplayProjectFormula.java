@@ -1,65 +1,102 @@
 package astrolab.formula.display;
 
+import java.util.Properties;
+
 import astrolab.db.Action;
 import astrolab.formula.FormulaIterator;
 import astrolab.formula.Formulae;
+import astrolab.formula.FormulaeSeries;
 import astrolab.web.Display;
 import astrolab.web.HTMLFormDisplay;
+import astrolab.web.Modify;
+import astrolab.web.component.ComponentLink;
+import astrolab.web.component.time.ComponentSelectTime;
 import astrolab.web.server.Request;
 import astrolab.web.server.content.LocalizedStringBuffer;
 
 public class DisplayProjectFormula extends HTMLFormDisplay {
 
-	public final static int ID = Display.getId(DisplayProjectFormula.class);
+  public final static int DISPLAY_ID = Display.getId(DisplayProjectFormula.class);
+  public final static int MODIFY_TIME_ID = Modify.getId(ModifyFormulaeSetTime.class);
 
   public DisplayProjectFormula() {
-    super(Action.getAction(-1, ID, -1));
+    super(Action.getAction(-1, DISPLAY_ID, MODIFY_TIME_ID));
   }
 
   public void fillBodyContent(Request request, LocalizedStringBuffer buffer) {
-    buffer.localize("You are allowed 10 slots for custom formula:");
-    buffer.append("<br />");
+    buffer.append("<table>");
+    buffer.append("<tr>");
+    buffer.append("<td>");
+    buffer.localize("From");
+    buffer.append("</td>");
+    buffer.append("<td>");
+    ComponentSelectTime.fill(buffer, FormulaIterator.getChartFromTime(), ModifyFormulaeSetTime.KEY_FROM_TIME, true);
+    buffer.append("</td>");
+    buffer.append("</tr>");
+    buffer.append("<tr>");
+    buffer.append("<td>");
+    buffer.localize("To");
+    buffer.append("</td>");
+    buffer.append("<td>");
+    ComponentSelectTime.fill(buffer, FormulaIterator.getChartToTime(), ModifyFormulaeSetTime.KEY_TO_TIME, true);
+    buffer.append("</td>");
+    buffer.append("</tr>");
+    buffer.append("</table>");
+    buffer.append("<hr />");
 
-    int slot = 1;
-    FormulaIterator iterator = FormulaIterator.iterateOwn();
+    buffer.append("<hr />");
+
+    Formulae base = FormulaIterator.getChartBase();
     buffer.append("<table border='1'>");
     buffer.append("<tr>");
     buffer.append("<th>");
-    buffer.localize("Slot");
+    buffer.localize("f(x)");
     buffer.append("</th>");
     buffer.append("<th>");
-    buffer.localize("Formulae");
-    buffer.append("</th>");
-    buffer.append("<th>");
-    buffer.localize("Score");
+    buffer.localize("Base");
     buffer.append("</th>");
     buffer.append("</tr>");
-    while (iterator.hasNext()) {
-      Formulae f = (Formulae) iterator.next();
-      buffer.append("<tr>");
-      buffer.append("<td>");
-      buffer.append(slot);
-      buffer.append("</td>");
-      buffer.append("<td>");
-      buffer.append(f.toString());
-      buffer.append("</td>");
-      buffer.append("<td>");
-      buffer.append(f.getScore());
-      buffer.append("</td>");
-      buffer.append("</tr>");
-      slot++;
-    }
+    buffer.append("<tr>");
+    buffer.append("<td>");
+    buffer.append(base.getId());
+    buffer.append("</td>");
+    buffer.append("<td>");
+    buffer.append(base.getText());
+    buffer.append("</td>");
+    buffer.append("</tr>");
     buffer.append("</table>");
 
     buffer.append("<hr />");
-    buffer.localize("These are the best formula:");
-    buffer.append("<br />");
 
-    iterator = FormulaIterator.iterateBest();
+    Formulae period = FormulaIterator.getChartPeriod();
     buffer.append("<table border='1'>");
     buffer.append("<tr>");
     buffer.append("<th>");
-    buffer.localize("Owner");
+    buffer.localize("f(x)");
+    buffer.append("</th>");
+    buffer.append("<th>");
+    buffer.localize("Period");
+    buffer.append("</th>");
+    buffer.append("</tr>");
+    buffer.append("<tr>");
+    buffer.append("<td>");
+    buffer.append(period.getId());
+    buffer.append("</td>");
+    buffer.append("<td>");
+    buffer.append(period.getText());
+    buffer.append("</td>");
+    buffer.append("</tr>");
+    buffer.append("</table>");
+
+    buffer.append("<hr />");
+
+    buffer.append("<table border='1'>");
+    buffer.append("<tr>");
+    buffer.append("<th>");
+    buffer.localize("f(x)");
+    buffer.append("</th>");
+    buffer.append("<th>");
+    buffer.localize("Color");
     buffer.append("</th>");
     buffer.append("<th>");
     buffer.localize("Formulae");
@@ -68,20 +105,30 @@ public class DisplayProjectFormula extends HTMLFormDisplay {
     buffer.localize("Score");
     buffer.append("</th>");
     buffer.append("</tr>");
-    while (iterator.hasNext()) {
-      Formulae f = (Formulae) iterator.next();
+
+    FormulaeSeries[] series = FormulaIterator.getChartSeries();
+    for (int i = 0; i < series.length; i++) {
       buffer.append("<tr>");
       buffer.append("<td>");
-      buffer.localize(f.getOwner());
+      buffer.append(series[i].getId());
+      buffer.append("</td>");
+
+      buffer.append("<td>");
+      Properties parameters = new Properties();
+      parameters.put("_m", String.valueOf(Modify.getId(ModifyFormulaeSetChartColor.class)));
+      parameters.put(ModifyFormulaeSetChartColor.KEY, String.valueOf(series[i].getId()));
+      parameters.put(ModifyFormulaeSetChartColor.IS_TO_SET, String.valueOf(series[i].getColor() == null));
+      ComponentLink.fillLink(buffer, request.getDisplay().getClass(), parameters, (series[i].getColor() != null) ? series[i].getColor() : "white");
+      buffer.append("</td>");
+
+      buffer.append("<td>");
+      buffer.append(series[i].getText());
       buffer.append("</td>");
       buffer.append("<td>");
-      buffer.append(f.toString());
+      buffer.append(series[i].getScore());
       buffer.append("</td>");
-      buffer.append("<td>");
-      buffer.append(f.getScore());
-      buffer.append("</td>");
+
       buffer.append("</tr>");
-      slot++;
     }
     buffer.append("</table>");
 	}

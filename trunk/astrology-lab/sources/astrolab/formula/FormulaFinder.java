@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import astrolab.db.Personalize;
 import astrolab.db.Text;
+import astrolab.formula.display.ModifyFormulae;
 import astrolab.project.statistics.StatisticsRecord;
 import astrolab.project.statistics.StatisticsRecordIterator;
 import astrolab.tools.Log;
@@ -31,13 +32,14 @@ public class FormulaFinder extends Thread {
     Formulae formulae = FormulaGenerator.generateNext(formulaSource); // get first formulae from database
     ArrayList<ElementData> records = new ArrayList<ElementData>();
 
-    FormulaIterator own = FormulaIterator.iterateOwn();
-    while (own.hasNext()) {
-      Formulae candidate = (Formulae) own.next();
-      if (candidate.getScore() > score) {
-        score = candidate.getScore();
-      }
-    }
+// TODO: get the score?
+//    FormulaIterator own = FormulaIterator.iterateOwn();
+//    while (own.hasNext()) {
+//      Formulae candidate = (Formulae) own.next();
+//      if (candidate.getScore() > score) {
+//        score = candidate.getScore();
+//      }
+//    }
 
     StatisticsRecordIterator iterator = StatisticsRecordIterator.iterate();
     while (iterator.hasNext()) {
@@ -56,13 +58,13 @@ public class FormulaFinder extends Thread {
   
         if (formulae.getScore(records) > score) {
           // store the best formulae so far
-          Formulae.store(8, formulae);
+          ModifyFormulae.storeFormulae(formulae.getText());
           score = formulae.getScore();
         } else {
           // store the current formulae for monitoring
           try {
             Log.beSilent(true);
-            Formulae.store(10, formulae);
+            ModifyFormulae.storeFormulae(formulae.getText());
           } finally {
             Log.beSilent(false);
           }

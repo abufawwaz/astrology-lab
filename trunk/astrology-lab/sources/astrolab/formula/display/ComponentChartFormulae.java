@@ -12,10 +12,11 @@ public class ComponentChartFormulae extends ComponentChartStatistics {
   Formulae formulae = null;
 
   public ComponentChartFormulae() {
-    FormulaIterator iterator = FormulaIterator.iterateBest();
-    if (iterator.hasNext()) {
-      formulae = (Formulae) iterator.next();
-    }
+    //TODO: deprecate?
+//    FormulaIterator iterator = FormulaIterator.iterateBest();
+//    if (iterator.hasNext()) {
+//      formulae = (Formulae) iterator.next();
+//    }
   }
 
   protected String decorateLine() {
