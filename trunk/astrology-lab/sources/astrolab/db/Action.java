@@ -10,11 +10,10 @@ public class Action {
     return (action != null) ? Integer.parseInt(action) : -1;
   }
 
-  public static int[][] getActions(int action_group, int view, int selections) {
+  public static int[][] getActions(int action_group, int view) {
     String view_part = (view >= 0) ? "(from_view = " + view + " OR from_view IS NULL)": "from_view IS NULL";
     String action_group_part = (action_group >= 0) ? "action_group = " + action_group : "action_group IS NULL";
-    String selection_part = "(required_selection IS NULL OR (object_id > 0 AND view_id IS NULL AND user_id = " + Personalize.getUser(true) + " AND required_selection = order_at))";
-    String[][] list = Database.queryList(2, "SELECT DISTINCT(id), to_view from actions, favourites where " + view_part + " and " + selection_part + " and " + action_group_part + " and " + getProjectPart());
+    String[][] list = Database.queryList(2, "SELECT DISTINCT(id), to_view from actions, favourites where " + view_part + " and " + action_group_part + " and " + getProjectPart());
     int[][] result = new int[list.length][2];
     for (int i = 0; i < list.length; i++) {
       result[i][0] = Integer.parseInt(list[i][0]);
@@ -23,18 +22,14 @@ public class Action {
     return result;
   }
 
-  public static int[] getFolders(int selection) {
-    String selection_part = (selection >= 0) ? "action_group = " + selection : "action_group IS NULL";
-    String[] list = Database.queryList("SELECT id from action_group where " + selection_part);
-    int[] result = new int[list.length];
-    for (int i = 0; i < list.length; i++) {
-      result[i] = Integer.parseInt(list[i]);
-    }
-    return result;
+  public static int[] getFolders(int view) {
+    String view_part = (view >= 0) ? "(from_view = " + view + " OR from_view IS NULL)": "from_view IS NULL";
+    return Database.queryIds("SELECT DISTINCT(action_group) from actions where action_group IS NOT NULL and " + view_part + " and " + getProjectPart() + " ORDER BY action_group ASC");
   }
 
   public static int getViewId(String className) {
-    return new Integer(Database.query("SELECT view from views where request = '" + className + "'")).intValue();
+    String viewId = Database.query("SELECT view from views where request = '" + className + "'");
+    return (viewId != null) ? new Integer(viewId).intValue() : -1;
   }
 
   public static String getViewClass(int view) {

@@ -1,8 +1,10 @@
 package astrolab.astronom.util;
 
+import astrolab.db.Text;
+
 public class Zodiac {
 
-  public static String[] SIGN = {"Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo", "Libra", "Scorpio", "Sagitarius", "Capricorn", "Aquarius", "Piesces"};
+  public static String[] SIGN = {"Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo", "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Piesces"};
 
   public static boolean isBetween(double a, double b, double c) {
     double aa = degree(a);
@@ -42,12 +44,14 @@ public class Zodiac {
    *               M - minutes
    *               S - seconds
    *               Z - sign name
+   *               Y - sign icon
    * 
    * @return
    */
   public static String toString(double degree, String format) {
+    int icon = -1;
     int[] c = new int[5];
-    String[] d = new String[5];
+    String[] d = new String[6];
     char[] f = format.toCharArray();
     char[] r = new char[f.length];
 
@@ -59,6 +63,15 @@ public class Zodiac {
 
     for (int i = 0; i < r.length; i++) {
       switch (f[i]) {
+        case 'Y': {
+          // leave r[i] be null
+          if (icon < 0) {
+            icon = i;
+          } else {
+            r[i] = ' ';
+          }
+          break;
+        }
         case 'A': {
           r[i] = d[1].charAt(c[01]);
           c[1]++;
@@ -89,7 +102,12 @@ public class Zodiac {
         }
       }
     }
-    return new String(r);
+
+    if (icon >= 0) {
+      return new String(r, 0, icon) + Text.getSVGText(d[4], 12) + new String(r, icon + 1, r.length - icon - 1);
+    } else {
+      return new String(r);
+    }
   }
 
   private final static String format(double data, int range) {

@@ -9,7 +9,7 @@ import astrolab.web.server.content.LocalizedStringBuffer;
 public class DisplayPersonalData extends HTMLDisplay {
 
   public void fillBodyContent(Request request, LocalizedStringBuffer buffer) {
-    int user = Personalize.getUser(true);
+    int user = Personalize.getUser();
     String userName = Text.getText(user);
     boolean anonymous = ((userName == null) || userName.startsWith("User"));
     if (anonymous) {

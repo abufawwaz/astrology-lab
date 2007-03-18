@@ -3,12 +3,9 @@ package astrolab.web.server;
 import java.util.HashMap;
 
 import astrolab.db.Action;
-import astrolab.db.Personalize;
-import astrolab.tools.Log;
 import astrolab.web.Display;
 import astrolab.web.Modify;
-import astrolab.web.resource.Resources;
-import astrolab.web.server.content.MenuPage;
+import astrolab.web.perspective.Perspective;
 import astrolab.web.server.content.StaticPage;
 
 public class Processor {
@@ -21,29 +18,29 @@ public class Processor {
     this.connection = connection;
   }
 
-	Request process(RequestParameters parameters, int raw_user) {
+	Request process(RequestParameters parameters) {
     Request request;
     String requestAddress = parameters.get("GET");
 
-    int user = determineUser(parameters, raw_user);
-
-    if (requestAddress.indexOf("menu") >= 0) {
-      request = new MenuPage(connection, user, parameters);
-    } else if (staticRequests.containsKey(requestAddress)) {
+    if (staticRequests.containsKey(requestAddress)) {
       request = getStaticPage(requestAddress);
     } else {
-      request = new Request(connection, user, parameters);
-    }
+      request = new Request(connection, parameters);
 
-    if (request.getRequestedDisplay() >= 0) {
-      if (request.getRequestedModify() >= 0) {
-        int modify = request.getRequestedModify();
-        request.setModify(Modify.getView(modify));
+      if (Perspective.isPerspectiveRequest()) {
+        request.setDisplay(new Perspective());
+      } else {
+        if (request.getRequestedDisplay() >= 0) {
+          if (request.getRequestedModify() >= 0) {
+            int modify = request.getRequestedModify();
+            request.setModify(Modify.getView(modify));
+          }
+          int display = request.getRequestedDisplay();
+          request.setDisplay(Display.getView(display));
+        } else {
+          process(request, request.getAction());
+        }
       }
-      int display = request.getRequestedDisplay();
-      request.setDisplay(Display.getView(display));
-    } else {
-      process(request, request.getAction());
     }
 
     connection.getOutput().respond(request);
@@ -81,28 +78,12 @@ public class Processor {
     return action;
   }
 
-  private final int determineUser(RequestParameters parameters, int raw_user) {
-    int user = raw_user;
-    String url = parameters.get("GET");
-    String referer = parameters.get("Referer");
-    String session = parameters.get("session");
-
-    if (url.length() == 0) {
-      if ((referer != null) && (referer.indexOf("mail") >= 0) && (session != null)) {
-        user = Integer.parseInt(session);
-        Log.log("Referer '" + referer + "' trusted to authenticate user " + user + ".");
-        connection.getOutput().setCookie("session", session);
-        Personalize.set(user, Personalize.LANGUAGE_EN);
-      }
-    }
-
-    return raw_user;
-  }
-
   static {
     registerStaticPage("favicon.ico", "favicon.ico", "image/x-icon");
-    registerStaticPage("", "frames.html", null);
-    registerStaticPage("/", "frames.html", null);
+    registerStaticPage("/image.jpg", "image.jpg", "image/jpeg");
+    registerStaticPage("/events.js", "events.js", "text/javascript");
+    registerStaticPage("/control.js", "control.js", "text/javascript");
+    registerStaticPage("/window.js", "window.js", "text/javascript");
   }
 
   private static void registerStaticPage(String key, String filename, String type) {

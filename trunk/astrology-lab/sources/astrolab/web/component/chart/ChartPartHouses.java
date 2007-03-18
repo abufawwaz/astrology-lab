@@ -20,15 +20,15 @@ public class ChartPartHouses extends SVGDisplay {
 	private double radius, x, y;
 
 	public void fillBodyContent(Request request, LocalizedStringBuffer buffer) {
-		fillContent(request, buffer, 0.0, true);
+		fillContent(request, buffer, Event.getSelectedEvent(), 0.0, true);
 	}
 
-	public void fillContent(Request request, LocalizedStringBuffer buffer, double offset, boolean ownImage) {
+	public void fillContent(Request request, LocalizedStringBuffer buffer, Event event, double offset, boolean ownImage) {
 		radius = request.getConstraints().getRadius();
 		x = request.getConstraints().getWidth() / 2;
 		y = request.getConstraints().getHeight() / 2;
 
-		HouseSystem houses = new PlacidusSystem(Event.getSelectedEvent());
+		HouseSystem houses = new PlacidusSystem(event);
     double[] hpos = new double[14];
 
     for (int i = 1; i < 13; i++) {

@@ -40,7 +40,7 @@ public class ComponentTree {
   public static void fill(LocalizedStringBuffer buffer, DisplayTree tree, TreeObject selection) {
     Properties parameters = new Properties();
     parameters.put("{1}", String.valueOf(selection.getId()));
-    parameters.put("{2}", selection.getText(false));
+    parameters.put("{2}", selection.getText());
     parameters.put("{3}", "/tree.html?_d=" + tree.getId());
     parameters.put("{4}", tree.getChoiceId());
     buffer.append(populate(parameters));

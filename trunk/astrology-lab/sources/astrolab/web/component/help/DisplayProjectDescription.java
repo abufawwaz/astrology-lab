@@ -20,13 +20,18 @@ public class DisplayProjectDescription extends HTMLFormDisplay {
 
     int project = Personalize.getFavourite(-1, Text.getId("user.session.project"), -1);
     if (project > 0) {
-      buffer.append("<center><h2>");
-      buffer.localize(project);
-      buffer.append("</h2></center>");
+      buffer.append("<div class='class_title'>");
 
-      buffer.append("<style type='text/css'>textarea { width:95%; }</style>");
+      buffer.append("<style type='text/css'>");
+      buffer.append("\r\ntextarea { width:95%; }");
+      buffer.append("\r\n</style>");
+
       buffer.append("<table width='100%' border='0'>");
-      buffer.append("<tr><th>");
+      buffer.append("<tr>");
+      buffer.append("<th width='100'>");
+      buffer.localize(project);
+      buffer.append("</th>");
+      buffer.append("<th>");
       buffer.localize("Message");
       buffer.append(" / ");
       buffer.localize("Opinion");
@@ -37,9 +42,13 @@ public class DisplayProjectDescription extends HTMLFormDisplay {
       buffer.append(Text.getText("Con"));
       buffer.append("</th>");
       buffer.append("</tr>");
+      buffer.append("</table>");
+
+      buffer.append("</div>");
 
       FeedbackRecordIterator records = FeedbackRecordIterator.iterate(request, project);
 
+      buffer.append("<table width='100%' border='0'>");
       if (!records.hasNext()) {
         buffer.append("<tr><td colspan='3'>");
         buffer.localize("No opinions at the moment.");
@@ -48,11 +57,11 @@ public class DisplayProjectDescription extends HTMLFormDisplay {
 
       while (records.hasNext()) {
         FeedbackRecord record = records.next();
-        boolean isAuthor = (record.getAuthor() == Personalize.getUser(false));
+        boolean isAuthor = (record.getAuthor() == Personalize.getUser());
 
         buffer.append("<tr>");
         buffer.append("<td>");
-        buffer.localize(record.getId());
+        buffer.append(record.getText());
         buffer.signature(record.getAuthor());
         buffer.append("</td>");
 
@@ -79,7 +88,7 @@ public class DisplayProjectDescription extends HTMLFormDisplay {
 
       buffer.append("<tr>");
       buffer.append("\r\n<td><center>");
-      buffer.append("<textarea name='feedback' cols='80%' rows='10'></textarea>");
+      buffer.append("<textarea name='feedback' cols='80%' rows='5'></textarea>");
       buffer.append("</center></td>");
       buffer.append("\r\n<td colspan='2' valign='bottom'><center>");
       buffer.append("<input type='submit' value='");

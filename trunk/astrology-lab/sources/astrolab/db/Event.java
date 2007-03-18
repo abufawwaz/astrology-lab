@@ -1,14 +1,15 @@
 package astrolab.db;
 
 import java.sql.ResultSet;
-import java.sql.Timestamp;
 import java.util.Date;
 
 import astrolab.astronom.Time;
 
 import astrolab.astronom.util.Trigonometry;
 import astrolab.astronom.util.Zodiac;
-import astrolab.web.project.archive.natal.DisplayNatalRecords;
+import astrolab.project.archive.DisplayArchiveRecordList;
+import astrolab.project.geography.Location;
+import astrolab.web.server.Request;
 
 public class Event extends AttributedObject {
 
@@ -46,9 +47,18 @@ public class Event extends AttributedObject {
   }
 
   public static Event getSelectedEvent(int number) {
-    int selection = Personalize.getFavourite(-1, Text.getId("user.session.event." + number), 0);
+    String temporarySelection = Request.getCurrentRequest().get("user.session.event." + number);
+    int selection = 0;
+    try {
+      selection = Integer.parseInt(temporarySelection);
+    } catch (NumberFormatException nfe) {
+    }
+
     if (selection <= 0) {
-      selection = Personalize.getUser(true);
+      selection = Personalize.getFavourite(-1, Text.getId("user.session.event." + number), 0);
+    }
+    if (selection <= 0) {
+      selection = Personalize.getUser();
     }
 
     return new Event(selection);
@@ -60,7 +70,7 @@ public class Event extends AttributedObject {
     for (int i = 0; i < result.length; i++) {
       result[i] = Personalize.getFavourite(-1, Text.getId("user.session.event." + (i + 1)), 0);
       if (result[i] <= 0) {
-        result[i] = Personalize.getUser(true);
+        result[i] = Personalize.getUser();
       }
     }
 
@@ -68,9 +78,9 @@ public class Event extends AttributedObject {
   }
 
   public static void setSelectedEvent(int event, int number) {
-    if (event >= Text.TYPE_EVENT && event < Text.TYPE_LABORATORY) { // TODO: create a method to distinguish events
+    if (event >= Text.TYPE_EVENT) {
       Personalize.addFavourite(-1, event, Text.getId("user.session.event." + number));
-      Personalize.addFavourite(DisplayNatalRecords.ID, event);
+      Personalize.addFavourite(DisplayArchiveRecordList.ID, event);
     }
   }
 
@@ -78,7 +88,7 @@ public class Event extends AttributedObject {
   	super(id);
 
   	try {
-	  	ResultSet set = Database.executeQuery("SELECT subject_id, event_time, location, type, accuracy, source FROM archive WHERE event_id = " + id);
+	  	ResultSet set = Database.executeQuery("SELECT subject_id, event_time, location, type, accuracy, source FROM project_archive WHERE event_id = " + id);
 	
 	    if (set != null && set.next()) {
         subject_id = set.getInt(1);
@@ -152,19 +162,24 @@ public class Event extends AttributedObject {
     return Trigonometry.radians(23.452294 - 0.0130125 * getTime().getJulianYearTime());
   }
 
-  public static void store(int id, int person, long timestamp, int location, String type, String accuracy, String source) {
-    String sqltimestamp = new Timestamp(timestamp).toString();
+  public String toString() {
+    return "Event: " + getId() + " type: " + getType();
+  }
 
-    if (Database.query("SELECT * FROM archive where event_id = " + id) == null) {
-      Database.execute("INSERT INTO archive VALUES (" + id + ", " + person + ", '" + sqltimestamp + "', " + location + ", '" + type + "', '" + accuracy + "', '" + source + "')");
-    } else {
-      Database.execute("UPDATE archive SET subject_id = " + person + " WHERE event_id = " + id);
-      Database.execute("UPDATE archive SET event_time = '" + sqltimestamp + "' WHERE event_id = " + id);
-      Database.execute("UPDATE archive SET location = " + location + " WHERE event_id = " + id);
-      Database.execute("UPDATE archive SET type = '" + type + "' WHERE event_id = " + id);
-      Database.execute("UPDATE archive SET accuracy = '" + accuracy + "' WHERE event_id = " + id);
-      Database.execute("UPDATE archive SET source = '" + source + "' WHERE event_id = " + id);
-    }
+  public static void store(int id, int person, long timestamp, int location, String type, String accuracy, String source) {
+    throw new IllegalStateException();
+//    String sqltimestamp = new Timestamp(timestamp).toString();
+//
+//    if (Database.query("SELECT * FROM archive where event_id = " + id) == null) {
+//      Database.execute("INSERT INTO archive VALUES (" + id + ", " + person + ", '" + sqltimestamp + "', " + location + ", '" + type + "', '" + accuracy + "', '" + source + "')");
+//    } else {
+//      Database.execute("UPDATE archive SET subject_id = " + person + " WHERE event_id = " + id);
+//      Database.execute("UPDATE archive SET event_time = '" + sqltimestamp + "' WHERE event_id = " + id);
+//      Database.execute("UPDATE archive SET location = " + location + " WHERE event_id = " + id);
+//      Database.execute("UPDATE archive SET type = '" + type + "' WHERE event_id = " + id);
+//      Database.execute("UPDATE archive SET accuracy = '" + accuracy + "' WHERE event_id = " + id);
+//      Database.execute("UPDATE archive SET source = '" + source + "' WHERE event_id = " + id);
+//    }
   }
 
 }

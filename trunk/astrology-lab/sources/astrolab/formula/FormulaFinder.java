@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import astrolab.db.Personalize;
 import astrolab.db.Text;
 import astrolab.formula.display.ModifyFormulae;
-import astrolab.project.statistics.StatisticsRecord;
-import astrolab.project.statistics.StatisticsRecordIterator;
 import astrolab.tools.Log;
 
 public class FormulaFinder extends Thread {
@@ -41,42 +39,42 @@ public class FormulaFinder extends Thread {
 //      }
 //    }
 
-    StatisticsRecordIterator iterator = StatisticsRecordIterator.iterate();
-    while (iterator.hasNext()) {
-      StatisticsRecord stat = (StatisticsRecord) iterator.next();
-      records.add(new ElementData(ElementSet.getDefault(), stat, stat.getValue()));
-    }
-
-    if (records.isEmpty()) {
-      Log.log("No statistics records available.");
-      return;
-    }
-
-    while (true) {
-      for (int iteration = 0; iteration < 100; iteration++) {
-        formulae = FormulaGenerator.generateNext(formulaSource);
-  
-        if (formulae.getScore(records) > score) {
-          // store the best formulae so far
-          ModifyFormulae.storeFormulae(formulae.getText());
-          score = formulae.getScore();
-        } else {
-          // store the current formulae for monitoring
-          try {
-            Log.beSilent(true);
-            ModifyFormulae.storeFormulae(formulae.getText());
-          } finally {
-            Log.beSilent(false);
-          }
-        }
-      }
-
-      try {
-        wait(100);
-      } catch (Exception e) {
-        Log.log("Exception on FormulaFinder.wait", e);
-      }
-    }
+//    StatisticsRecordIterator iterator = StatisticsRecordIterator.iterate();
+//    while (iterator.hasNext()) {
+//      StatisticsRecord stat = (StatisticsRecord) iterator.next();
+//      records.add(new ElementData(ElementSet.getDefault(), stat, stat.getValue()));
+//    }
+//
+//    if (records.isEmpty()) {
+//      Log.log("No statistics records available.");
+//      return;
+//    }
+//
+//    while (true) {
+//      for (int iteration = 0; iteration < 100; iteration++) {
+//        formulae = FormulaGenerator.generateNext(formulaSource);
+//  
+//        if (formulae.getScore(records) > score) {
+//          // store the best formulae so far
+//          ModifyFormulae.storeFormulae(formulae.getText());
+//          score = formulae.getScore();
+//        } else {
+//          // store the current formulae for monitoring
+//          try {
+//            Log.beSilent(true);
+//            ModifyFormulae.storeFormulae(formulae.getText());
+//          } finally {
+//            Log.beSilent(false);
+//          }
+//        }
+//      }
+//
+//      try {
+//        wait(100);
+//      } catch (Exception e) {
+//        Log.log("Exception on FormulaFinder.wait", e);
+//      }
+//    }
   }
 
 }

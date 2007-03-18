@@ -14,6 +14,8 @@ public interface TreeObject {
 
   public RecordIterator iterateSubTrees();
 
-  public String getText(boolean toSelect);
+  public String getText();
+
+  public String getDescription();
 
 }

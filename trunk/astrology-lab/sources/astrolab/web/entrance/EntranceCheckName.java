@@ -3,23 +3,23 @@ package astrolab.web.entrance;
 import astrolab.db.Event;
 import astrolab.db.Personalize;
 import astrolab.db.Text;
+import astrolab.project.archive.FormEditNatalRecord;
 import astrolab.web.HTMLDisplay;
 import astrolab.web.component.ComponentLink;
-import astrolab.web.project.archive.natal.FormEditNatalRecord;
 import astrolab.web.server.Request;
 import astrolab.web.server.content.LocalizedStringBuffer;
 
 class EntranceCheckName extends HTMLDisplay {
 
   public void fillBodyContent(Request request, LocalizedStringBuffer buffer) {
-    int user = Personalize.getUser(true);
+    int user = Personalize.getUser();
     String userName = Text.getText(user);
     boolean anonymous = ((userName == null) || userName.startsWith("User"));
 
     if (!anonymous) {
       buffer.localize(user);
     } else {
-      Event.setSelectedEvent(Personalize.getUser(false), 1);
+      Event.setSelectedEvent(Personalize.getUser(), 1);
       ComponentLink.fillLink(buffer, FormEditNatalRecord.class, "enter");
       buffer.append("<br />");
       buffer.append("<font color='red'>");

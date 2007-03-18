@@ -24,7 +24,10 @@ public class Project {
   public Project(int id, String name) {
     this.id = id;
     this.name = name;
-    listKeys();
+
+    if (name != null) {
+      listKeys();
+    }
   }
 
   public int getId() {

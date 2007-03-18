@@ -10,6 +10,8 @@ import astrolab.web.Display;
 import astrolab.web.HTMLFormDisplay;
 import astrolab.web.Modify;
 import astrolab.web.component.ComponentLink;
+import astrolab.web.component.ComponentSelectText;
+import astrolab.web.component.ComponentSubmitButton;
 import astrolab.web.component.time.ComponentSelectTime;
 import astrolab.web.server.Request;
 import astrolab.web.server.content.LocalizedStringBuffer;
@@ -20,7 +22,8 @@ public class DisplayProjectFormula extends HTMLFormDisplay {
   public final static int MODIFY_TIME_ID = Modify.getId(ModifyFormulaeSetTime.class);
 
   public DisplayProjectFormula() {
-    super(Action.getAction(-1, DISPLAY_ID, MODIFY_TIME_ID));
+    super(Action.getAction(-1, -1, Modify.getId(ModifyFormulae.class)));
+//    super(Action.getAction(-1, DISPLAY_ID, MODIFY_TIME_ID));
   }
 
   public void fillBodyContent(Request request, LocalizedStringBuffer buffer) {
@@ -90,6 +93,13 @@ public class DisplayProjectFormula extends HTMLFormDisplay {
 
     buffer.append("<hr />");
 
+    // Search for a formula
+    buffer.localize("Search");
+    buffer.localize(":");
+    ComponentSelectText.fill(buffer, "formulae");
+    ComponentSubmitButton.fill(buffer);
+
+    // Chart series
     buffer.append("<table border='1'>");
     buffer.append("<tr>");
     buffer.append("<th>");
@@ -106,7 +116,7 @@ public class DisplayProjectFormula extends HTMLFormDisplay {
     buffer.append("</th>");
     buffer.append("</tr>");
 
-    FormulaeSeries[] series = FormulaIterator.getChartSeries();
+    FormulaeSeries[] series = FormulaIterator.getChartSeries(false);
     for (int i = 0; i < series.length; i++) {
       buffer.append("<tr>");
       buffer.append("<td>");

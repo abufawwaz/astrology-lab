@@ -44,14 +44,12 @@ public abstract class DisplayTree extends HTMLDisplay {
             buffer.append("<a href=\"?_d=");
             buffer.append(id);
             buffer.append("&amp;");
-            buffer.append("_reload=0");
-            buffer.append("&amp;");
             buffer.append(choiceId);
             buffer.append("=");
             buffer.append(parentNode.getId());
             buffer.append("\"><i>&lt;&lt; ");
             if (parentNode.getId() > 0) {
-              buffer.append(parentNode.getText(false));
+              buffer.append(parentNode.getText());
             }
             buffer.append("</i></a>");
             buffer.append(" / ");
@@ -76,34 +74,40 @@ public abstract class DisplayTree extends HTMLDisplay {
       buffer.append(" <a href=\"javascript:if (parent != top) parent.select(new Array('");
       buffer.append(child.getId());
       buffer.append("', '");
-      buffer.append(child.getText(false));
+      buffer.append(child.getText());
       buffer.append("', false)); window.location.href='?_d=");
       buffer.append(id);
-      buffer.append("&amp;");
-      buffer.append("_reload=0");
       buffer.append("&amp;");
       buffer.append(choiceId);
       buffer.append("=");
       buffer.append(child.getId());
       buffer.append("'\">");
-      buffer.append(child.getText(true));
+      buffer.append(child.getText());
+      buffer.append(" ");
+      buffer.append(child.getDescription());
       buffer.append("</a><br />");
     }
 
+    buffer.append("<table>");
     iterator = selectionRoot.iterateChildren();
     while (iterator.hasNext()) {
       TreeObject child = (TreeObject) iterator.next();
 
       if (!subtrees.contains(new Integer(child.getId()))) {
-        buffer.append(" <a href=\"javascript:if (parent != top) parent.select(new Array('");
+        buffer.append("<tr><td>");
+        buffer.append("<a href=\"javascript:if (parent != top) parent.select(new Array('");
         buffer.append(child.getId());
         buffer.append("', '");
-        buffer.append(child.getText(false));
+        buffer.append(child.getText());
         buffer.append("', true))\">");
-        buffer.append(child.getText(true));
-        buffer.append("</a><br />");
+        buffer.append(child.getText());
+        buffer.append("</a>");
+        buffer.append("</td><td>");
+        buffer.append(child.getDescription());
+        buffer.append("</td></tr>");
       }
     }
+    buffer.append("</table>");
   }
 
 }

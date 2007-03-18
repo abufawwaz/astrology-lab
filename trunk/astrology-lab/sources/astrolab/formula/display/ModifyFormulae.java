@@ -21,7 +21,7 @@ public class ModifyFormulae extends Modify {
 	}
 
   public static int storeFormulae(String text) {
-    int owner = Personalize.getUser(true);
+    int owner = Personalize.getUser();
 
     //TODO: limit formula to 100 per user
     //TODO: parse formula for attacks or syntax errors
@@ -34,10 +34,13 @@ public class ModifyFormulae extends Modify {
   }
 
   private static void addSeries(int series_id) {
-    int user = Personalize.getUser(true);
+    int user = Personalize.getUser();
     int project = Projects.getProject().getId();
 
-    Database.execute("INSERT INTO formula_chart VALUES (" + user + ", " + project + ", " + series_id + ", NULL, NULL)");
+    String textid = Database.query("SELECT formulae_id FROM formula_chart WHERE user_id = " + user + " AND project_id = " + project + " AND formulae_id = " + series_id);
+    if (textid == null) {
+      Database.execute("INSERT INTO formula_chart VALUES (" + user + ", " + project + ", " + series_id + ", NULL, NULL)");
+    }
   }
 
 }

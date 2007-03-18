@@ -5,8 +5,8 @@ import java.util.Date;
 
 import astrolab.astronom.Time;
 import astrolab.db.Database;
-import astrolab.db.Location;
 import astrolab.db.RecordIterator;
+import astrolab.project.geography.Location;
 import astrolab.web.project.archive.relocation.RelocationRecord;
 
 public class PurchaseIterator extends RecordIterator {

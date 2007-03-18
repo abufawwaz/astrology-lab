@@ -2,7 +2,6 @@ package astrolab.formula;
 
 import astrolab.formula.score.FormulaScore;
 import astrolab.formula.score.FormulaScoreFactory;
-import astrolab.project.statistics.StatisticsRecord;
 
 public class FormulaData {
 
@@ -50,9 +49,9 @@ public class FormulaData {
     count[(int) v]++;
   }
 
-  public void feed(StatisticsRecord record) {
-    feed(new ElementData(ElementSet.getDefault(), record, record.getValue()));
-  }
+//  public void feed(StatisticsRecord record) {
+//    feed(new ElementData(ElementSet.getDefault(), record, record.getValue()));
+//  }
 
   public String toString() {
     StringBuffer buffer = new StringBuffer(formula.toString());

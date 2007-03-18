@@ -18,7 +18,10 @@ public class FormGiveFeedback extends HTMLFormDisplay {
   public void fillBodyContent(Request request, LocalizedStringBuffer buffer) {
     operate(request);
 
-    buffer.append("<style type='text/css'>textarea { width:95%; }</style>");
+    buffer.append("<style type='text/css'>");
+    buffer.append("\r\ntextarea { width:95%; }");
+    buffer.append("\r\n</style>");
+
     buffer.append("<table border='0'>");
     buffer.append("<tr>");
     buffer.append("<th width='30'>");
@@ -33,7 +36,7 @@ public class FormGiveFeedback extends HTMLFormDisplay {
     buffer.append("</tr>");
     buffer.append("<tr>");
     buffer.append("<td colspan='3'><center>");
-    buffer.append("<textarea name='feedback' cols='80%' rows='10'></textarea>");
+    buffer.append("<textarea name='feedback' cols='80%' rows='5'></textarea>");
     buffer.append("<br />");
     buffer.append("<input type='submit' value='");
     buffer.localize("Save");
@@ -44,7 +47,7 @@ public class FormGiveFeedback extends HTMLFormDisplay {
     FeedbackRecordIterator records = FeedbackRecordIterator.iterate(request, 0, FeedbackRecordIterator.SORT_BY_VOTE);
     while (records.hasNext()) {
       FeedbackRecord record = records.next();
-      boolean isAuthor = (record.getAuthor() == Personalize.getUser(false));
+      boolean isAuthor = (record.getAuthor() == Personalize.getUser());
       buffer.append("<tr>");
       buffer.append("<td>");
       if (!isAuthor && !record.hasApproved()) {
@@ -65,7 +68,7 @@ public class FormGiveFeedback extends HTMLFormDisplay {
       }
       buffer.append("</td>");
       buffer.append("<td>");
-      buffer.localize(record.getId());
+      buffer.append(record.getText());
       buffer.signature(record.getAuthor());
       buffer.append("</td>");
       buffer.append("</tr>");

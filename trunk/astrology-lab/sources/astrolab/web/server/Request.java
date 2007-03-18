@@ -19,10 +19,18 @@ public class Request {
   private Modify modify;
   private RequestParameters parameters;
 
-  public Request(Connection connection, int user, RequestParameters parameters) {
+  protected Request(Connection connection, RequestParameters parameters, int user) {
     this.connection = connection;
-    this.user = user;
     this.parameters = parameters;
+    this.user = user;
+
+    currentRequest.set(this);
+  }
+
+  public Request(Connection connection, RequestParameters parameters) {
+    this.connection = connection;
+    this.parameters = parameters;
+    this.user = SessionManager.determineUser(this);
 
     currentRequest.set(this);
   }

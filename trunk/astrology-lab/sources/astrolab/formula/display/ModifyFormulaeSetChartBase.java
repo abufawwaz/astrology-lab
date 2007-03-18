@@ -17,7 +17,7 @@ public class ModifyFormulaeSetChartBase extends Modify {
 
       if (formulaeText != null) {
         int formulae_id = Integer.parseInt(formulaeText);
-        int user = Personalize.getUser(true);
+        int user = Personalize.getUser();
         int project = Projects.getProject().getId();
         if (Boolean.parseBoolean(request.get(IS_TO_SET))) {
           Database.execute("UPDATE formula_chart SET chart_base = formulae_id = " + formulae_id + " WHERE user_id = " + user + " AND project_id = " + project);

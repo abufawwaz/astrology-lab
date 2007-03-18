@@ -5,7 +5,7 @@ import java.util.Date;
 
 public class EventIterator extends RecordIterator {
 
-  protected final static String QUERY = "SELECT archive.event_id, subject_id, event_time, location, type, accuracy, source FROM archive";
+  protected final static String QUERY = "SELECT project_archive.event_id, subject_id, event_time, location, type, accuracy, source FROM project_archive";
 
   public final static int SORT_BY_DATE_ASC = 1;
   public final static int SORT_BY_DATE_DESC = 2;
@@ -15,10 +15,12 @@ public class EventIterator extends RecordIterator {
   }
 
   public static EventIterator iterate(String raw_like) {
+    String accessible = TextAccessControl.constructAccessibleByCaller();
     String like = Text.escape("%" + raw_like + "%");
-    String query = "SELECT DISTINCT(archive.event_id), subject_id, event_time, location, type, accuracy, source FROM archive, text" +
+    String query = "SELECT DISTINCT(project_archive.event_id), subject_id, event_time, location, type, accuracy, source FROM project_archive, text" +
       " WHERE (en LIKE " + like + " OR bg LIKE " + like + ")" +
-      " AND (id = event_id OR id = subject_id OR id = location) AND (type = 'male' OR type = 'female')";
+      " AND (id = event_id) AND (type = 'male' OR type = 'female')" +
+      accessible;
     return iterate(query, 0, 0);
   }
 

@@ -15,27 +15,36 @@ public class ModifyFormulaeSetChartColor extends Modify {
   public final static String KEY = "formulae"; 
   public final static String IS_TO_SET = "set_as"; 
 
+  private final static HashSet<String> COLOR_SET = new HashSet<String>();
+
+  static {
+    COLOR_SET.add("red");
+    COLOR_SET.add("orange");
+    COLOR_SET.add("yellow");
+    COLOR_SET.add("green");
+    COLOR_SET.add("blue");
+    COLOR_SET.add("indigo");
+    COLOR_SET.add("black");
+  }
+
+  public static HashSet<String> getColors() {
+    return (HashSet<String>) COLOR_SET.clone();
+  }
+
   public void operate(Request request) {
     try {
       String formulaeText = request.get(KEY);
 
       if (formulaeText != null) {
         int formulae_id = Integer.parseInt(formulaeText);
-        int user = Personalize.getUser(true);
+        int user = Personalize.getUser();
         int project = Projects.getProject().getId();
         String color = "NULL";
 
         if (Boolean.parseBoolean(request.get(IS_TO_SET))) {
           FormulaeSeries cf = null;
-          FormulaeSeries[] series = FormulaIterator.getChartSeries();
-          HashSet<String> colorSet = new HashSet<String>();
-          colorSet.add("red");
-          colorSet.add("orange");
-          colorSet.add("yellow");
-          colorSet.add("green");
-          colorSet.add("blue");
-          colorSet.add("indigo");
-          colorSet.add("black");
+          FormulaeSeries[] series = FormulaIterator.getChartSeries(true);
+          HashSet<String> colorSet = getColors();
 
           for (int i = 0; i < series.length; i++) {
             colorSet.remove(series[i].getColor());

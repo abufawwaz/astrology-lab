@@ -8,8 +8,8 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.TimeZone;
 
-import astrolab.db.Location;
 import astrolab.db.Text;
+import astrolab.project.geography.Location;
 
 public class Time extends GregorianCalendar {
 

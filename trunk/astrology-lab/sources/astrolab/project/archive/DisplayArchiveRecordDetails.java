@@ -1,11 +1,17 @@
-package astrolab.web.project.archive;
+package astrolab.project.archive;
 
 import astrolab.db.Event;
 import astrolab.web.HTMLDisplay;
 import astrolab.web.server.Request;
 import astrolab.web.server.content.LocalizedStringBuffer;
 
-public class TransformEventView extends HTMLDisplay {
+public class DisplayArchiveRecordDetails extends HTMLDisplay {
+
+  public DisplayArchiveRecordDetails() {
+    super("Details");
+
+    super.addAction("event", "user.session.event.1");
+  }
 
   public void fillBodyContent(Request request, LocalizedStringBuffer buffer) {
   	Event event = Event.getSelectedEvent();

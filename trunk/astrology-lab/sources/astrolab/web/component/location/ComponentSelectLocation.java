@@ -1,6 +1,6 @@
 package astrolab.web.component.location;
 
-import astrolab.db.Location;
+import astrolab.project.geography.Location;
 import astrolab.web.component.tree.ComponentTree;
 import astrolab.web.server.Request;
 import astrolab.web.server.content.LocalizedStringBuffer;

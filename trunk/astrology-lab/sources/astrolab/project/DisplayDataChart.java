@@ -76,25 +76,28 @@ public class DisplayDataChart extends SVGDisplay {
   }
 
   public void fillViewBox(Request request, LocalizedStringBuffer buffer) {
-    series = FormulaIterator.getChartSeries();
+    series = FormulaIterator.getChartSeries(true);
     base = FormulaIterator.getChartBase();
     period = FormulaIterator.getChartPeriod();
-    data = Projects.getProject().getData(series, base, period, FormulaIterator.getChartFromTime(), FormulaIterator.getChartToTime());
 
-    if (data.begin()) {
-      do {
-        double value = (double) data.getNumeric(base.getText());
-        minx = (value < minx) ? value : minx;
-        maxx = (value > maxx) ? value : maxx;
-  
-        for (int i = 0; i < series.length; i++) {
-          value = (double) data.getNumeric(series[i].getText());
-          miny = (value < miny) ? value : miny;
-          maxy = (value > maxy) ? value : maxy;
-        }
-      } while (data.move());
-    } else {
-      data = null;
+    if (series.length > 0) {
+      data = Projects.getProject().getData(series, base, period, FormulaIterator.getChartFromTime(), FormulaIterator.getChartToTime());
+
+      if (data.begin()) {
+        do {
+          double value = (double) data.getNumeric(base.getText());
+          minx = (value < minx) ? value : minx;
+          maxx = (value > maxx) ? value : maxx;
+    
+          for (int i = 0; i < series.length; i++) {
+            value = (double) data.getNumeric(series[i].getText());
+            miny = (value < miny) ? value : miny;
+            maxy = (value > maxy) ? value : maxy;
+          }
+        } while (data.move());
+      } else {
+        data = null;
+      }
     }
 
     strokeWidth = ((float) Math.min(maxx - minx, maxy - miny)) / 300;

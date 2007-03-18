@@ -1,8 +1,11 @@
-package astrolab.db;
+package astrolab.project.geography;
 
 import java.util.Hashtable;
 import java.util.TimeZone;
 
+import astrolab.db.Database;
+import astrolab.db.RecordIterator;
+import astrolab.db.Text;
 import astrolab.web.component.tree.TreeObject;;
 
 public class Location implements TreeObject {
@@ -25,7 +28,7 @@ public class Location implements TreeObject {
 
   public double getLongitude() {
     if (Double.isNaN(longitude)) {
-      String value = Database.query("SELECT longitude FROM locations WHERE id = " + id);
+      String value = Database.query("SELECT longitude FROM " + ProjectGeography.TABLE_NAME + " WHERE id = " + id);
       if (value != null) {
         longitude = Double.parseDouble(value);
       }
@@ -35,7 +38,7 @@ public class Location implements TreeObject {
 
   public double getLattitude() {
     if (Double.isNaN(lattitude)) {
-      String value = Database.query("SELECT lattitude FROM locations WHERE id = " + id);
+      String value = Database.query("SELECT lattitude FROM " + ProjectGeography.TABLE_NAME + " WHERE id = " + id);
       if (value != null) {
         lattitude = Double.parseDouble(value);
       }
@@ -45,7 +48,7 @@ public class Location implements TreeObject {
 
   public int getRegion() {
     if (region < 0) {
-      String value = Database.query("SELECT region FROM locations WHERE id = " + id);
+      String value = Database.query("SELECT region FROM " + ProjectGeography.TABLE_NAME + " WHERE id = " + id);
       if (value != null) {
         region = Integer.parseInt(value);
       }
@@ -63,7 +66,7 @@ public class Location implements TreeObject {
 
   public TimeZone getTimeZone() {
     if (time_zone == null) {
-      String value = Database.query("SELECT descrid FROM locations, text WHERE locations.id = " + id + " AND time_zone = text.id AND time_zone > 0");
+      String value = Database.query("SELECT descrid FROM " + ProjectGeography.TABLE_NAME + ", text WHERE " + ProjectGeography.TABLE_NAME + ".id = " + id + " AND time_zone = text.id AND time_zone > 0");
       time_zone = (value != null) ? TimeZone.getTimeZone(value) : TimeZone.getDefault();
     }
     return time_zone;
@@ -73,10 +76,9 @@ public class Location implements TreeObject {
     return Text.getText(id);
   }
 
-  public String toFullString() {
+  public String getDescription() {
     StringBuffer buffer = new StringBuffer();
-    buffer.append(Text.getText(id));
-    buffer.append(" (");
+    buffer.append("(");
     buffer.append((int) Math.abs(getLongitude()));
     buffer.append((getLongitude() > 0) ? "W" : "E");
     buffer.append(roundLeft(getLongitude()));
@@ -88,8 +90,8 @@ public class Location implements TreeObject {
     return buffer.toString();
   }
 
-  public String getText(boolean toSelect) {
-    return (toSelect) ? toFullString() : toString();
+  public String getText() {
+    return Text.getText(id);
   }
 
   public static Location getLocation(int id) {
@@ -107,7 +109,7 @@ public class Location implements TreeObject {
   public static void store(String name, int region, double longitude, double lattitude, TimeZone zone) {
     int id = Text.reserve(name, Text.TYPE_REGION);
     int timeZone = Text.reserve(zone.getDisplayName(), zone.getID(), Text.TYPE_TIME_ZONE);
-    Database.execute("INSERT INTO locations VALUES (" + id + ", " + region + ", '" + longitude + "', " + lattitude + ", '" + timeZone + "')");
+    Database.execute("INSERT INTO " + ProjectGeography.TABLE_NAME + " VALUES (" + id + ", " + region + ", '" + longitude + "', " + lattitude + ", '" + timeZone + "')");
   }
 
   private String roundLeft(double value) {

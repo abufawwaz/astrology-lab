@@ -1,4 +1,4 @@
-package astrolab.web.project.archive.natal;
+package astrolab.project.archive;
 
 import astrolab.db.Action;
 import astrolab.web.HTMLFormDisplay;

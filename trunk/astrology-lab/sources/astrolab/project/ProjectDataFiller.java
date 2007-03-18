@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Timestamp;
-import java.util.Calendar;
 import java.util.Hashtable;
 
 import astrolab.astronom.ActivePoint;
@@ -12,7 +11,6 @@ import astrolab.astronom.Time;
 import astrolab.astronom.planet.Planet;
 import astrolab.astronom.planet.SolarSystem;
 import astrolab.db.Database;
-import astrolab.project.statistics.InMemoryEvent;
 import astrolab.tools.Log;
 
 public class ProjectDataFiller extends Thread {

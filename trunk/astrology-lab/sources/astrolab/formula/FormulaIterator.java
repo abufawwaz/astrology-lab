@@ -10,7 +10,9 @@ import astrolab.astronom.Time;
 import astrolab.db.Database;
 import astrolab.db.Personalize;
 import astrolab.db.RecordIterator;
+import astrolab.formula.display.ModifyFormulaeSetChartColor;
 import astrolab.project.Project;
+import astrolab.project.ProjectDataKey;
 import astrolab.project.Projects;
 
 public class FormulaIterator extends RecordIterator {
@@ -20,7 +22,7 @@ public class FormulaIterator extends RecordIterator {
   }
 
   public static FormulaeBase getChartBase() {
-    int userId = Personalize.getUser(true);
+    int userId = Personalize.getUser();
     int projectId = Projects.getProject().getId();
     String query = "SELECT formula.formulae_id, project_id, owner_id, formulae FROM formula, formula_chart_base" +
         " WHERE project_id = " + projectId +
@@ -37,7 +39,7 @@ public class FormulaIterator extends RecordIterator {
   }
 
   public static FormulaePeriod getChartPeriod() {
-    int userId = Personalize.getUser(true);
+    int userId = Personalize.getUser();
     int projectId = Projects.getProject().getId();
     String query = "SELECT formula.formulae_id, project_id, owner_id, formulae FROM formula, formula_chart_base" +
         " WHERE project_id = " + projectId +
@@ -54,13 +56,14 @@ public class FormulaIterator extends RecordIterator {
     }
   }
 
-  public static FormulaeSeries[] getChartSeries() {
-    int userId = Personalize.getUser(true);
+  public static FormulaeSeries[] getChartSeries(boolean withColor) {
+    int userId = Personalize.getUser();
     int projectId = Projects.getProject().getId();
     String query = "SELECT formula.formulae_id, project_id, owner_id, formulae, score, chart_color FROM formula, formula_chart" +
         " WHERE project_id = " + projectId +
         " AND formula.formulae_id = formula_chart.formulae_id" +
         " AND user_id = " + userId +
+        ((withColor) ? " AND chart_color IS NOT NULL " : "") +
         " ORDER BY chart_color DESC, formula.formulae_id";
 
     FormulaIterator iterator = new FormulaIterator(Database.executeQuery(query));
@@ -69,6 +72,18 @@ public class FormulaIterator extends RecordIterator {
       list.add((Formulae) iterator.next());
     }
     iterator.close();
+
+    // if there is no formula added use the keys
+    if (list.size() == 0) {
+      Object[] colors = ModifyFormulaeSetChartColor.getColors().toArray();
+      ProjectDataKey[] keys = Projects.getProject().getKeys();
+      String base = getChartBase().getText();
+      for (int i = 0; i < keys.length; i++) {
+        if (!base.equals(keys[i].getName())) {
+          list.add(new FormulaeSeries(i, projectId, 0, keys[i].getName(), 0.0, (String) ((i < colors.length) ? colors[i] : "black")));
+        }
+      }
+    }
     return list.toArray(new FormulaeSeries[0]);
   }
 
@@ -85,7 +100,7 @@ public class FormulaIterator extends RecordIterator {
   }
 
   private final static Time getChartTime(Project project, String key) {
-    int userId = Personalize.getUser(true);
+    int userId = Personalize.getUser();
     String query = "SELECT " + key + " FROM formula_chart_base" +
         " WHERE project_id = " + project.getId() +
         " AND user_id = " + userId +

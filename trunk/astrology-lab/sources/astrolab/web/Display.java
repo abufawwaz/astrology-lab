@@ -1,6 +1,7 @@
 package astrolab.web;
 
 import java.lang.reflect.Method;
+import java.util.Enumeration;
 import java.util.Hashtable;
 
 import astrolab.db.Action;
@@ -15,6 +16,12 @@ public abstract class Display {
   private static Hashtable viewsIdToClass = new Hashtable();
   private static Hashtable viewsIdToExtension = new Hashtable();
 	private static Hashtable viewsClassToId = new Hashtable();
+
+  private Hashtable<String, String> actions = new Hashtable<String, String>();
+
+  public void addAction(String eventType, String requestParameter) {
+    actions.put(eventType, requestParameter);
+  }
 
   public abstract String getType();
 
@@ -37,6 +44,41 @@ public abstract class Display {
       remember(id.intValue(), classs);
     }
     return id.intValue();
+  }
+
+  protected final void fillActionScript(Request request, LocalizedStringBuffer buffer) {
+    String key;
+    String parameter;
+    Enumeration<String> keys = actions.keys();
+
+    String get = request.get("URL");
+    String url = (get.indexOf('?') >= 0) ? get + "&" : get + "?";
+    url = url.replaceAll("&amp;", "&");
+
+    if (keys.hasMoreElements()) {
+      buffer.append("\r\n<script language='javascript'>");
+      buffer.append("\r\n//<![CDATA[");
+
+      while (keys.hasMoreElements()) {
+        key = keys.nextElement();
+        parameter = actions.get(key);
+
+        String parameterURL = url;
+        int parameterIndex = url.indexOf(parameter + "=");
+        int parameterEnd = url.indexOf("&", parameterIndex);
+        if (parameterIndex >= 0) {
+          if (parameterEnd >= 0) {
+            parameterURL = url.substring(0, parameterIndex) + url.substring(parameterEnd + 1);
+          } else {
+            parameterURL = url.substring(0, parameterIndex);
+          }
+        }
+        buffer.append("\r\ntop.registerListener('" + key + "', function(message) { document.location.href='" + parameterURL + parameter + "=' + message })");
+      }
+
+      buffer.append("\r\n//]]>");
+      buffer.append("\r\n</script>");
+    }
   }
 
 	public final static Display getView(int intid) {
