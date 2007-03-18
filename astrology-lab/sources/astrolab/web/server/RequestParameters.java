@@ -3,6 +3,9 @@ package astrolab.web.server;
 import java.util.Properties;
 import java.util.StringTokenizer;
 
+import astrolab.db.Personalize;
+import astrolab.db.Text;
+
 public class RequestParameters {
 
   public final static String TEXT_NAME = "_name";
@@ -15,6 +18,7 @@ public class RequestParameters {
     String requestURI = tokens.nextToken();
     int paramIndex = requestURI.indexOf('?');
 
+    set("URL", requestURI);
     set("GET", (paramIndex < 0) ? requestURI : requestURI.substring(0, paramIndex));
 
     extractParameters((paramIndex < 0) ? "" : requestURI.substring(paramIndex + 1));
@@ -44,6 +48,11 @@ public class RequestParameters {
 
   public void set(String parameter, String value) {
     textParameters.setProperty(parameter, value);
+
+    //TODO: all favorites may be added here
+    if ("user.session.project".equals(parameter)) {
+      Personalize.addFavourite(-1, Integer.parseInt(value), Text.getId("user.session.project"));
+    }
   }
 
   public void extractParameters(String text) {

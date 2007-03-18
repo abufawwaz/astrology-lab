@@ -1,8 +1,8 @@
-package astrolab.web.project.archive.natal;
+package astrolab.project.archive;
 
 import astrolab.db.Action;
 import astrolab.db.Event;
-import astrolab.db.Text;
+import astrolab.db.TextAccessControl;
 import astrolab.web.HTMLFormDisplay;
 import astrolab.web.Modify;
 import astrolab.web.component.ComponentSelectAccuracy;
@@ -19,6 +19,7 @@ public class FormEditNatalRecord extends HTMLFormDisplay {
 
   public FormEditNatalRecord() {
     super(Action.getAction(-1, -1, Modify.getId(ModifyCreateNatalRecord.class)));
+    super.addAction("event", "user.session.event.1");
   }
 
 	public void fillBodyContent(Request request, LocalizedStringBuffer buffer) {
@@ -94,9 +95,9 @@ public class FormEditNatalRecord extends HTMLFormDisplay {
     buffer.localize("Record is visible to");
     buffer.append(":</td>");
     buffer.append("<td>");
-    int accessible_by = Text.getAccessibleBy(record.getId());
-    String accessibleSelection = (accessible_by == Text.ACCESSIBLE_BY_ALL) ? "everyone" : "me only";
-    ComponentSelectChoice.fill(buffer, new String[] { "everyone", "me only" }, new String[] { String.valueOf(Text.ACCESSIBLE_BY_ALL), String.valueOf(Text.ACCESSIBLE_BY_OWNER) }, accessibleSelection, "_accessible_by");
+    int accessible_by = TextAccessControl.getAccessibleBy(record.getId());
+    String accessibleSelection = (accessible_by == TextAccessControl.ACCESSIBLE_BY_ALL) ? "everyone" : "me only";
+    ComponentSelectChoice.fill(buffer, new String[] { "everyone", "me only" }, new String[] { String.valueOf(TextAccessControl.ACCESSIBLE_BY_ALL), String.valueOf(TextAccessControl.ACCESSIBLE_BY_OWNER) }, accessibleSelection, "_accessible_by");
     buffer.append("</td>");
     buffer.append("</tr>");
 
@@ -104,6 +105,10 @@ public class FormEditNatalRecord extends HTMLFormDisplay {
     buffer.append("<input type='submit' value='");
     buffer.localize("Save");
     buffer.append("' />");
+
+    buffer.append("<input type='button' value='");
+    buffer.localize("New");
+    buffer.append("' onclick='document.forms[0]._event_id.value=0;document.forms[0]." + RequestParameters.TEXT_NAME + ".value=\"\"'/>");
 	}
 
 }

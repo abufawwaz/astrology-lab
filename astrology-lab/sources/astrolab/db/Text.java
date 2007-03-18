@@ -2,30 +2,25 @@ package astrolab.db;
 
 public class Text {
 
-  public final static int ACCESSIBLE_BY_ALL = 0;
-  public final static int ACCESSIBLE_BY_OWNER = -1;
+  public final static int TYPE_TIME_ZONE = 1000001;
+  public final static int TYPE_REGION = 1001001;
+  public final static int TYPE_EVENT = 2000001;
+  public final static int TYPE_LIMIT = 5000000;
 
-  private final static int TYPE_OFFSET = 1000000;
-	private final static int TYPE_SUB_OFFSET = 1000;
-
-	// large groups
-	public final static int TYPE_VIEW = 1;
-  public final static int TYPE_SYSTEM = TYPE_OFFSET * 1 + 1;
-  public final static int TYPE_EVENT = TYPE_OFFSET * 2 + 1;
-	public final static int TYPE_LABORATORY = TYPE_OFFSET * 3 + 1;
-	public final static int TYPE_ACTION = TYPE_OFFSET * 4 + 1;
-  public final static int TYPE_REGION = TYPE_OFFSET * 5 + 1;
-  public final static int TYPE_LABELS = TYPE_OFFSET * 6 + 1;
-  public final static int TYPE_HELP_FEEDBACK = TYPE_OFFSET * 7 + 1;
-  public final static int TYPE_PRODUCTS = TYPE_OFFSET * 8 + 1;
-  public final static int TYPE_RESERVED = TYPE_OFFSET * 9 + 1;
-
-	// small groups
-	public final static int TYPE_VARIOUS = TYPE_OFFSET * 10 + 1;
-	public final static int TYPE_EVENT_TYPE = TYPE_SUB_OFFSET * 1 + TYPE_VARIOUS;
-  public final static int TYPE_EVENT_ATTRIBUTE_TYPE = TYPE_SUB_OFFSET * 2 + TYPE_VARIOUS;
-  public final static int TYPE_TIME_ZONE = TYPE_SUB_OFFSET * 3 + TYPE_VARIOUS;
-  public static final int TYPE_FORMULAE = TYPE_SUB_OFFSET * 4 + TYPE_VARIOUS;
+  private final static int getLimit(int type) {
+    switch (type) {
+      case TYPE_TIME_ZONE: {
+        return TYPE_REGION -1;
+      }
+      case TYPE_REGION: {
+        return TYPE_EVENT -1;
+      }
+      case TYPE_EVENT: {
+        return TYPE_LIMIT;
+      }
+    }
+    throw new IllegalStateException(" Unknown text type: " + type);
+  }
 
   public static String escape(String text) {
     if (text == null) {
@@ -52,9 +47,9 @@ public class Text {
       int id = Integer.parseInt(existing);
       String accessible = Database.query("SELECT accessible_by FROM text WHERE id = " + id);
       String expected = String.valueOf(user);
-      if (user == ACCESSIBLE_BY_OWNER) {
-        expected = String.valueOf(Personalize.getUser(false));
-      } else if (user == ACCESSIBLE_BY_ALL) {
+      if (user == TextAccessControl.ACCESSIBLE_BY_OWNER) {
+        expected = String.valueOf(Personalize.getUser());
+      } else if (user == TextAccessControl.ACCESSIBLE_BY_ALL) {
         expected = "NULL";
       }
       if (!String.valueOf(user).equalsIgnoreCase("" + accessible)) {
@@ -62,17 +57,17 @@ public class Text {
       }
       return Integer.parseInt(existing);
     } else {
-      int limit = (type < TYPE_VARIOUS) ? type + TYPE_OFFSET : type + TYPE_SUB_OFFSET;
+      int limit = getLimit(type);
       int id = Integer.parseInt(Database.query("SELECT max(id) FROM text WHERE id < " + limit)) + 1;
       if (id < type) {
         id = type;
       }
 
       String accessible_by;
-      if (user == ACCESSIBLE_BY_ALL) {
+      if (user == TextAccessControl.ACCESSIBLE_BY_ALL) {
         accessible_by = "NULL";
-      } else if (user == ACCESSIBLE_BY_OWNER) {
-        int current_user = Personalize.getUser(false);
+      } else if (user == TextAccessControl.ACCESSIBLE_BY_OWNER) {
+        int current_user = Personalize.getUser();
         accessible_by = String.valueOf((current_user > 0) ? current_user : id);
       } else {
         accessible_by = String.valueOf(user);
@@ -87,14 +82,9 @@ public class Text {
     }
   }
 
-  public static int getAccessibleBy(int id) {
-    String data = Database.query("SELECT accessible_by from text where id = " + id);
-    return (data != null) ? Integer.parseInt(data) : ACCESSIBLE_BY_ALL;
-  }
-
   public static String getText(int id) {
     String language = Personalize.getLanguage();
-    String accessible_by = constructAccessibleBy(String.valueOf(id));
+    String accessible_by = TextAccessControl.constructAccessibleBy(String.valueOf(id));
     String value = Database.query("SELECT " + language + " from text where id = " + id + accessible_by);
     if (value == null && !"en".equals(language)) {
       value = Database.query("SELECT en from text where id = " + id + accessible_by);
@@ -108,53 +98,32 @@ public class Text {
     return value;
   }
 
-  public static String getSVGText(int id) {
-    String accessible_by = constructAccessibleBy(String.valueOf(id));
+  public static String getCenteredSVGText(int id) {
+    String accessible_by = TextAccessControl.constructAccessibleBy(String.valueOf(id));
     String value = Database.query("SELECT svg.svg from svg, text where text.id=svg.id AND svg.id = " + id + accessible_by);
-    return (value != null) ? "<svg:svg width='20' height='20' viewBox='-100 -100 200 200'>" + value + "</svg:svg>" : getText(id);
+    return (value != null) ? value : "<svg:text font-size='100'>" + getText(id) + "</svg:text>";
+  }
+
+  public static String getSVGText(int id) {
+    String accessible_by = TextAccessControl.constructAccessibleBy(String.valueOf(id));
+    String value = Database.query("SELECT svg.svg from svg, text where text.id=svg.id AND svg.id = " + id + accessible_by);
+    return (value != null) ? "<svg:svg width='20' height='20' viewBox='-120 -120 240 240'>" + value + "</svg:svg>" : getText(id);
+  }
+
+  public static String getSVGText(String id, int fontSize) {
+    String accessible_by = TextAccessControl.constructAccessibleBy(id);
+    String value = Database.query("SELECT svg.svg from svg, text where text.id=svg.id AND (text.descrid = '" + id + "' or text.en = '" + id + "')" + accessible_by);
+    return (value != null) ? "<svg:svg width='" + fontSize + "' height='" + fontSize + "' viewBox='-120 -120 240 240'>" + value + "</svg:svg>" : getText(id);
   }
 
   public static String getText(String id) {
     String language = Personalize.getLanguage();
-    String accessible_by = constructAccessibleBy(id);
+    String accessible_by = TextAccessControl.constructAccessibleBy(id);
     String value = Database.query("SELECT " + language + " from text where (descrid = '" + id + "' or en = '" + id + "')" + accessible_by);
     if (value == null && !"en".equals(language)) {
       value = Database.query("SELECT en from text where descrid = '" + id + "'" + accessible_by);
     }
     return (value != null) ? value : id;
-  }
-
-  public static String getSVG(String id) {
-    String accessible_by = constructAccessibleBy(id);
-    String value = Database.query("SELECT svg.svg from svg, text where text.id=svg.id AND (text.descrid = '" + id + "' or text.en = '" + id + "')" + accessible_by);
-    return (value != null) ? value : "<svg:text font-size='100'>" + getText(id) + "</svg:text>";
-  }
-
-  public static String getSVGText(String id) {
-    String accessible_by = constructAccessibleBy(id);
-    String value = Database.query("SELECT svg.svg from svg, text where text.id=svg.id AND (text.descrid = '" + id + "' or text.en = '" + id + "')" + accessible_by);
-    return (value != null) ? "<svg:svg width='20' height='20' viewBox='-100 -100 200 200'>" + value + "</svg:svg>" : getText(id);
-  }
-
-  private final static String constructAccessibleBy(String id) {
-    int user = Personalize.getUser(false);
-
-    if (user == 2000001) {
-      // system user sees everything
-      return "";
-    } else if (user == -1) {
-      try {
-        return " AND (accessible_by IS NULL OR accessible_by = " + Integer.parseInt(id) + ")";
-      } catch (NumberFormatException nfe) {
-        // no user. show only available to everybody
-        return " AND (accessible_by IS NULL)";
-      }
-    } else if (id.equals(String.valueOf(user))) {
-      // every user sees him/herself
-      return "";
-    } else {
-      return " AND (accessible_by IS NULL OR accessible_by = " + user + ")";
-    }
   }
 
   public static int getId(String id) {

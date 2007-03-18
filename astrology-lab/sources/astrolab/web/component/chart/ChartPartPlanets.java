@@ -21,10 +21,10 @@ public class ChartPartPlanets extends SVGDisplay {
 	private double radius, x, y;
 
 	public void fillBodyContent(Request request, LocalizedStringBuffer buffer) {
-		fillContent(request, buffer, 0.0, true);
+		fillContent(request, buffer, Event.getSelectedEvent(), 0.0, true);
 	}
 
-	public void fillContent(Request request, LocalizedStringBuffer buffer, double offset, boolean ownImage) {
+	public void fillContent(Request request, LocalizedStringBuffer buffer, Event event, double offset, boolean ownImage) {
 		radius = request.getConstraints().getRadius();
 		x = request.getConstraints().getWidth() / 2;
 		y = request.getConstraints().getHeight() / 2;
@@ -32,7 +32,7 @@ public class ChartPartPlanets extends SVGDisplay {
 		double position;
 		SolarSystem solar = new SolarSystem();
     Planet earth = solar.getPlanet(SolarSystem.EARTH);
-    solar.calculate(Event.getSelectedEvent());
+    solar.calculate(event);
 
 		for (int i = 0; i < PLANETS.length; i++) {
       position = solar.getPlanet(PLANETS[i]).positionAround(earth) - offset;
@@ -40,14 +40,14 @@ public class ChartPartPlanets extends SVGDisplay {
 		}
 
 		PointGamma gamma = new PointGamma(60, PointGamma.START_FROM_ARIES);
-		gamma.initialize(Event.getSelectedEvent());
+		gamma.initialize(event);
 		position = gamma.getPosition(Calendar.getInstance());
 		fillPlanet(gamma, (position - offset) * OFFSET_DELTA, -1, buffer);
 	}
 
 	private void fillPlanet(ActivePoint point, double offset, int index, LocalizedStringBuffer buffer) {
 		buffer.append("\r\n\t<g transform='translate(" + ((int) (x - (radius - 90) * Math.cos(offset))) + ", " + ((int) (y + (radius - 90) * Math.sin(offset))) + ") scale(0.1)'>");
-    buffer.append(Text.getSVG(point.getName()));
+    buffer.append(Text.getCenteredSVGText(Text.getId(point.getName())));
 		buffer.append("\r\n\t</g>");
 	}
 

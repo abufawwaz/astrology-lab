@@ -54,8 +54,12 @@ public class Product implements TreeObject {
     return new Product(id);
   }
 
-  public String getText(boolean toSelect) {
+  public String getText() {
     return toString();
+  }
+
+  public String getDescription() {
+    return "";
   }
 
   public TreeObject getParent() {
@@ -71,13 +75,14 @@ public class Product implements TreeObject {
   }
 
   protected static void store(String name, int category) {
-    int id = Text.getId(name);
-    if (id <= 0) {
-      id = Text.reserve(name, Text.TYPE_PRODUCTS);
-      Database.execute("INSERT INTO project_financial_products VALUES (" + id + ", " + category + ")");
-    } else {
-      Database.execute("UPDATE project_financial_products SET product_category = " + category + " WHERE product_id = " + id);
-    }
+    throw new RuntimeException("not implemented");
+//    int id = Text.getId(name);
+//    if (id <= 0) {
+//      id = Text.reserve(name, Text.TYPE_PRODUCTS);
+//      Database.execute("INSERT INTO project_financial_products VALUES (" + id + ", " + category + ")");
+//    } else {
+//      Database.execute("UPDATE project_financial_products SET product_category = " + category + " WHERE product_id = " + id);
+//    }
   }
 
 }

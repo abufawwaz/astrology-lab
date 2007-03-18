@@ -6,6 +6,10 @@ public class LocalizedStringBuffer {
 
   private StringBuffer buffer = new StringBuffer();
 
+  public void newline() {
+    buffer.append("\r\n");
+  }
+
   public void append(String text) {
     buffer.append(text);
   }
@@ -19,7 +23,7 @@ public class LocalizedStringBuffer {
   }
 
   public void localize(String text) {
-    append(bbcode(Text.getSVGText(text)));
+    append(bbcode(Text.getSVGText(text, 20)));
   }
 
   public void localize(int id) {

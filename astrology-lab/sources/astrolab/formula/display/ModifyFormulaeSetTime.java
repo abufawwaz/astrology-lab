@@ -15,7 +15,7 @@ public class ModifyFormulaeSetTime extends Modify {
 
   public void operate(Request request) {
     try {
-      int user = Personalize.getUser(true);
+      int user = Personalize.getUser();
       int project = Projects.getProject().getId();
       Time fromTime = ComponentSelectTime.retrieve(request, KEY_FROM_TIME);
       Time toTime = ComponentSelectTime.retrieve(request, KEY_TO_TIME);

@@ -5,7 +5,6 @@ import java.net.Socket;
 import java.sql.*;
 import java.util.*;
 
-import astrolab.astronom.planet.SolarSystem;
 import astrolab.db.Database;
 import astrolab.db.Event;
 import astrolab.db.Project;
@@ -16,8 +15,6 @@ import astrolab.formula.ElementSet;
 import astrolab.formula.FormulaGeneratorElement;
 import astrolab.formula.Formulae;
 import astrolab.formula.FormulaGenerator;
-import astrolab.formula.score.FormulaScoreFactory;
-import astrolab.project.statistics.InMemoryEvent;
 
 public class Test {
 

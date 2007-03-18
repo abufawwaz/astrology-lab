@@ -21,10 +21,10 @@ public class ChartPartAspects extends SVGDisplay {
 	private double radius, x, y;
 
 	public void fillBodyContent(Request request, LocalizedStringBuffer buffer) {
-		fillContent(request, buffer, 0.0, true);
+		fillContent(request, buffer, Event.getSelectedEvent(), 0.0, true);
 	}
 
-	public void fillContent(Request request, LocalizedStringBuffer buffer, double offset, boolean ownImage) {
+	public void fillContent(Request request, LocalizedStringBuffer buffer, Event event, double offset, boolean ownImage) {
     Vector positions = new Vector();
 
     radius = request.getConstraints().getRadius();
@@ -33,7 +33,7 @@ public class ChartPartAspects extends SVGDisplay {
 
 		SolarSystem solar = new SolarSystem();
     Planet earth = solar.getPlanet(SolarSystem.EARTH);
-    solar.calculate(Event.getSelectedEvent());
+    solar.calculate(event);
 
 		for (int i = 0; i < PLANETS.length; i++) {
       positions.add(new Double(solar.getPlanet(PLANETS[i]).positionAround(earth)));

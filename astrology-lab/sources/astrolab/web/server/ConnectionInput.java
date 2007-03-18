@@ -27,7 +27,6 @@ public class ConnectionInput extends Thread {
     try {
       while (true) {
         // read an HTTP request
-        int user;
       	String headline = in.readLine();
         String line;
 
@@ -58,13 +57,8 @@ public class ConnectionInput extends Thread {
           parameters.extractParameters(new String(contentArray));
         }
 
-        user = Integer.parseInt(parameters.getCookie("session", "-1"));
-        if (user > 0) {
-          Personalize.set(user, parameters.get("Accept-Language"));
-        }
-
         Log.log("Received request " + parameters);
-        request = connection.getProcessor().process(parameters, user);
+        request = connection.getProcessor().process(parameters);
         if (request == null) {
         	break;
         }

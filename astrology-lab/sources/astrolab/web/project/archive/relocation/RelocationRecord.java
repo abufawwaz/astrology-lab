@@ -15,8 +15,8 @@ public class RelocationRecord extends Event {
     super(id);
   }
 
-  protected RelocationRecord(int id, int person, Date timestamp, int location, String accuracy, String source) {
-    super(id, person, timestamp, location, Event.TYPE_EVENT, accuracy, source);
+  protected RelocationRecord(int person, Date timestamp, int location) {
+    super(-1, person, timestamp, location, Event.TYPE_EVENT, Event.ACCURACY_DAY, Event.SOURCE_RECALLED);
   }
 
   public static int store(int person, long timestamp, int location, String accuracy, String source) {

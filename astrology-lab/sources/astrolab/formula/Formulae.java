@@ -8,8 +8,6 @@ import astrolab.db.Database;
 import astrolab.db.Personalize;
 import astrolab.formula.score.FormulaScoreFactory;
 import astrolab.project.Projects;
-import astrolab.project.statistics.StatisticsRecord;
-import astrolab.project.statistics.StatisticsRecordIterator;
 
 public abstract class Formulae {
 
@@ -26,7 +24,7 @@ public abstract class Formulae {
   public Formulae(int id, int project, int owner, String text, double score) {
     this.id = id;
     this.project = (project > 0) ? project : Projects.getProject().getId();
-    this.owner = (owner > 0) ? owner : Personalize.getUser(true);
+    this.owner = (owner > 0) ? owner : Personalize.getUser();
     this.text = text;
     this.score = score;
     this.element = Formulae.readElements(id);
@@ -93,10 +91,10 @@ public abstract class Formulae {
   public double rescore() {
     scoreData = new FormulaData(this, FormulaScoreFactory.SCORE_ACCUMULATIVE);
 
-    StatisticsRecordIterator iterator = StatisticsRecordIterator.iterate();
-    while (iterator.hasNext()) {
-      scoreData.feed((StatisticsRecord) iterator.next());
-    }
+//    StatisticsRecordIterator iterator = StatisticsRecordIterator.iterate();
+//    while (iterator.hasNext()) {
+//      scoreData.feed((StatisticsRecord) iterator.next());
+//    }
 
     score = scoreData.getScore().getScore();
     return getScore();

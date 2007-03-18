@@ -2,9 +2,6 @@ package astrolab.db;
 
 import java.util.StringTokenizer;
 
-import astrolab.web.project.archive.natal.NatalRecord;
-import astrolab.web.server.Request;
-
 public final class Personalize extends AttributedObject {
 
   public final static int VALUE_NULL = -1;
@@ -65,18 +62,9 @@ public final class Personalize extends AttributedObject {
     }
   }
 
-  public static int getUser(boolean requireReal) {
+  public static int getUser() {
     Personalize person = currentPersonalization.get();
-    if (person != null && person.user > 0) {
-      return person.user;
-    } else if (requireReal) {
-      long time = System.currentTimeMillis();
-      int user = NatalRecord.store(-1, "User" + time, time, 0, NatalRecord.TYPE_MALE, NatalRecord.ACCURACY_SECOND, NatalRecord.SOURCE_ACCURATE, Text.ACCESSIBLE_BY_OWNER);
-      Request.getCurrentRequest().getConnection().getOutput().setCookie("session", String.valueOf(user));
-      return user;
-    } else {
-      return -1;
-    }
+    return (person != null && person.user > 0) ? person.user : -1;
   }
 
   public static int[] getFavourites(int int_view) {

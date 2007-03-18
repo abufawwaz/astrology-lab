@@ -6,6 +6,7 @@ import java.util.*;
 import astrolab.astronom.util.LocationParser;
 import astrolab.db.Database;
 import astrolab.db.Text;
+import astrolab.project.geography.ProjectGeography;
 
 public class LocationImport {
 
@@ -54,7 +55,7 @@ public class LocationImport {
 
 	private final static void importLocation(int city, int country, double longitude, double lattitude, double zone) {
 		try {
-  		Database.execute("INSERT INTO locations values (" + city + ", 0, " + country + ", 0, 0, " + city + ", 0, 0, " + longitude + ", " + lattitude + ", " + zone + " )");
+  		Database.execute("INSERT INTO " + ProjectGeography.TABLE_NAME + " values (" + city + ", 0, " + country + ", 0, 0, " + city + ", 0, 0, " + longitude + ", " + lattitude + ", " + zone + " )");
 		} catch (Exception e) {
 			System.err.println(e.toString());
 		}

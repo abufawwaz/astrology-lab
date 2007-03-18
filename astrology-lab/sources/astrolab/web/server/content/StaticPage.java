@@ -15,7 +15,7 @@ public class StaticPage extends Request implements Response {
   private String type;
 
   public StaticPage(String filename, String type) {
-    super(null, 0, new RequestParameters("GET " + filename + " HTTP/1.1"));
+    super(null, new RequestParameters("GET " + filename + " HTTP/1.1"), 0);
 
     this.filename = filename;
     this.type = type;

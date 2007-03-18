@@ -1,7 +1,6 @@
 package astrolab.web.component.help;
 
 import astrolab.db.Database;
-import astrolab.db.Text;
 
 class FeedbackRecord {
 
@@ -11,9 +10,11 @@ class FeedbackRecord {
   private int author;
   private int has_approved;
   private int has_disapproved;
+  private String text;
 
-  FeedbackRecord(int id, int approves, int disapproves, int author, int has_approved, int has_disapproved) {
+  FeedbackRecord(int id, String text, int approves, int disapproves, int author, int has_approved, int has_disapproved) {
     this.id = id;
+    this.text = text;
     this.approves = approves;
     this.disapproves = disapproves;
     this.author = author;
@@ -37,6 +38,10 @@ class FeedbackRecord {
     return author;
   }
 
+  public String getText() {
+    return text;
+  }
+
   public boolean hasApproved() {
     return has_approved > 0;
   }
@@ -46,27 +51,22 @@ class FeedbackRecord {
   }
 
   public static int store(int person, int project, String message) {
-    int id = Text.getId(message);
+    Database.execute("INSERT INTO help_project (commenter_id, project_id, comment_text) VALUES (" + person + ", " + project + ", '" + message + "')");
 
-    if (id < 0) {
-      id = Text.reserve(message, Text.TYPE_HELP_FEEDBACK);
-
-      Database.execute("INSERT INTO help_project VALUES (" + id + ", " + person + ", " + project + ")");
-    }
-
+    int id = Integer.parseInt(Database.query("SELECT comment_id FROM help_project WHERE commenter_id = " + person + " AND project_id = " + project + " AND comment_text = '" + message + "'"));
     approve(person, project, id);
 
     return id;
   }
 
-  public static void approve(int person, int project, int message) {
-    Database.execute("DELETE FROM help_feedback WHERE id=" + message + " and user_id=" + person);
-    Database.execute("INSERT INTO help_feedback VALUES (" + message + ", " + person + ", 'yes')");
+  public static void approve(int person, int project, int commentId) {
+    Database.execute("DELETE FROM help_feedback WHERE id=" + commentId + " and user_id=" + person);
+    Database.execute("INSERT INTO help_feedback VALUES (" + commentId + ", " + person + ", 'yes')");
   }
 
-  public static void disapprove(int person, int project, int message) {
-    Database.execute("DELETE FROM help_feedback WHERE id=" + message + " and user_id=" + person);
-    Database.execute("INSERT INTO help_feedback VALUES (" + message + ", " + person + ", 'no')");
+  public static void disapprove(int person, int project, int commentId) {
+    Database.execute("DELETE FROM help_feedback WHERE id=" + commentId + " and user_id=" + person);
+    Database.execute("INSERT INTO help_feedback VALUES (" + commentId + ", " + person + ", 'no')");
   }
 
 }
