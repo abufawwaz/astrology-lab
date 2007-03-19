@@ -1,12 +1,10 @@
-package astrolab.web.project.archive.relocation;
+package astrolab.project.relocation;
 
 import astrolab.db.Action;
 import astrolab.db.Text;
 import astrolab.project.geography.ComponentSelectLocation;
 import astrolab.web.HTMLFormDisplay;
 import astrolab.web.Modify;
-import astrolab.web.component.ComponentSelectAccuracy;
-import astrolab.web.component.ComponentSelectSource;
 import astrolab.web.component.time.ComponentSelectTime;
 import astrolab.web.server.Request;
 import astrolab.web.server.content.LocalizedStringBuffer;
@@ -27,18 +25,6 @@ public class FormRelocationRecord extends HTMLFormDisplay {
     buffer.append("<td>Time of relocation:</td>");
     buffer.append("<td>");
     ComponentSelectTime.fill(buffer, ComponentSelectTime.PARAMETER_KEY);
-    buffer.append("</td>");
-    buffer.append("</tr>");
-    buffer.append("<tr>");
-    buffer.append("<td>Accuracy:</td>");
-    buffer.append("<td>");
-    ComponentSelectAccuracy.fill(buffer);
-    buffer.append("</td>");
-    buffer.append("</tr>");
-    buffer.append("<tr>");
-    buffer.append("<td>Source:</td>");
-    buffer.append("<td>");
-    ComponentSelectSource.fill(buffer);
     buffer.append("</td>");
     buffer.append("</tr>");
     buffer.append("<tr>");

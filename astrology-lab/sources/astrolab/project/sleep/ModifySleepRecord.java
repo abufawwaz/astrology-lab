@@ -2,10 +2,10 @@ package astrolab.project.sleep;
 
 import astrolab.astronom.Time;
 import astrolab.db.Event;
+import astrolab.project.relocation.RelocationRecord;
 import astrolab.web.Modify;
 import astrolab.web.component.ComponentSelectAccuracy;
 import astrolab.web.component.ComponentSelectSource;
-import astrolab.web.project.archive.relocation.RelocationRecord;
 import astrolab.web.server.Request;
 
 public class ModifySleepRecord extends Modify {

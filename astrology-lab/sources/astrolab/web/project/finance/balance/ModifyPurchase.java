@@ -2,11 +2,11 @@ package astrolab.web.project.finance.balance;
 
 import astrolab.astronom.Time;
 import astrolab.db.Text;
+import astrolab.project.relocation.RelocationRecord;
 import astrolab.web.Modify;
 import astrolab.web.component.ComponentSelectChoice;
 import astrolab.web.component.ComponentSelectNumber;
 import astrolab.web.component.time.ComponentSelectTime;
-import astrolab.web.project.archive.relocation.RelocationRecord;
 import astrolab.web.project.finance.products.ComponentSelectProduct;
 import astrolab.web.server.Request;
 import astrolab.web.server.RequestParameters;

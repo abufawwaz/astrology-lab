@@ -3,7 +3,7 @@ package astrolab.web.project.archive.test;
 import astrolab.db.Database;
 import astrolab.db.Event;
 import astrolab.db.Text;
-import astrolab.web.project.archive.relocation.RelocationRecord;
+import astrolab.project.relocation.RelocationRecord;
 
 class TestRecord extends Event {
 
