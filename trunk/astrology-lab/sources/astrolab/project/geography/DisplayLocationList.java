@@ -1,6 +1,5 @@
-package astrolab.web.component.location;
+package astrolab.project.geography;
 
-import astrolab.project.geography.Location;
 import astrolab.web.HTMLDisplay;
 import astrolab.web.component.tree.DisplayTree;
 import astrolab.web.component.tree.TreeObject;

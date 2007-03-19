@@ -2,10 +2,10 @@ package astrolab.web.project.archive.relocation;
 
 import astrolab.astronom.Time;
 import astrolab.db.Event;
+import astrolab.project.geography.ComponentSelectLocation;
 import astrolab.web.Modify;
 import astrolab.web.component.ComponentSelectAccuracy;
 import astrolab.web.component.ComponentSelectSource;
-import astrolab.web.component.location.ComponentSelectLocation;
 import astrolab.web.component.time.ComponentSelectTime;
 import astrolab.web.server.Request;
 
