@@ -1,4 +1,4 @@
-package astrolab.web.component.location;
+package astrolab.project.geography;
 
 import java.util.TimeZone;
 

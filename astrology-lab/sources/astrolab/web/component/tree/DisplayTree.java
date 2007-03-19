@@ -15,6 +15,8 @@ public abstract class DisplayTree extends HTMLDisplay {
   protected DisplayTree(int id) {
     this.id = id;
     this.choiceId = "_tree-" + id;
+
+    super.addAction("location", this.choiceId);
   }
 
   protected int getId() {
@@ -67,39 +69,41 @@ public abstract class DisplayTree extends HTMLDisplay {
     iterator = selectionRoot.iterateSubTrees();
     HashSet subtrees = new HashSet();
 
+    buffer.append("<table>");
     while (iterator.hasNext()) {
       TreeObject child = (TreeObject) iterator.next();
       subtrees.add(new Integer(child.getId()));
 
-      buffer.append(" <a href=\"javascript:if (parent != top) parent.select(new Array('");
+      buffer.append("<tr><td>");
+      buffer.append("<a href=\"javascript:if (parent != top) { parent.select(new Array('");
       buffer.append(child.getId());
       buffer.append("', '");
       buffer.append(child.getText());
-      buffer.append("', false)); window.location.href='?_d=");
+      buffer.append("', false)) } else { top.fireEvent('location','" + child.getId() + "') }; window.location.href='?_d=");
       buffer.append(id);
       buffer.append("&amp;");
       buffer.append(choiceId);
       buffer.append("=");
       buffer.append(child.getId());
-      buffer.append("'\">");
+      buffer.append("'\"><b>");
       buffer.append(child.getText());
-      buffer.append(" ");
+      buffer.append("</b></a>");
+      buffer.append("</td><td>");
       buffer.append(child.getDescription());
-      buffer.append("</a><br />");
+      buffer.append("</td></tr>");
     }
 
-    buffer.append("<table>");
     iterator = selectionRoot.iterateChildren();
     while (iterator.hasNext()) {
       TreeObject child = (TreeObject) iterator.next();
 
       if (!subtrees.contains(new Integer(child.getId()))) {
         buffer.append("<tr><td>");
-        buffer.append("<a href=\"javascript:if (parent != top) parent.select(new Array('");
+        buffer.append("<a href=\"javascript:if (parent != top) { parent.select(new Array('");
         buffer.append(child.getId());
         buffer.append("', '");
         buffer.append(child.getText());
-        buffer.append("', true))\">");
+        buffer.append("', true)) } else { top.fireEvent('location','" + child.getId() + "') }\">");
         buffer.append(child.getText());
         buffer.append("</a>");
         buffer.append("</td><td>");

@@ -1,9 +1,8 @@
-package astrolab.web.component.location;
+package astrolab.project.geography;
 
 import java.util.TimeZone;
 
 import astrolab.db.Text;
-import astrolab.project.geography.Location;
 import astrolab.web.Modify;
 import astrolab.web.server.Request;
 import astrolab.web.server.RequestParameters;
