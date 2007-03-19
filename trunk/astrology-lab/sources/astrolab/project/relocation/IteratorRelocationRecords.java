@@ -1,4 +1,4 @@
-package astrolab.web.project.archive.relocation;
+package astrolab.project.relocation;
 
 import java.sql.ResultSet;
 import java.util.Date;
@@ -13,7 +13,7 @@ public class IteratorRelocationRecords extends EventIterator {
   }
 
   public static IteratorRelocationRecords iterate(int user) {
-    return new IteratorRelocationRecords(Database.executeQuery(EventIterator.QUERY + ", project_relocation WHERE subject_id = " + user + " ORDER BY event_time"));
+    return new IteratorRelocationRecords(Database.executeQuery("SELECT subject_id, time, location FROM project_relocation WHERE subject_id = " + user + " ORDER BY time"));
   }
 
   protected Object read() throws Exception {

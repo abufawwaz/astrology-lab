@@ -162,8 +162,8 @@ create table project_archive (
 ) ENGINE=InnoDB;
 
 create table project_relocation (
+  time DATETIME,
   subject_id INT UNSIGNED NOT NULL REFERENCES project_archive (subject_id),
-  event_time DATETIME,
   location INT UNSIGNED NOT NULL REFERENCES project_geography (id),
 
   INDEX (subject_id)
@@ -463,9 +463,9 @@ insert into views values (26, 'astrolab.project.match.GeneralPowerView');
 insert into views values (27, 'astrolab.project.match.GeneralSignMatchView');
 insert into views values (28, 'astrolab.web.project.archive.diary.FormDiaryRecord');
 insert into views values (29, 'astrolab.web.project.archive.diary.ModifyDiaryRecord');
-insert into views values (30, 'astrolab.web.project.archive.relocation.DisplayRelocationRecords');
-insert into views values (31, 'astrolab.web.project.archive.relocation.FormRelocationRecord');
-insert into views values (32, 'astrolab.web.project.archive.relocation.ModifyRelocationRecord');
+insert into views values (30, 'astrolab.project.relocation.DisplayRelocationRecords');
+insert into views values (31, 'astrolab.project.relocation.FormRelocationRecord');
+insert into views values (32, 'astrolab.project.relocation.ModifyRelocationRecord');
 insert into views values (33, 'astrolab.project.geography.DisplayLocationList');
 insert into views values (34, 'astrolab.project.match.DisplayPartnerMatch');
 insert into views values (35, 'astrolab.web.component.help.FormGiveFeedback');

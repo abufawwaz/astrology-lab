@@ -80,7 +80,6 @@ public class Processor {
 
   static {
     registerStaticPage("favicon.ico", "favicon.ico", "image/x-icon");
-    registerStaticPage("/image.jpg", "image.jpg", "image/jpeg");
     registerStaticPage("/events.js", "events.js", "text/javascript");
     registerStaticPage("/control.js", "control.js", "text/javascript");
     registerStaticPage("/window.js", "window.js", "text/javascript");

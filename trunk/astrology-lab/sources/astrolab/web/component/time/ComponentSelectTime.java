@@ -3,8 +3,8 @@ package astrolab.web.component.time;
 import java.util.Properties;
 
 import astrolab.astronom.Time;
+import astrolab.project.relocation.RelocationRecord;
 import astrolab.tools.Template;
-import astrolab.web.project.archive.relocation.RelocationRecord;
 import astrolab.web.server.Request;
 import astrolab.web.server.content.LocalizedStringBuffer;
 

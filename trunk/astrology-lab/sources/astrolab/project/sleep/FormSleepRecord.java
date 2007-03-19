@@ -2,12 +2,12 @@ package astrolab.project.sleep;
 
 import astrolab.db.Action;
 import astrolab.db.Text;
+import astrolab.project.relocation.RelocationRecord;
 import astrolab.web.HTMLFormDisplay;
 import astrolab.web.Modify;
 import astrolab.web.component.ComponentSelectAccuracy;
 import astrolab.web.component.ComponentSelectSource;
 import astrolab.web.component.time.ComponentSelectTime;
-import astrolab.web.project.archive.relocation.RelocationRecord;
 import astrolab.web.server.Request;
 import astrolab.web.server.content.LocalizedStringBuffer;
 
