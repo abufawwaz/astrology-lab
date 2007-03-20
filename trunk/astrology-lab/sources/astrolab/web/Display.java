@@ -46,7 +46,7 @@ public abstract class Display {
     return id.intValue();
   }
 
-  protected final void fillActionScript(Request request, LocalizedStringBuffer buffer) {
+  protected final void fillActionScript(Request request, LocalizedStringBuffer buffer, boolean inOwnScript) {
     String key;
     String parameter;
     Enumeration<String> keys = actions.keys();
@@ -56,8 +56,11 @@ public abstract class Display {
     url = url.replaceAll("&amp;", "&");
 
     if (keys.hasMoreElements()) {
-      buffer.append("\r\n<script language='javascript'>");
-      buffer.append("\r\n//<![CDATA[");
+      if (!inOwnScript) {
+        buffer.newline();
+        buffer.append("<script language='javascript'>"); buffer.newline();
+        buffer.append("//<![CDATA["); buffer.newline();
+      }
 
       while (keys.hasMoreElements()) {
         key = keys.nextElement();
@@ -73,11 +76,18 @@ public abstract class Display {
             parameterURL = url.substring(0, parameterIndex);
           }
         }
-        buffer.append("\r\ntop.registerListener('" + key + "', function(message) { document.location.href='" + parameterURL + parameter + "=' + message })");
+        buffer.append("\r\ntop.registerListener('" + key + "', function(message) {");
+        buffer.append("if ((window.location == window.parent.location) && (window != window.parent)) {");
+        buffer.append("top.document.getElementById('frame_svg').src='" + parameterURL + parameter + "=' + message"); // SVG frame TODO: this is done to support IE. Find a better way
+        buffer.append("} else {");
+        buffer.append("window.location='" + parameterURL + parameter + "=' + message"); // normal frame
+        buffer.append("} })");
       }
 
-      buffer.append("\r\n//]]>");
-      buffer.append("\r\n</script>");
+      if (!inOwnScript) {
+        buffer.append("\r\n//]]>");
+        buffer.append("\r\n</script>");
+      }
     }
   }
 

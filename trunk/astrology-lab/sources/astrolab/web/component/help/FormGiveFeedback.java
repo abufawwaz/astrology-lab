@@ -35,7 +35,7 @@ public class FormGiveFeedback extends HTMLFormDisplay {
     buffer.append("</th>");
     buffer.append("</tr>");
     buffer.append("<tr>");
-    buffer.append("<td colspan='3'><center>");
+    buffer.append("<td colspan='3' class='class_input'><center>");
     buffer.append("<textarea name='feedback' cols='80%' rows='5'></textarea>");
     buffer.append("<br />");
     buffer.append("<input type='submit' value='");

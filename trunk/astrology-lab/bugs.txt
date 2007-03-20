@@ -1,0 +1,3 @@
+1. IE - changing the event via "Archive Search" does not update all views in "Natal Chart" perspective
+2. IE - selecting a location via location list does not update the location edit form in "Enter data" perspective
+3. 
