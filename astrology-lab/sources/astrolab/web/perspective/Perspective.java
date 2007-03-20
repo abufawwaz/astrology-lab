@@ -1,5 +1,8 @@
 package astrolab.web.perspective;
 
+import java.io.File;
+import java.io.FileInputStream;
+
 import astrolab.db.Database;
 import astrolab.web.Display;
 import astrolab.web.server.Request;
@@ -32,26 +35,24 @@ public class Perspective extends Display {
   public void fillContent(Request request, LocalizedStringBuffer buffer) {
     SessionManager.establishSession(request);
 
-    buffer.append("<html xmlns=\"http://www.w3.org/1999/xhtml\" xmlns:svg=\"http://www.w3.org/2000/svg\">"); buffer.newline();
+    buffer.append("<?xml version=\"1.0\" encoding=\"utf-8\"?>"); buffer.newline();
+    buffer.append("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Frameset//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd\">"); buffer.newline();
+    buffer.append("<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">"); buffer.newline();
+//    buffer.append("<html xmlns=\"http://www.w3.org/1999/xhtml\" xmlns:svg=\"http://www.w3.org/2000/svg\">"); buffer.newline();
     buffer.append("<head>"); buffer.newline();
     buffer.append(" <META name='verify-v1' content='QugwE0IKpM7Zrdqn/7KqZGbrX1PVtMBkhx/ZCi6mvZM=' />"); buffer.newline();
     buffer.append(" <title>"); buffer.newline();
     buffer.append("  www.astrology-lab.net"); buffer.newline();
     buffer.append(" </title>"); buffer.newline();
+
+//    buffer.append("<script language='javascript' src='./events.js' />"); buffer.newline();
+//    buffer.append("<script language='javascript' src='./control.js' />"); buffer.newline();
+
     buffer.append("</head>"); buffer.newline();
     buffer.append(""); buffer.newline();
 
-    buffer.append("<script language='javascript' src='./events.js' />"); buffer.newline();
-    buffer.append("<script language='javascript' src='./control.js' />"); buffer.newline();
-    buffer.append("<script language='javascript'>"); buffer.newline();
-    buffer.append("  function switchPerspective(perspectiveId) {"); buffer.newline();
-    buffer.append("    top.window.location.href = '/?");
-    buffer.append(PERSPECTIVE_KEY);
-    buffer.append("=' + perspectiveId"); buffer.newline();
-    buffer.append("  }"); buffer.newline();
-    buffer.append("</script>"); buffer.newline();
+    includeScripts(request, buffer);
 
-    super.fillActionScript(request, buffer);
     buffer.append(getPerspectiveHtml(request.get(PERSPECTIVE_KEY))); buffer.newline();
 
     buffer.append("</html>"); buffer.newline();
@@ -68,4 +69,45 @@ public class Perspective extends Display {
     return Database.query(query.toString());
   }
 
+  private void includeScripts(Request request, LocalizedStringBuffer buffer) {
+    try {
+      File scripts = new File("./scripts");
+      File[] files = scripts.listFiles();
+
+      buffer.newline();
+      buffer.append("<script language='javascript'>");
+      buffer.newline();
+      buffer.append("//<![CDATA[");
+      buffer.newline();
+      for (int i = 0; i < files.length; i++) {
+        if (files[i].getName().endsWith("js")) {
+          includeScript(files[i], buffer);
+        }
+      }
+      buffer.newline();
+      super.fillActionScript(request, buffer, true);
+      buffer.newline();
+      buffer.append("//]]>");
+      buffer.newline();
+      buffer.append("</script>");
+      buffer.newline();
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+
+  private void includeScript(File file, LocalizedStringBuffer buffer) {
+    try {
+      FileInputStream fis = new FileInputStream(file);
+      int read;
+      byte[] data = new byte[500];
+      while (fis.available() > 0) {
+        read = fis.read(data);
+        buffer.append(new String(data, 0, read));
+      }
+      fis.close();
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
 }

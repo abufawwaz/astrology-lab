@@ -22,7 +22,7 @@ public abstract class SVGDisplay extends Display {
     buffer.append("<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">\r\n");
     buffer.append("<svg onLoad='top.manage_control()' version=\"1.1\" width=\"100%\" height=\"100%\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:svg=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" ");
     buffer.append(">\r\n");
-    fillActionScript(request, buffer);
+    fillActionScript(request, buffer, false);
     buffer.append("<g style=\"font-size:10pt\">\r\n");
     fillBodyContent(request, buffer);
     buffer.append("</g>\r\n");

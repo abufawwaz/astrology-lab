@@ -5,7 +5,6 @@ import astrolab.db.EventIterator;
 import astrolab.db.Personalize;
 import astrolab.web.Display;
 import astrolab.web.HTMLFormDisplay;
-import astrolab.web.component.ComponentController;
 import astrolab.web.component.ComponentSelectText;
 import astrolab.web.server.Request;
 import astrolab.web.server.content.LocalizedStringBuffer;
@@ -26,7 +25,7 @@ public class DisplayArchiveRecordList extends HTMLFormDisplay {
     // Search bar
     buffer.append("<table width='100%'>");
     buffer.append("<tr>");
-    buffer.append("<td>");
+    buffer.append("<td class='class_input'>");
     ComponentSelectText.fill(buffer, KEY_SEARCH_TEXT, searchText, "Enter part of name, birthplace or a keyword.");
     buffer.append("</td>");
     buffer.append("<td>");

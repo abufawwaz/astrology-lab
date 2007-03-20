@@ -80,9 +80,10 @@ public class Processor {
 
   static {
     registerStaticPage("favicon.ico", "favicon.ico", "image/x-icon");
-    registerStaticPage("/events.js", "events.js", "text/javascript");
-    registerStaticPage("/control.js", "control.js", "text/javascript");
-    registerStaticPage("/window.js", "window.js", "text/javascript");
+    //registerStaticPage("/main.js", "main.js", "text/javascript");
+    //registerStaticPage("/events.js", "events.js", "text/javascript");
+    //registerStaticPage("/control.js", "control.js", "text/javascript");
+    //registerStaticPage("/window.js", "window.js", "text/javascript");
   }
 
   private static void registerStaticPage(String key, String filename, String type) {

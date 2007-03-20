@@ -87,7 +87,7 @@ public class DisplayProjectDescription extends HTMLFormDisplay {
       }
 
       buffer.append("<tr>");
-      buffer.append("\r\n<td><center>");
+      buffer.append("\r\n<td class='class_input'><center>");
       buffer.append("<textarea name='feedback' cols='80%' rows='5'></textarea>");
       buffer.append("</center></td>");
       buffer.append("\r\n<td colspan='2' valign='bottom'><center>");
