@@ -16,7 +16,7 @@ public class Location implements TreeObject {
   private int region = -1;
   private TimeZone time_zone = null;
 
-  private static Hashtable cache = new Hashtable();
+  private static Hashtable<Integer, Location> cache = new Hashtable<Integer, Location>();
 
   private Location(int id) {
     this.id = id;
@@ -95,12 +95,11 @@ public class Location implements TreeObject {
   }
 
   public static Location getLocation(int id) {
-    Integer intId = new Integer(id);
-    Location result = (Location) cache.get(intId);
+    Location result = cache.get(id);
 
     if (result == null) {
       result = new Location(id);
-      cache.put(intId, result);
+      cache.put(id, result);
     }
 
     return result;
@@ -110,6 +109,22 @@ public class Location implements TreeObject {
     int id = Text.reserve(name, Text.TYPE_REGION);
     int timeZone = Text.reserve(zone.getDisplayName(), zone.getID(), Text.TYPE_TIME_ZONE);
     Database.execute("INSERT INTO " + ProjectGeography.TABLE_NAME + " VALUES (" + id + ", " + region + ", '" + longitude + "', " + lattitude + ", '" + timeZone + "')");
+  }
+
+  public static void update(int id, int region, double longitude, double lattitude, TimeZone zone) {
+    Location location = Location.getLocation(id);
+    int timeZone = Text.reserve(zone.getDisplayName(), zone.getID(), Text.TYPE_TIME_ZONE);
+    if (location.region != region && region != 0) {
+      Database.execute("UPDATE " + ProjectGeography.TABLE_NAME + " SET region = " + region + " WHERE id = " + id);
+    }
+    if (location.longitude != longitude && longitude != 0) {
+      Database.execute("UPDATE " + ProjectGeography.TABLE_NAME + " SET longitude = " + longitude + " WHERE id = " + id);
+    }
+    if (location.lattitude != lattitude && lattitude != 0) {
+      Database.execute("UPDATE " + ProjectGeography.TABLE_NAME + " SET lattitude = " + lattitude + " WHERE id = " + id);
+    }
+    Database.execute("UPDATE " + ProjectGeography.TABLE_NAME + " SET time_zone = " + timeZone + " WHERE id = " + id);
+    cache.remove(id);
   }
 
   private String roundLeft(double value) {

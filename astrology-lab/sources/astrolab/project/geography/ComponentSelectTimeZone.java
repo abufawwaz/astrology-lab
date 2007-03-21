@@ -35,6 +35,7 @@ public class ComponentSelectTimeZone {
   }
 
   public static TimeZone retrieve(Request request) {
-    return TimeZone.getTimeZone(request.get(CHOICE_TIME_ZONE));
+    String value = request.get(CHOICE_TIME_ZONE);
+    return (value != null && value.length() > 0) ? TimeZone.getTimeZone(request.get(CHOICE_TIME_ZONE)) : TimeZone.getDefault();
   }
 }

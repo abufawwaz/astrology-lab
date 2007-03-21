@@ -15,7 +15,7 @@ public class ComponentSelectLocation extends ComponentTree {
   }
 
   public static int retrieve(Request request) {
-    return Integer.parseInt(request.get(new DisplayLocationList().getChoiceId()));
+    return request.getParameters().getInt(new DisplayLocationList().getChoiceId());
   }
 
 }
