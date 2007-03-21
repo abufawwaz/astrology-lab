@@ -1,3 +1,5 @@
 1. IE - changing the event via "Archive Search" does not update all views in "Natal Chart" perspective
 2. IE - selecting a location via location list does not update the location edit form in "Enter data" perspective
-3. 
+3. User with unkown session id should renew it.
+4. project: geography: too many refreshes when location tree is used
+5. project: geography:  creating new location should refresh the tree to the right

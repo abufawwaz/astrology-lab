@@ -32,6 +32,28 @@ public class RequestParameters {
     return textParameters.getProperty(parameter, defaultValue);
   }
 
+  public int getInt(String parameter) {
+    try {
+      return (int) Double.parseDouble(textParameters.getProperty(parameter));
+    } catch (NullPointerException e) {
+      return 0;
+    } catch (Exception e) {
+      e.printStackTrace();
+      return 0;
+    }
+  }
+
+  public double getDouble(String parameter) {
+    try {
+      return Double.parseDouble(textParameters.getProperty(parameter));
+    } catch (NullPointerException e) {
+      return 0;
+    } catch (Exception e) {
+      e.printStackTrace();
+      return 0;
+    }
+  }
+
   public String getCookie(String name, String defaultValue) {
     String cookies = textParameters.getProperty("Cookie");
     if (cookies == null) {

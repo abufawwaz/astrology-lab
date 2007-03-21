@@ -39,7 +39,6 @@ public class ComponentSelectLongitude {
   }
 
   public static double retrieve(Request request) {
-    String value = request.get(CHOICE_LONGITUDE);
-    return (value.length() > 0) ? Double.parseDouble(request.get(CHOICE_LONGITUDE)) : 0;
+    return request.getParameters().getDouble(CHOICE_LONGITUDE);
   }
 }

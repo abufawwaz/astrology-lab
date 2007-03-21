@@ -39,7 +39,6 @@ public class ComponentSelectLattitude {
   }
 
   public static double retrieve(Request request) {
-    String value = request.get(CHOICE_LATTITUDE);
-    return (value.length() > 0) ? Double.parseDouble(request.get(CHOICE_LATTITUDE)) : 0;
+    return request.getParameters().getDouble(CHOICE_LATTITUDE);
   }
 }
