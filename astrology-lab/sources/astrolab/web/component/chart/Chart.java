@@ -15,6 +15,10 @@ public class Chart extends SVGDisplay {
 
   public final static int ID = Display.getId(Chart.class);
 
+  public Chart() {
+    super.addAction("event", "user.session.event.1");
+  }
+
   public void fillBodyContent(Request request, LocalizedStringBuffer buffer) {
     Event event = getSelectedEvent();
 		HouseSystem houses = new PlacidusSystem(event);

@@ -29,6 +29,10 @@ public class DisplayDataChart extends SVGDisplay {
 
   private static DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#.###############", new DecimalFormatSymbols(Locale.ENGLISH));
 
+  public DisplayDataChart() {
+    super.addAction("formula", "formula");
+  }
+
   public void fillBodyContent(Request request, LocalizedStringBuffer buffer) {
     double width = (maxx - minx) / 12;
     double height = maxy - miny;
@@ -95,12 +99,15 @@ public class DisplayDataChart extends SVGDisplay {
             maxy = (value > maxy) ? value : maxy;
           }
         } while (data.move());
+
+        miny -= 5;
+        maxy += 5;
       } else {
         data = null;
       }
     }
 
-    strokeWidth = ((float) Math.min(maxx - minx, maxy - miny)) / 300;
+    strokeWidth = ((double) (maxy - miny)) / 300;
 
     buffer.append("preserveAspectRatio='none' viewBox='0 " + (miny - maxy) + " " + (maxx - minx) + " " + (maxy - miny) + "'");
   }

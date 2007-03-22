@@ -27,6 +27,8 @@ public class DisplayProjectFormula extends HTMLFormDisplay {
   }
 
   public void fillBodyContent(Request request, LocalizedStringBuffer buffer) {
+    addScript(buffer);
+
     buffer.append("<table>");
     buffer.append("<tr>");
     buffer.append("<td>");
@@ -142,5 +144,13 @@ public class DisplayProjectFormula extends HTMLFormDisplay {
     }
     buffer.append("</table>");
 	}
+
+  public final static void addScript(LocalizedStringBuffer buffer) {
+    buffer.newline();
+    buffer.append("<script language='javascript'>");
+    buffer.append("top.fireEvent('formula', 'refresh')");
+    buffer.append("</script>");
+    buffer.newline();
+  }
 
 }
