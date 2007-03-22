@@ -1,3 +1,16 @@
+insert into project_sunspots values ('1977-01-01 00:00:00', 10);
+insert into project_sunspots values ('1977-01-02 00:00:00', 20);
+insert into project_sunspots values ('1977-01-03 00:00:00', 30);
+insert into project_sunspots values ('1977-01-04 00:00:00', 40);
+insert into project_sunspots values ('1977-01-05 00:00:00', 50);
+insert into project_sunspots values ('1977-01-06 00:00:00', 60);
+insert into project_sunspots values ('1977-01-07 00:00:00', 70);
+insert into project_sunspots values ('1977-01-08 00:00:00', 60);
+insert into project_sunspots values ('1977-01-09 00:00:00', 50);
+insert into project_sunspots values ('1977-01-10 00:00:00', 40);
+insert into project_sunspots values ('1977-01-11 00:00:00', 30);
+insert into project_sunspots values ('1977-01-12 00:00:00', 20);
+insert into project_sunspots values ('1977-01-13 00:00:00', 10);
 insert into project_sunspots values ('2007-01-01 00:00:00', 10);
 insert into project_sunspots values ('2007-01-02 00:00:00', 20);
 insert into project_sunspots values ('2007-01-03 00:00:00', 30);

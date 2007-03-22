@@ -21,7 +21,7 @@ public class NatalRecord extends Event {
     if (user <= 0) {
       user = Text.reserve(name, name, Text.TYPE_EVENT, accessible_by);
     } else {
-      Text.changeText(user, name);
+      Text.changeText(user, name, accessible_by);
     }
 
     if (!exists(user)) {

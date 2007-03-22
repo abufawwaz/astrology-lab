@@ -148,9 +148,17 @@ public class Text {
     return (value != null) ? value : text;
   }
 
-  public static void changeText(int id, String text) {
+  public static void changeText(int id, String text, int user) {
     String language = Personalize.getLanguage();
     Database.execute("UPDATE text set " + language + " = '" + text.replace('\'', '_') + "' where id = " + id);
+
+    String expected = String.valueOf(user);
+    if (user == TextAccessControl.ACCESSIBLE_BY_OWNER) {
+      expected = String.valueOf(Personalize.getUser());
+    } else if (user == TextAccessControl.ACCESSIBLE_BY_ALL) {
+      expected = "NULL";
+    }
+    Database.execute("UPDATE text SET accessible_by = " + expected + " WHERE id = " + id);
   }
 
 }

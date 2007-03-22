@@ -64,8 +64,9 @@ public class ProjectData implements CloseableResource {
     } else {
       String fromSQLTime = fromTime.toMySQLString();
       String toSQLTime = toTime.toMySQLString();
-      String dateDiff = "(datediff('" + toSQLTime + "', '" + fromSQLTime + "') / " + slots + ")";
-      groupby = " GROUP BY floor(TO_DAYS(time) / " + dateDiff + ") * " + dateDiff;
+      String datePointDiff = "datediff(time, '" + fromSQLTime + "')";
+      String dateSpanDiff = "datediff('" + toSQLTime + "', '" + fromSQLTime + "')";
+      groupby = " GROUP BY floor(" + datePointDiff + " / " + dateSpanDiff + " * " + slots + ")";
     }
 
     this.data = Database.executeQuery("SELECT " + keyselect + " FROM " + Project.TABLE_PREFIX + project.getName() + timing + groupby + " LIMIT " + slots);
