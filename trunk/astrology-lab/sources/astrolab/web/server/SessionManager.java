@@ -28,6 +28,10 @@ public class SessionManager {
 
     int user = Integer.parseInt(parameters.getCookie("session", "0"));
 
+    if (!NatalRecord.exists(user)) {
+      user = -1;
+    }
+
     if (user <= 0) {
       String url = parameters.get("GET");
       String referer = parameters.get("Referer");

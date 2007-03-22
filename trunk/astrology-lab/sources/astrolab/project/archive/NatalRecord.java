@@ -24,7 +24,7 @@ public class NatalRecord extends Event {
       Text.changeText(user, name);
     }
 
-    if (Database.query("SELECT * FROM " + TABLENAME + " where event_id = " + user) == null) {
+    if (!exists(user)) {
       Database.execute("INSERT INTO " + TABLENAME + " VALUES (" + user + ", " + user + ", '" + sqltimestamp + "', " + location + ", '" + type + "', '" + accuracy + "', '" + source + "')");
     } else {
       Database.execute("UPDATE " + TABLENAME + " SET subject_id = " + user + " WHERE event_id = " + user);
@@ -35,6 +35,10 @@ public class NatalRecord extends Event {
       Database.execute("UPDATE " + TABLENAME + " SET source = '" + source + "' WHERE event_id = " + user);
     }
     return user;
+  }
+
+  public static boolean exists(int natal_record_id) {
+    return (Database.query("SELECT * FROM " + TABLENAME + " where event_id = " + natal_record_id) != null);
   }
 
 }
