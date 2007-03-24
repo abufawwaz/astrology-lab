@@ -16,7 +16,7 @@ public abstract class DisplayTree extends HTMLDisplay {
     this.id = id;
     this.choiceId = "_tree-" + id;
 
-    super.addAction("location", this.choiceId);
+    super.addAction("location.edit", this.choiceId);
   }
 
   protected int getId() {

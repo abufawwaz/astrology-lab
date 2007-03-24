@@ -1,4 +1,5 @@
+release: 23:42 25.03.2007
+
 - IE - changing the event via "Archive Search" does not update all views in "Natal Chart" perspective
-- IE - selecting a location via location list does not update the location edit form in "Enter data" perspective
-- project: geography: too many refreshes when location tree is used
-- project: geography:  creating new location should refresh the tree to the right
+- IE - selecting a location via location list updates the location edit form in "Enter data" perspective on second selection
+- project: geography: rename of location does not work

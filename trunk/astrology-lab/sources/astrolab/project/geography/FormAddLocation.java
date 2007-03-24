@@ -1,20 +1,18 @@
 package astrolab.project.geography;
 
-import astrolab.db.Action;
-import astrolab.web.HTMLFormDisplay;
+import astrolab.web.AJAXFormDisplay;
 import astrolab.web.Modify;
 import astrolab.web.component.ComponentSelectNumber;
 import astrolab.web.server.Request;
 import astrolab.web.server.RequestParameters;
 import astrolab.web.server.content.LocalizedStringBuffer;
 
-public class FormAddLocation extends HTMLFormDisplay {
+public class FormAddLocation extends AJAXFormDisplay {
 
   private final static String KEY_LOCATION = "user.session.location.1";
 
   public FormAddLocation() {
-    super(Action.getAction(-1, -1, Modify.getId(ModifyLocation.class)));
-
+    super("Add Location", Modify.getId(ModifyLocation.class));
     super.addAction("location", KEY_LOCATION);
   }
 
@@ -74,9 +72,7 @@ public class FormAddLocation extends HTMLFormDisplay {
     buffer.append("</tr>");
     buffer.append("</table>");
 
-    buffer.append("<input type='submit' value='");
-    buffer.localize("Save");
-    buffer.append("' />");
+    super.addSubmit(buffer, "Save", "\r\ntop.fireEvent(\"location.edit\", function() { return document.forms[0].elements[\"_tree-33\"].value })\r\n");
 
     buffer.append("<input type='button' value='");
     buffer.localize("New");

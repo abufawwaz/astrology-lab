@@ -23,7 +23,11 @@ function EventType() {
     for (var i = 0; i < listeners.length; i++) {
       try {
         if (listeners[i]) {
-          listeners[i](message)
+          if (typeof(message) == "function") {
+            listeners[i](message())
+          } else {
+            listeners[i](message)
+          }
         }
       } catch (e) {
         listeners.splice(i, 1)
