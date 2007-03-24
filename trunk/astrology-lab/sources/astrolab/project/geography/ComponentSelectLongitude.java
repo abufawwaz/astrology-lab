@@ -41,4 +41,8 @@ public class ComponentSelectLongitude {
   public static double retrieve(Request request) {
     return request.getParameters().getDouble(CHOICE_LONGITUDE);
   }
+
+  public static void fillReset(LocalizedStringBuffer buffer) {
+    buffer.append("recalculateLongitude();");
+  }
 }
