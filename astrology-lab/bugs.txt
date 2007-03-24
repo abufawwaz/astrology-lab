@@ -1,5 +1,4 @@
 release: 23:42 25.03.2007
 
-- IE - changing the event via "Archive Search" does not update all views in "Natal Chart" perspective
 - IE - selecting a location via location list updates the location edit form in "Enter data" perspective on second selection
 - project: geography: rename of location does not work

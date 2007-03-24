@@ -76,7 +76,10 @@ public abstract class Display {
             parameterURL = url.substring(0, parameterIndex);
           }
         }
-        buffer.append("\r\ntop.registerListener('" + key + "', function(message) {");
+
+        String windowId = "d=" + request.getRequestedDisplay() + ";a=" + request.getAction();
+        buffer.append("\r\nwindow.onunload = function() { top.unregisterListener('" + key + "', '" + windowId + "') }");
+        buffer.append("\r\ntop.registerListener('" + key + "', '" + windowId + "', function(message) {");
         buffer.append("if ((window.location == window.parent.location) && (window != window.parent)) {");
         buffer.append("top.document.getElementById('frame_svg').src='" + parameterURL + parameter + "=' + message"); // SVG frame TODO: this is done to support IE. Find a better way
         buffer.append("} else {");
