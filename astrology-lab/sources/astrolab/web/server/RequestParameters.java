@@ -48,6 +48,8 @@ public class RequestParameters {
       return Double.parseDouble(textParameters.getProperty(parameter));
     } catch (NullPointerException e) {
       return 0;
+    } catch (NumberFormatException e) {
+      return 0;
     } catch (Exception e) {
       e.printStackTrace();
       return 0;
