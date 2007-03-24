@@ -15,7 +15,9 @@ public class ModifyRelocationRecord extends Modify {
 
       long timestamp = new Time(request.get(ComponentSelectTime.PARAMETER_KEY), location).getTimeInMillis();
 
-      RelocationRecord.store(user, timestamp, location);
+      if (user > 0 && location > 0) {
+        RelocationRecord.store(user, timestamp, location);
+      }
     } catch (Exception e) {
       e.printStackTrace();
     }

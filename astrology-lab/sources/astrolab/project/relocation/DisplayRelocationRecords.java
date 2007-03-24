@@ -7,7 +7,11 @@ import astrolab.web.server.content.LocalizedStringBuffer;
 
 public class DisplayRelocationRecords extends HTMLDisplay {
 
-	public void fillBodyContent(Request request, LocalizedStringBuffer buffer) {
+  public DisplayRelocationRecords() {
+    super.addAction("relocation.new", "reload");
+  }
+
+  public void fillBodyContent(Request request, LocalizedStringBuffer buffer) {
     IteratorRelocationRecords iterator = IteratorRelocationRecords.iterate(request.getUser());
 
     buffer.append("<div class='class_title'>");
