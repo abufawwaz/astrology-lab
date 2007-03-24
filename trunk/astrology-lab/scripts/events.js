@@ -1,11 +1,11 @@
 // public methods
 
-function registerListener(eventType, listenerDocument, listenerFunction) {
-  getEventType(eventType).registerListener(listenerDocument, listenerFunction)
+function registerListener(eventType, listenerFunction) {
+  return getEventType(eventType).registerListener(listenerFunction)
 }
 
-function unregisterListener(eventType, listenerDocument) {
-  getEventType(eventType).unregisterListener(listenerDocument)
+function unregisterListener(eventType, listener) {
+  getEventType(eventType).unregisterListener(listener)
 }
 
 function fireEvent(eventType, message) {
@@ -16,20 +16,23 @@ function fireEvent(eventType, message) {
 
 var events = new Array();
 
+function EventListener(listenerFunction) {
+  this.handle = listenerFunction;
+}
+
 function EventType() {
-  var documents = new Array();
   var listeners = new Array();
 
-  this.registerListener = function(listenerDocument, listenerFunction) {
-    documents[documents.length] = listenerDocument
-    listeners[listeners.length] = listenerFunction
+  this.registerListener = function(listenerFunction) {
+    var listener = new EventListener(listenerFunction)
+    listeners[listeners.length] = listener
+    return listener
   }
 
-  this.unregisterListener = function(listenerDocument) {
-    for (var i = 0; i < documents.length; i++) {
-      if (documents[i] == listenerDocument) {
+  this.unregisterListener = function(listener) {
+    for (var i = 0; i < listeners.length; i++) {
+      if (listeners[i] == listener) {
         listeners.splice(i, 1)
-        documents.splice(i, 1)
       }
     }
   }
@@ -37,16 +40,11 @@ function EventType() {
   this.fireEvent = function(message) {
     for (var i = 0; i < listeners.length; i++) {
       try {
-        if (listeners[i] && documents[i]) {
-          if (typeof(message) == "function") {
-            listeners[i](message())
-          } else {
-            listeners[i](message)
-          }
+        if (listeners[i]) {
+          listeners[i].handle((typeof(message) == "function") ? message() : message)
         }
       } catch (e) {
         listeners.splice(i, 1)
-        documents.splice(i, 1)
       }
     }
   }

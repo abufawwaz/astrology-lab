@@ -77,14 +77,16 @@ public abstract class Display {
           }
         }
 
-        String windowId = "d=" + request.getRequestedDisplay() + ";a=" + request.getAction();
-        buffer.append("\r\nwindow.onunload = function() { top.unregisterListener('" + key + "', '" + windowId + "') }");
-        buffer.append("\r\ntop.registerListener('" + key + "', '" + windowId + "', function(message) {");
-        buffer.append("if ((window.location == window.parent.location) && (window != window.parent)) {");
-        buffer.append("top.document.getElementById('frame_svg').src='" + parameterURL + parameter + "=' + message"); // SVG frame TODO: this is done to support IE. Find a better way
-        buffer.append("} else {");
-        buffer.append("window.location='" + parameterURL + parameter + "=' + message"); // normal frame
-        buffer.append("} })");
+        buffer.append("\r\nvar listenerObject = null");
+        buffer.append("\r\nwindow.onunload = function() { top.unregisterListener('" + key + "', listenerObject) }");
+        buffer.append("\r\nlistenerObject = top.registerListener('" + key + "', function(message) {");
+
+        if (this instanceof SVGDisplay) {
+          buffer.append("top.document.getElementById('frame_svg').src='" + parameterURL + parameter + "=' + message"); // SVG frame TODO: this is done to support IE. Find a better way
+        } else {
+          buffer.append("window.location='" + parameterURL + parameter + "=' + message"); // normal frame
+        }
+        buffer.append(" })");
       }
 
       if (!inOwnScript) {
