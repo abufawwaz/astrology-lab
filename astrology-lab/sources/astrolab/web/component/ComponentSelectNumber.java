@@ -22,4 +22,8 @@ public class ComponentSelectNumber {
       return 0.0;
     }
   }
+
+  public static void fillReset(LocalizedStringBuffer buffer, String choice_id) {
+    buffer.append("document.forms[0]." + choice_id + ".value=\"\";");
+  }
 }

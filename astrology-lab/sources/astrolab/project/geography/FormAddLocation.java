@@ -76,7 +76,12 @@ public class FormAddLocation extends AJAXFormDisplay {
 
     buffer.append("<input type='button' value='");
     buffer.localize("New");
-    buffer.append("' onclick='document.forms[0]._location_id.value=0;document.forms[0]." + RequestParameters.TEXT_NAME + ".value=\"\"'/>");
+    buffer.append("' onclick='");
+    ComponentSelectNumber.fillReset(buffer, "_location_id");
+    buffer.append("document.forms[0]." + RequestParameters.TEXT_NAME + ".value=\"\";");
+    ComponentSelectLattitude.fillReset(buffer);
+    ComponentSelectLongitude.fillReset(buffer);
+    buffer.append("'/>");
   }
 
 }
