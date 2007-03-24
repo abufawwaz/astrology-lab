@@ -1,18 +1,17 @@
 package astrolab.project.relocation;
 
-import astrolab.db.Action;
 import astrolab.db.Text;
 import astrolab.project.geography.ComponentSelectLocation;
-import astrolab.web.HTMLFormDisplay;
+import astrolab.web.AJAXFormDisplay;
 import astrolab.web.Modify;
 import astrolab.web.component.time.ComponentSelectTime;
 import astrolab.web.server.Request;
 import astrolab.web.server.content.LocalizedStringBuffer;
 
-public class FormRelocationRecord extends HTMLFormDisplay {
+public class FormRelocationRecord extends AJAXFormDisplay {
 
   public FormRelocationRecord() {
-    super(Action.getAction(-1, -1, Modify.getId(ModifyRelocationRecord.class)));
+    super("Add relocation", Modify.getId(ModifyRelocationRecord.class));
   }
 
 	public void fillBodyContent(Request request, LocalizedStringBuffer buffer) {
@@ -34,7 +33,7 @@ public class FormRelocationRecord extends HTMLFormDisplay {
     buffer.append("</td>");
     buffer.append("</tr>");
     buffer.append("</table>");
-    buffer.append("<input type='submit' value='Save' />");
+    super.addSubmit(buffer, "Save", "top.fireEvent(\"relocation.new\", \"yes\")");
 	}
 
 }

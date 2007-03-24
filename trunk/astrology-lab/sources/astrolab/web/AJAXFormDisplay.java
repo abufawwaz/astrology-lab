@@ -3,33 +3,13 @@ package astrolab.web;
 import astrolab.web.server.Request;
 import astrolab.web.server.content.LocalizedStringBuffer;
 
-public abstract class HTMLFormDisplay extends HTMLDisplay {
+public abstract class AJAXFormDisplay extends HTMLDisplay {
 
-  private int submitAction = -1;
-  private int submitDisplay = -1;
+  private int modifyAction = -1;
 
-  protected HTMLFormDisplay(int submitAction) {
-    this.submitAction = submitAction;
-  }
-
-  /**
-   * @deprecated use constructor with title instead
-   */
-  protected HTMLFormDisplay(int submitDisplay, boolean isDisplay) {
-    if (isDisplay) {
-      this.submitDisplay = submitDisplay;
-    } else {
-      this.submitAction = submitDisplay;
-    }
-  }
-
-  protected HTMLFormDisplay(String title, int submitDisplay, boolean isDisplay) {
+  protected AJAXFormDisplay(String title, int modifyAction) {
     super(title);
-    if (isDisplay) {
-      this.submitDisplay = submitDisplay;
-    } else {
-      this.submitAction = submitDisplay;
-    }
+    this.modifyAction = modifyAction;
   }
 
   public void fillContent(Request request, LocalizedStringBuffer buffer) {
@@ -42,7 +22,11 @@ public abstract class HTMLFormDisplay extends HTMLDisplay {
 
     fillActionScript(request, buffer, false);
 
-    buffer.append("\r\n<body style='background-color:transparent' onload='top.manage_control()'>");
+    buffer.newline();
+    buffer.append("<body style='background-color:transparent' onload='top.manage_control()'>");
+    buffer.newline();
+    buffer.append("<form>");
+    buffer.newline();
 
     if (getTitle() != null) {
       buffer.append("<div class='class_title'>");
@@ -50,13 +34,11 @@ public abstract class HTMLFormDisplay extends HTMLDisplay {
       buffer.append("</div>");
     }
 
-    buffer.append("<form method=\"post\" action=\"");
-    fillUrl(buffer);
-    buffer.append("\">");
-    buffer.append("\r\n");
+    buffer.newline();
     fillBodyContent(request, buffer);
-    buffer.append("\r\n</form>");
-    buffer.append("\r\n</body>");
+    buffer.newline();
+    buffer.append("</form>");
+    buffer.append("</body>");
 
     // TODO get tge style sheet from the database or use dedicated CSS file
     buffer.append("<style type='text/css'>");
@@ -67,25 +49,20 @@ public abstract class HTMLFormDisplay extends HTMLDisplay {
     buffer.append("\r\n</html>");
   }
 
-  public void addSubmit(LocalizedStringBuffer buffer, String text) {
-    buffer.append("<input type='submit' value='");
+  protected void addSubmit(LocalizedStringBuffer buffer, String text, String function) {
+    buffer.append("<input type='button' name='submit' value='");
     buffer.localize(text);
-    buffer.append("' />");
+    buffer.append("' onclick='top.postAjaxRequest(\"");
+    fillUrl(buffer);
+    buffer.append("\", this.form, function(ajax) {");
+    buffer.append(function);
+    buffer.append("})' />");
   }
 
   public abstract void fillBodyContent(Request request, LocalizedStringBuffer buffer);
 
   protected void fillUrl(LocalizedStringBuffer buffer) {
-    buffer.append("post.html?");
-    buffer.append("_rd=");
-    buffer.append(HTMLFormDisplay.getId(this.getClass()));
-    buffer.append("&amp;");
-    if (submitAction >= 0) {
-      buffer.append("_a=");
-      buffer.append(submitAction);
-    } else {
-      buffer.append("_d=");
-      buffer.append(submitDisplay);
-    }
+    buffer.append("ajax.html?_d=0&amp;_m=");
+    buffer.append(modifyAction);
   }
 }

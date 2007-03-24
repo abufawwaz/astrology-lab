@@ -13,7 +13,9 @@ public class IteratorRelocationRecords extends EventIterator {
   }
 
   public static IteratorRelocationRecords iterate(int user) {
-    return new IteratorRelocationRecords(Database.executeQuery("SELECT subject_id, time, location FROM project_relocation WHERE subject_id = " + user + " ORDER BY time"));
+    String sqlNatal = "SELECT subject_id, event_time as time, location FROM project_archive WHERE project_archive.event_id=" + user;
+    String sqlRelocation = "SELECT subject_id, time, location FROM project_relocation WHERE subject_id=" + user + " ORDER BY time";
+    return new IteratorRelocationRecords(Database.executeQuery(sqlNatal + " UNION " + sqlRelocation));
   }
 
   protected Object read() throws Exception {
