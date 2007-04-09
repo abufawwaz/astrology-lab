@@ -303,6 +303,7 @@ insert into text values (40038, NULL, NULL, 'Data Chart', 'Data Chart');
 insert into text values (40039, NULL, NULL, 'Data', 'Data');
 insert into text values (40040, NULL, NULL, 'Natal Chart', 'Натална карта');
 insert into text values (40041, NULL, NULL, 'Statistics', 'Статистически данни');
+insert into text values (40042, NULL, NULL, 'Electionary', 'Елективна карта');
 
 insert into text values (60001, NULL, NULL, 'Description', 'Описание');
 insert into text values (60002, NULL, NULL, 'Subject', 'Субект');
@@ -492,11 +493,18 @@ insert into views values (58, 'astrolab.project.DisplayDataChart');
 insert into views values (60, 'astrolab.formula.display.ModifyFormulaeSetChartBase');
 insert into views values (61, 'astrolab.formula.display.ModifyFormulaeSetChartColor');
 insert into views values (62, 'astrolab.formula.display.ModifyFormulaeSetTime');
+insert into views values (63, 'astrolab.project.election.DisplayHourlyElectionaryChart');
+insert into views values (64, 'astrolab.project.election.DisplayDailyElectionaryChart');
+insert into views values (65, 'astrolab.project.election.DisplayElectionaryCriteriaList');
+insert into views values (66, 'astrolab.project.election.DisplayElectionaryCriteriaComponents');
+insert into views values (67, 'astrolab.project.election.FormElectionaryCriteriaTemplate');
+insert into views values (68, 'astrolab.project.election.DisplayElectionaryRestrictionList');
 
 insert into views_perspective values (0, '<frameset cols="15%,*" border="0"><frame src="/view.html?_d=1" /><frame src="/view.html?_d=56" /></frameset>');
 insert into views_perspective values (40040, '<frameset cols="15%,*" border="0"><frameset rows="20%,40%,40%"><frame src="/view.html?_d=1" /><frame src="/view.html?_d=2" /><frame src="/view.html?_d=25" /></frameset><frameset rows="70%,*"><frameset cols="70%,15%,15%"><frame id="frame_svg" src="/view.svg?_d=4" /><frame src="/view.html?_d=10" /><frame src="/view.html?_d=11" /></frameset><frame src="/view.html?_d=45" /></frameset></frameset>');
 insert into views_perspective values (40041, '<frameset cols="15%,*" border="0"><frameset rows="30%,*"><frame src="/view.html?_d=1" /><frame src="/view.html?_d=23" /></frameset><frameset rows="70%,*"><frameset cols="70%,30%"><frame id="frame_svg" src="/view.svg?_d=58" /><frame src="/view.html?_d=52" /></frameset><frame src="/view.html?_d=45" /></frameset></frameset>');
 insert into views_perspective values (40018, '<frameset cols="15%,*" border="0"><frameset rows="30%,*"><frame src="/view.html?_d=1" /><frame src="/view.html?_d=23" /></frameset><frameset cols="50%,*"><frame src="/view.html?_a=40018" /><frame src="/view.html?_a=40019" /></frameset></frameset>');
+insert into views_perspective values (40042, '<frameset cols="60%,25%,15%" border="0"><frameset rows="50%,25%,25%"><frameset cols="25%,75%"><frame src="/view.html?_d=1" /><frame src="/view.html?_d=4" /></frameset><frame src="/view.html?_d=63" /><frame src="/view.html?_d=64" /></frameset><frameset rows="50%,*"><frame src="/view.html?_d=65" /><frame src="/view.html?_d=68" /></frameset><frameset rows="50%,*"><frame src="/view.html?_d=67" /><frame src="/view.html?_d=66" /></frameset></frameset>');
 
 insert into actions values (40002, 40016, NULL, NULL, NULL, NULL, 45, NULL);
 insert into actions values (40003, 40020, 4016, NULL, NULL, NULL, 4, NULL);
