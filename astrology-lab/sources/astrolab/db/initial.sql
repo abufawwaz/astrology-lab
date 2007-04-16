@@ -176,6 +176,14 @@ create table project_sunspots (
   INDEX (time)
 ) ENGINE=InnoDB;
 
+create table project_classmates (
+  classmate_id SMALLINT,
+  classmate_name VARCHAR(20),
+  password VARCHAR(100),
+  general_info TEXT,
+  private_info TEXT
+) ENGINE=InnoDB;
+
 insert into text values (0, NULL, NULL, '... not set ...', '... липсва ...');
 
 insert into text values (1001, NULL, NULL, 'Jan', 'Яну');
@@ -499,6 +507,11 @@ insert into views values (65, 'astrolab.project.election.DisplayElectionaryCrite
 insert into views values (66, 'astrolab.project.election.DisplayElectionaryCriteriaComponents');
 insert into views values (67, 'astrolab.project.election.FormElectionaryCriteriaTemplate');
 insert into views values (68, 'astrolab.project.election.DisplayElectionaryRestrictionList');
+insert into views values (901, 'astrolab.project.classmates.FormClassmatesLogin');
+insert into views values (903, 'astrolab.project.classmates.DisplayClassmateGeneralInfo');
+insert into views values (904, 'astrolab.project.classmates.DisplayClassmatePrivateInfo');
+insert into views values (905, 'astrolab.project.classmates.ModifyClassmateGeneralInfo');
+insert into views values (906, 'astrolab.project.classmates.ModifyClassmatePrivateInfo');
 
 insert into views_perspective values (0, '<frameset cols="15%,*" border="0"><frame src="/view.html?_d=1" /><frame src="/view.html?_d=56" /></frameset>');
 insert into views_perspective values (40040, '<frameset cols="15%,*" border="0"><frameset rows="20%,40%,40%"><frame src="/view.html?_d=1" /><frame src="/view.html?_d=2" /><frame src="/view.html?_d=25" /></frameset><frameset rows="70%,*"><frameset cols="70%,15%,15%"><frame id="frame_svg" src="/view.svg?_d=4" /><frame src="/view.html?_d=10" /><frame src="/view.html?_d=11" /></frameset><frame src="/view.html?_d=45" /></frameset></frameset>');

@@ -84,6 +84,8 @@ public class Processor {
     //registerStaticPage("/events.js", "events.js", "text/javascript");
     //registerStaticPage("/control.js", "control.js", "text/javascript");
     //registerStaticPage("/window.js", "window.js", "text/javascript");
+    registerStaticPage("/classmates.html", "classmates.html", "text/html");
+    registerStaticPage("/classmates.gif", "classmates.gif", "image/gif");
   }
 
   private static void registerStaticPage(String key, String filename, String type) {

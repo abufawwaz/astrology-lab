@@ -41,7 +41,7 @@ public class SessionManager {
         if ((referer != null) && (referer.indexOf("mail") >= 0) && (session != null)) {
           user = Integer.parseInt(session);
           Log.log("Referer '" + referer + "' trusted to authenticate user " + user + ".");
-          request.getConnection().getOutput().setCookie(COOKIE_SESSION, session);
+          request.getConnection().getOutput().setCookie(COOKIE_SESSION, session, true);
         }
       }
     }
@@ -49,7 +49,7 @@ public class SessionManager {
     if (user <= 0) {
       long time = System.currentTimeMillis();
       user = NatalRecord.store(-1, "User" + time, time, 0, NatalRecord.TYPE_MALE, NatalRecord.ACCURACY_SECOND, NatalRecord.SOURCE_ACCURATE, TextAccessControl.ACCESSIBLE_BY_OWNER);
-      Request.getCurrentRequest().getConnection().getOutput().setCookie("session", String.valueOf(user));
+      Request.getCurrentRequest().getConnection().getOutput().setCookie("session", String.valueOf(user), true);
     }
 
     if (user > 0) {

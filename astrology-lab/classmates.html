@@ -1,0 +1,52 @@
+﻿<html>
+<head>
+<title>
+Клас А
+</title>
+</head>
+
+<script language="Javascript">
+var doc_height
+var mate
+
+function selectClassMate(classmate) {
+  if (mate != classmate) {
+    mate = classmate
+
+    document.getElementById('classmate_general_info').src = '/view.html?_d=903&classmate=' + classmate
+    document.getElementById('classmate_private_info').src = '/view.html?_d=904&classmate=' + classmate
+  }
+}
+
+</script>
+
+<body>
+
+<img src="classmates.gif" width='700' height='200' usemap="#classmates" border="0" />
+
+<map name="classmates">
+<area shape="rect" coords="50,0,100,200" onmouseover="javascript:selectClassMate('1')" />
+<area shape="rect" coords="150,0,200,200" onmouseover="javascript:selectClassMate('2')" />
+<area shape="rect" coords="300,0,350,200" onmouseover="javascript:selectClassMate('3')" />
+</map>
+
+<script language="Javascript">
+doc_height = document.body.clientHeight - 230
+document.write("<table width='100%' height=" + doc_height + " border='1'>")
+</script>
+
+ <tr height='20'>
+  <th width='75%'>Информация</th>
+  <th>Лични данни</th>
+ </tr>
+ <tr>
+  <td>
+   <iframe id='classmate_general_info' width='100%' height='100%' src='/view.html?_d=903' ></iframe>
+  </td>
+  <td>
+   <iframe id='classmate_private_info' width='100%' height='100%' src='/view.html?_d=904' ></iframe>
+  </td>
+ </tr>
+</table>
+</body>
+</html>

@@ -12,8 +12,8 @@ public class ConnectionOutput {
     this.out = out;
   }
 
-  public void setCookie(String key, String value) {
-    cookies = "Set-Cookie: " + key + "=" + value + "; expires=Sun, 2-Jan-2050 01:00:00 GMT";
+  public void setCookie(String key, String value, boolean isPersistent) {
+    cookies = "Set-Cookie: " + key + "=" + value + ((isPersistent) ? "; expires=Sun, 2-Jan-2050 01:00:00 GMT" : "");
   }
 
   public void respond(Request request) {

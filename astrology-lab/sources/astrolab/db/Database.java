@@ -25,9 +25,9 @@ public class Database {
   public static Connection getConnection() throws SQLException {
     if (connection == null || connection.isClosed()) {
       try {
-        connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/astrolab?useUnicode=true&connectionCollation=cp1251_bulgarian_ci&characterEncoding=cp1251", "develop", "develop");
+        connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/astrolab?useUnicode=true&characterEncoding=utf8", "develop", "develop");
       } catch (Exception e) {
-        connection = DriverManager.getConnection("jdbc:mysql://astrology-lab.net:3306/astrolab?useUnicode=true&connectionCollation=cp1251_bulgarian_ci&characterEncoding=cp1251", "develop", "develop");
+        connection = DriverManager.getConnection("jdbc:mysql://astrology-lab.net:3306/astrolab?useUnicode=true&characterEncoding=utf8", "develop", "develop");
       }
     }
 
@@ -156,7 +156,7 @@ public class Database {
 
   private final static String decode(byte[] encoded) {
     try {
-      return (encoded != null) ? new String(encoded, "windows-1251") : null;
+      return (encoded != null) ? new String(encoded, "utf8") : null;
     } catch (Exception e) {
       Log.log(new String(encoded), e);
     }
