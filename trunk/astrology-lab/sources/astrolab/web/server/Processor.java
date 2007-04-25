@@ -85,7 +85,11 @@ public class Processor {
     //registerStaticPage("/control.js", "control.js", "text/javascript");
     //registerStaticPage("/window.js", "window.js", "text/javascript");
     registerStaticPage("/classmates.html", "classmates.html", "text/html");
-    registerStaticPage("/classmates.gif", "classmates.gif", "image/gif");
+    registerStaticPage("/hands_left.jpg", "hands_left.jpg", "image/jpeg");
+    registerStaticPage("/hands_top.jpg", "hands_top.jpg", "image/jpeg");
+    registerStaticPage("/hands_right.jpg", "hands_right.jpg", "image/jpeg");
+    registerStaticPage("/hands_bottom.jpg", "hands_bottom.jpg", "image/jpeg");
+    registerStaticPage("/classmate.jpg", "classmate.jpg", "image/jpeg");
   }
 
   private static void registerStaticPage(String key, String filename, String type) {
