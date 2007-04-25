@@ -6,7 +6,6 @@
 </head>
 
 <script language="Javascript">
-var doc_height
 var mate
 
 function selectClassMate(classmate) {
@@ -20,19 +19,31 @@ function selectClassMate(classmate) {
 
 </script>
 
-<body>
-
-<img src="classmates.gif" width='700' height='200' usemap="#classmates" border="0" />
-
-<map name="classmates">
-<area shape="rect" coords="50,0,100,200" onmouseover="javascript:selectClassMate('1')" />
-<area shape="rect" coords="150,0,200,200" onmouseover="javascript:selectClassMate('2')" />
-<area shape="rect" coords="300,0,350,200" onmouseover="javascript:selectClassMate('3')" />
-</map>
+<body style='allow-transparency: true; background-color: transparent;'>
 
 <script language="Javascript">
-doc_height = document.body.clientHeight - 230
-document.write("<table width='100%' height=" + doc_height + " border='1'>")
+document.write("<div style=\"position: absolute; left: 5px; top: 5px; height: " + (document.body.clientHeight - 40) + "px; width: 40px; background-image: url('./hands_left.jpg');\"></div>")
+document.write("<div style=\"position: absolute; left: " + (document.body.clientWidth - 48 - 5) + "px; top: 5px; height: " + (document.body.clientHeight - 40) + "px; width: 48px; background-image: url('./hands_right.jpg');\"></div>")
+document.write("<div style=\"position: absolute; left: 5px; top: 5px; height: 45px; width: " + (document.body.clientWidth - 10) + "px; background-image: url('./hands_top.jpg');\"> </div>")
+document.write("<div style=\"position: absolute; left: 5px; top: " + (document.body.clientHeight - 45) + "px; height: 45px; width: " + (document.body.clientWidth - 10) + "px; background-image: url('./hands_bottom.jpg');\"> </div>")
+
+var mates_count = 22
+var mate_image_width = 75;
+var mate_image_height = 120;
+var xstep = (document.body.clientWidth - 150) / mates_count
+for (i = 1; i <= mates_count; i++) {
+document.write("<img src='./classmate.jpg' style=\"position: absolute; top: 50px; left: ")
+document.write(50 + (i - 1) * xstep)
+document.write("px; width: " + mate_image_width + "px; height: " + mate_image_height + "px;\" onmouseover=\"this.style.zIndex=100;javascript:selectClassMate('")
+document.write(i)
+document.write("')\" onmouseout=\"this.style.zIndex=0\"></img>")
+}
+</script>
+
+<script language="Javascript">
+var info_top = 60 + mate_image_height
+document.write("<div style=\"position: absolute; left: 50px; top: " + info_top + "px; height: " + (document.body.clientHeight - info_top - 50) + "px; width: " + (document.body.clientWidth - 100) + "px; allow-transparency: true; background-color: transparent;\">")
+document.write("<table width='100%' height='100%' border='1'>")
 </script>
 
  <tr height='20'>
@@ -41,12 +52,15 @@ document.write("<table width='100%' height=" + doc_height + " border='1'>")
  </tr>
  <tr>
   <td>
-   <iframe id='classmate_general_info' width='100%' height='100%' src='/view.html?_d=903' ></iframe>
+   <iframe id='classmate_general_info' width='100%' height='100%' src='/view.html?_d=903' style='allow-transparency: true; background-color: transparent;' ></iframe>
   </td>
   <td>
    <iframe id='classmate_private_info' width='100%' height='100%' src='/view.html?_d=904' ></iframe>
   </td>
  </tr>
 </table>
+<script language="Javascript">
+document.write("</div>")
+</script>
 </body>
 </html>
