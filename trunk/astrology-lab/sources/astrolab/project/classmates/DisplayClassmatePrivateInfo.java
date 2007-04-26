@@ -32,10 +32,11 @@ public class DisplayClassmatePrivateInfo extends HTMLFormDisplay {
       if (classmate <= 0) {
         buffer.append("Избери някой от съучениците като посочиш с мишката образа му в снимката!");
       } else if (request.getParameters().getCookie(FormClassmatesLogin.CLASSMATE_ID, "").equals(String.valueOf(classmate))) {
-        buffer.append("<textarea name='private_info' cols='30%' rows='12' >");
-        buffer.append(getInfo(classmate));
+        buffer.append("<textarea name='private_info' cols='20%' rows='12' >");
+        buffer.append(getInfo(classmate).replaceAll("<", "&lt;"));
         buffer.append("</textarea>");
         ComponentSelectNumber.fillHidden(buffer, "classmate", classmate);
+        buffer.append("<br />");
         super.addSubmit(buffer, "Запази");
       } else {
         buffer.append("<pre>");
