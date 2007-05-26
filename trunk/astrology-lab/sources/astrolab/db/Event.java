@@ -85,12 +85,12 @@ public class Event extends AttributedObject {
   }
 
   public Event(int id) {
-  	super(id);
+    super(id);
 
-  	try {
-	  	ResultSet set = Database.executeQuery("SELECT subject_id, event_time, location, type, accuracy, source FROM project_archive WHERE event_id = " + id);
-	
-	    if (set != null && set.next()) {
+    try {
+      ResultSet set = Database.executeQuery("SELECT subject_id, event_time, location, type, accuracy, source FROM project_archive WHERE event_id = " + id);
+  
+      if (set != null && set.next()) {
         subject_id = set.getInt(1);
         location = set.getInt(3);
         type = set.getString(4);
@@ -98,12 +98,18 @@ public class Event extends AttributedObject {
         source = set.getString(6);
 
         timestamp = new Time(set.getTimestamp(2).getTime(), getLocation().getTimeZone());
-	    }
-  	} catch (Exception e) {
-  		e.printStackTrace();
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
 
       timestamp = new Time();
-  	}
+    }
+  }
+
+  public Event(Location location, long timestamp) {
+    super(-1);
+    this.location = location.getId();
+    this.timestamp = new Time(timestamp, getLocation().getTimeZone());
   }
 
   protected Event(int event, int subject, Date timestamp, int location, String type, String accuracy, String source) {

@@ -148,7 +148,7 @@ public class DisplayProjectFormula extends HTMLFormDisplay {
   public final static void addScript(LocalizedStringBuffer buffer) {
     buffer.newline();
     buffer.append("<script language='javascript'>");
-    buffer.append("top.fireEvent('formula', 'refresh')");
+    buffer.append("top.fireEvent(window, 'formula', 'refresh')");
     buffer.append("</script>");
     buffer.newline();
   }

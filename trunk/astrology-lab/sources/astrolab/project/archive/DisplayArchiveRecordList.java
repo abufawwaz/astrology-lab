@@ -73,7 +73,7 @@ public class DisplayArchiveRecordList extends HTMLFormDisplay {
       buffer.append("'>");
 
       // TODO: put this into a separate class
-      buffer.append("<a href='javascript:top.fireEvent(\"event\",\"" + event.getId() + "\")'>");
+      buffer.append("<a href='javascript:top.fireEvent(window, \"event\",\"" + event.getId() + "\")'>");
       if (event.getId() == Personalize.getUser()) {
         buffer.append("(");
         buffer.localize("You");

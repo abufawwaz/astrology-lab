@@ -1,4 +1,4 @@
-package astrolab.project.election;
+package astrolab.perspective.election;
 
 import astrolab.web.HTMLFormDisplay;
 import astrolab.web.server.Request;

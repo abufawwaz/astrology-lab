@@ -33,7 +33,7 @@ public class FormRelocationRecord extends AJAXFormDisplay {
     buffer.append("</td>");
     buffer.append("</tr>");
     buffer.append("</table>");
-    super.addSubmit(buffer, "Save", "top.fireEvent(\"relocation.new\", \"yes\")");
+    super.addSubmit(buffer, "Save", "top.fireEvent(window, \"relocation.new\", \"yes\")");
 	}
 
 }

@@ -12,9 +12,11 @@ public class ChartPartInfo extends SVGDisplay {
 	}
 
   public void fillContent(Request request, LocalizedStringBuffer buffer, Event event) {
-    buffer.append("<text y='20'>");
-    buffer.localize(event.getEvent());
-    buffer.append("</text>");
+    if (event.getEventId() > 0) {
+      buffer.append("<text y='20'>");
+      buffer.localize(event.getEvent());
+      buffer.append("</text>");
+    }
 
     buffer.append("<text y='40'>");
     buffer.localize(event.getTime().toSimpleString());

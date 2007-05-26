@@ -89,7 +89,9 @@ public class Processor {
     registerStaticPage("/hands_top.jpg", "hands_top.jpg", "image/jpeg");
     registerStaticPage("/hands_right.jpg", "hands_right.jpg", "image/jpeg");
     registerStaticPage("/hands_bottom.jpg", "hands_bottom.jpg", "image/jpeg");
-    registerStaticPage("/classmate.jpg", "classmate.jpg", "image/jpeg");
+    for (int i = 1; i <= 22; i++) {
+      registerStaticPage("/classmate" + i + ".jpg", "classmate" + i + ".jpg", "image/jpeg");
+    }
   }
 
   private static void registerStaticPage(String key, String filename, String type) {

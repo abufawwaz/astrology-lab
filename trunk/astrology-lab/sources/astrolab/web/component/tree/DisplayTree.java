@@ -79,7 +79,7 @@ public abstract class DisplayTree extends HTMLDisplay {
       buffer.append(child.getId());
       buffer.append("', '");
       buffer.append(child.getText());
-      buffer.append("', false)) } else { top.fireEvent('location','" + child.getId() + "') }; window.location.href='?_d=");
+      buffer.append("', false)) } else { top.fireEvent(window, 'location','" + child.getId() + "') }; window.location.href='?_d=");
       buffer.append(id);
       buffer.append("&amp;");
       buffer.append(choiceId);
@@ -103,7 +103,7 @@ public abstract class DisplayTree extends HTMLDisplay {
         buffer.append(child.getId());
         buffer.append("', '");
         buffer.append(child.getText());
-        buffer.append("', true)) } else { top.fireEvent('location','" + child.getId() + "') }\">");
+        buffer.append("', true)) } else { top.fireEvent(window, 'location','" + child.getId() + "') }\">");
         buffer.append(child.getText());
         buffer.append("</a>");
         buffer.append("</td><td>");

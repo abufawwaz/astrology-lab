@@ -72,7 +72,7 @@ public class FormAddLocation extends AJAXFormDisplay {
     buffer.append("</tr>");
     buffer.append("</table>");
 
-    super.addSubmit(buffer, "Save", "\r\ntop.fireEvent(\"location.edit\", function() { return document.forms[0].elements[\"_tree-33\"].value })\r\n");
+    super.addSubmit(buffer, "Save", "\r\ntop.fireEvent(window, \"location.edit\", function() { return document.forms[0].elements[\"_tree-33\"].value })\r\n");
 
     buffer.append("<input type='button' value='");
     buffer.localize("New");

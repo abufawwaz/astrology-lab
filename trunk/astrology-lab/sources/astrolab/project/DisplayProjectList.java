@@ -35,7 +35,7 @@ public class DisplayProjectList extends HTMLDisplay {
       }
 
       // TODO: put this into a separate class
-      buffer.append("<a href='javascript:top.fireEvent(\"project\",\"" + project.getId() + "\")'>");
+      buffer.append("<a href='javascript:top.fireEvent(window, \"project\",\"" + project.getId() + "\")'>");
       if (selected_project == project.getId()) {
         buffer.append("<b><font color='green'>");
       }

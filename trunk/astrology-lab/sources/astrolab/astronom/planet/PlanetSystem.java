@@ -3,15 +3,21 @@ package astrolab.astronom.planet;
 import java.util.*;
 
 import astrolab.db.*;
+import astrolab.astronom.Time;
 import astrolab.astronom.util.Zodiac;
 
 public class PlanetSystem {
 
   protected Hashtable planets = new Hashtable();
 
+  private double standardYearTime = -1;
   private Vector waiting = new Vector();
 
   public PlanetSystem() {
+  }
+
+  public Enumeration getPlanetNames() {
+    return planets.keys();
   }
 
   public Planet getPlanet(String name) {
@@ -19,6 +25,22 @@ public class PlanetSystem {
   }
 
   public void calculate(Event event) {
+    calculate(event.getTime());
+  }
+
+  public void calculate(Time time) {
+    calculate(time.getStandardYearTime());
+  }
+
+  public void calculate(Calendar calendar) {
+    calculate(new Time(calendar.getTime()));
+  }
+
+  public void calculate(double standardYearTime) {
+    if (standardYearTime == this.standardYearTime) {
+      return;
+    }
+
     Enumeration objects = planets.elements();
     Planet planet;
     boolean goon = true;
@@ -37,7 +59,7 @@ public class PlanetSystem {
       for (int i = 0; i < waiting.size(); i++) {
         planet = (Planet) waiting.elementAt(i);
 
-        if (planet.position(event.getTime().getStandardYearTime())) {
+        if (planet.position(standardYearTime)) {
           waiting.remove(planet);
           goon = true;
         }
@@ -49,6 +71,7 @@ public class PlanetSystem {
     }
 
     waiting.clear();
+    this.standardYearTime = standardYearTime;
   }
 
   // get rid of this

@@ -1,47 +1,48 @@
 // public methods
 
-function registerListener(eventType, listenerFunction) {
-  return getEventType(eventType).registerListener(listenerFunction)
+function registerListener(win, eventType, listenerFunction) {
+  return getEventType(eventType).registerListener(listenerFunction, win)
 }
 
 function unregisterListener(eventType, listener) {
   getEventType(eventType).unregisterListener(listener)
 }
 
-function fireEvent(eventType, message) {
-  getEventType(eventType).fireEvent(message)
+function fireEvent(win, eventType, message) {
+  getEventType(eventType).fireEvent(win, message)
 }
 
 // internal functions
 
 var events = new Array();
 
-function EventListener(listenerFunction) {
+function EventListener(listenerFunction, listenerWindow) {
   this.handle = listenerFunction;
+  this.owner = listenerWindow;
 }
 
 function EventType() {
   var listeners = new Array();
 
-  this.registerListener = function(listenerFunction) {
-    var listener = new EventListener(listenerFunction)
+  this.registerListener = function(listenerFunction, listenerWindow) {
+    var listener = new EventListener(listenerFunction, listenerWindow)
     listeners[listeners.length] = listener
     return listener
   }
 
   this.unregisterListener = function(listener) {
     for (var i = 0; i < listeners.length; i++) {
-      if (listeners[i] == listener) {
+      if (listeners[i].owner.location.href == listener.owner.location.href) {
         listeners.splice(i, 1)
       }
     }
   }
 
-  this.fireEvent = function(message) {
+  this.fireEvent = function(win, message) {
     for (var i = 0; i < listeners.length; i++) {
       try {
-        if (listeners[i]) {
-          listeners[i].handle((typeof(message) == "function") ? message() : message)
+        if (listeners[i] && (listeners[i].owner != win)) {
+          listeners[i].handle((typeof(message) == "function") ? message() : message, listeners[i].owner.frameIndex)
         }
       } catch (e) {
         listeners.splice(i, 1)

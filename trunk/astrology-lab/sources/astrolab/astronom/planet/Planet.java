@@ -105,7 +105,8 @@ public abstract class Planet extends ActivePoint {
   }
 
   public double getPosition(Calendar calendar) {
-  	return positionAround(new SolarSystem().getPlanet(SolarSystem.EARTH));
+    system.calculate(calendar);
+  	return positionAround(system.getPlanet(SolarSystem.EARTH));
   }
 
 	public ActivePointTrajectory getTrajectory(Calendar start, Calendar end) {
