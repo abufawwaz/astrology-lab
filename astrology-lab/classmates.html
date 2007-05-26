@@ -32,7 +32,7 @@ var mate_image_width = 75;
 var mate_image_height = 120;
 var xstep = (document.body.clientWidth - 150) / mates_count
 for (i = 1; i <= mates_count; i++) {
-document.write("<img src='./classmate.jpg' style=\"position: absolute; top: 50px; left: ")
+document.write("<img src='./classmate" + i + ".jpg' style=\"position: absolute; top: 50px; left: ")
 document.write(50 + (i - 1) * xstep)
 document.write("px; width: " + mate_image_width + "px; height: " + mate_image_height + "px;\" onmouseover=\"this.style.zIndex=100;javascript:selectClassMate('")
 document.write(i)

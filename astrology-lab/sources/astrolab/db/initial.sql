@@ -184,6 +184,15 @@ create table project_classmates (
   private_info TEXT
 ) ENGINE=InnoDB;
 
+create table perspective_elect_criteria (
+  criteria_owner INT UNSIGNED NOT NULL REFERENCES text (id),
+  criteria_type INT UNSIGNED NOT NULL,
+  criteria_actor INT UNSIGNED NOT NULL REFERENCES text (id),
+  criteria_action INT UNSIGNED NOT NULL REFERENCES text (id),
+  criteria_factor INT UNSIGNED NOT NULL REFERENCES text (id),
+  criteria_color VARCHAR(20)
+) ENGINE=InnoDB;
+
 insert into text values (0, NULL, NULL, '... not set ...', '... липсва ...');
 
 insert into text values (1001, NULL, NULL, 'Jan', 'Яну');
@@ -501,12 +510,12 @@ insert into views values (58, 'astrolab.project.DisplayDataChart');
 insert into views values (60, 'astrolab.formula.display.ModifyFormulaeSetChartBase');
 insert into views values (61, 'astrolab.formula.display.ModifyFormulaeSetChartColor');
 insert into views values (62, 'astrolab.formula.display.ModifyFormulaeSetTime');
-insert into views values (63, 'astrolab.project.election.DisplayHourlyElectionaryChart');
-insert into views values (64, 'astrolab.project.election.DisplayDailyElectionaryChart');
-insert into views values (65, 'astrolab.project.election.DisplayElectionaryCriteriaList');
-insert into views values (66, 'astrolab.project.election.DisplayElectionaryCriteriaComponents');
-insert into views values (67, 'astrolab.project.election.FormElectionaryCriteriaTemplate');
-insert into views values (68, 'astrolab.project.election.DisplayElectionaryRestrictionList');
+insert into views values (63, 'astrolab.perspective.election.DisplayHourlyElectionaryChart');
+insert into views values (64, 'astrolab.perspective.election.DisplayDailyElectionaryChart');
+insert into views values (65, 'astrolab.perspective.election.DisplayElectionaryCriteriaList');
+insert into views values (66, 'astrolab.perspective.election.DisplayElectionaryCriteriaComponents');
+insert into views values (67, 'astrolab.perspective.election.FormElectionaryCriteriaTemplate');
+insert into views values (68, 'astrolab.perspective.election.DisplayElectionaryRestrictionList');
 insert into views values (901, 'astrolab.project.classmates.FormClassmatesLogin');
 insert into views values (903, 'astrolab.project.classmates.DisplayClassmateGeneralInfo');
 insert into views values (904, 'astrolab.project.classmates.DisplayClassmatePrivateInfo');
@@ -514,8 +523,8 @@ insert into views values (905, 'astrolab.project.classmates.ModifyClassmateGener
 insert into views values (906, 'astrolab.project.classmates.ModifyClassmatePrivateInfo');
 
 insert into views_perspective values (0, '<frameset cols="15%,*" border="0"><frame src="/view.html?_d=1" /><frame src="/view.html?_d=56" /></frameset>');
-insert into views_perspective values (40040, '<frameset cols="15%,*" border="0"><frameset rows="20%,40%,40%"><frame src="/view.html?_d=1" /><frame src="/view.html?_d=2" /><frame src="/view.html?_d=25" /></frameset><frameset rows="70%,*"><frameset cols="70%,15%,15%"><frame id="frame_svg" src="/view.svg?_d=4" /><frame src="/view.html?_d=10" /><frame src="/view.html?_d=11" /></frameset><frame src="/view.html?_d=45" /></frameset></frameset>');
-insert into views_perspective values (40041, '<frameset cols="15%,*" border="0"><frameset rows="30%,*"><frame src="/view.html?_d=1" /><frame src="/view.html?_d=23" /></frameset><frameset rows="70%,*"><frameset cols="70%,30%"><frame id="frame_svg" src="/view.svg?_d=58" /><frame src="/view.html?_d=52" /></frameset><frame src="/view.html?_d=45" /></frameset></frameset>');
+insert into views_perspective values (40040, '<frameset cols="15%,*" border="0"><frameset rows="20%,40%,40%"><frame src="/view.html?_d=1" /><frame src="/view.html?_d=2" /><frame src="/view.html?_d=25" /></frameset><frameset rows="70%,*"><frameset cols="70%,15%,15%"><frame src="/view.svg?_d=4" /><frame src="/view.html?_d=10" /><frame src="/view.html?_d=11" /></frameset><frame src="/view.html?_d=45" /></frameset></frameset>');
+insert into views_perspective values (40041, '<frameset cols="15%,*" border="0"><frameset rows="30%,*"><frame src="/view.html?_d=1" /><frame src="/view.html?_d=23" /></frameset><frameset rows="70%,*"><frameset cols="70%,30%"><frame src="/view.svg?_d=58" /><frame src="/view.html?_d=52" /></frameset><frame src="/view.html?_d=45" /></frameset></frameset>');
 insert into views_perspective values (40018, '<frameset cols="15%,*" border="0"><frameset rows="30%,*"><frame src="/view.html?_d=1" /><frame src="/view.html?_d=23" /></frameset><frameset cols="50%,*"><frame src="/view.html?_a=40018" /><frame src="/view.html?_a=40019" /></frameset></frameset>');
 insert into views_perspective values (40042, '<frameset cols="60%,25%,15%" border="0"><frameset rows="50%,25%,25%"><frameset cols="25%,75%"><frame src="/view.html?_d=1" /><frame src="/view.html?_d=4" /></frameset><frame src="/view.html?_d=63" /><frame src="/view.html?_d=64" /></frameset><frameset rows="50%,*"><frame src="/view.html?_d=65" /><frame src="/view.html?_d=68" /></frameset><frameset rows="50%,*"><frame src="/view.html?_d=67" /><frame src="/view.html?_d=66" /></frameset></frameset>');
 

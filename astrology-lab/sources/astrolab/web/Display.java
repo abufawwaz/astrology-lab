@@ -62,31 +62,51 @@ public abstract class Display {
         buffer.append("//<![CDATA["); buffer.newline();
       }
 
+      buffer.newline();
+      buffer.append("var listenerObject = null;");
+      buffer.newline();
+      buffer.append("var frameIndex = 0;");
+      buffer.newline();
+      buffer.append("for (; frameIndex < parent.frames.length; frameIndex++) {");
+      buffer.append("  if (parent.frames[frameIndex].window == this.window) break;");
+      buffer.append("}");
+      buffer.newline();
+
+      buffer.append("\r\nwindow.onunload = function() {");
+      while (keys.hasMoreElements()) {
+        key = keys.nextElement();
+        buffer.append("top.unregisterListener('" + key + "', listenerObject);");
+      }
+      buffer.append(" }");
+
+      keys = actions.keys();
       while (keys.hasMoreElements()) {
         key = keys.nextElement();
         parameter = actions.get(key);
 
-        String parameterURL = url;
-        int parameterIndex = url.indexOf(parameter + "=");
-        int parameterEnd = url.indexOf("&", parameterIndex);
-        if (parameterIndex >= 0) {
-          if (parameterEnd >= 0) {
-            parameterURL = url.substring(0, parameterIndex) + url.substring(parameterEnd + 1);
-          } else {
-            parameterURL = url.substring(0, parameterIndex);
+        if (!parameter.startsWith("javascript:")) {
+          String parameterURL = url;
+          int parameterIndex = url.indexOf(parameter + "=");
+          int parameterEnd = url.indexOf("&", parameterIndex);
+          if (parameterIndex >= 0) {
+            if (parameterEnd >= 0) {
+              parameterURL = url.substring(0, parameterIndex) + url.substring(parameterEnd + 1);
+            } else {
+              parameterURL = url.substring(0, parameterIndex);
+            }
           }
-        }
-
-        buffer.append("\r\nvar listenerObject = null");
-        buffer.append("\r\nwindow.onunload = function() { top.unregisterListener('" + key + "', listenerObject) }");
-        buffer.append("\r\nlistenerObject = top.registerListener('" + key + "', function(message) {");
-
-        if (this instanceof SVGDisplay) {
-          buffer.append("top.document.getElementById('frame_svg').src='" + parameterURL + parameter + "=' + message"); // SVG frame TODO: this is done to support IE. Find a better way
+  
+          buffer.append("\r\nlistenerObject = top.registerListener(this.window, '" + key + "', function(message, findex) {");
+  
+          if (this instanceof SVGDisplay) {
+            buffer.append("top.frames[findex].location='" + parameterURL + parameter + "=' + message");
+          } else {
+            buffer.append("window.location='" + parameterURL + parameter + "=' + message"); // normal frame
+          }
+          buffer.append(" })");
         } else {
-          buffer.append("window.location='" + parameterURL + parameter + "=' + message"); // normal frame
+          buffer.append("\r\nlistenerObject = top.registerListener(this.window, '" + key + "', function(message) { " + parameter.substring("javascript:".length()) + " })");
         }
-        buffer.append(" })");
       }
 
       if (!inOwnScript) {

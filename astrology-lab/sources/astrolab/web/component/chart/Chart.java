@@ -3,6 +3,7 @@ package astrolab.web.component.chart;
 import astrolab.astronom.houses.HouseSystem;
 import astrolab.astronom.houses.PlacidusSystem;
 import astrolab.db.Event;
+import astrolab.project.geography.Location;
 import astrolab.web.Display;
 import astrolab.web.SVGDisplay;
 import astrolab.web.component.ComponentControllable;
@@ -12,11 +13,13 @@ import astrolab.web.server.content.LocalizedStringBuffer;
 public class Chart extends SVGDisplay {
 
   private final static String KEY_CHART_EVENT = "Chart.event";
+  private final static String KEY_CHART_TIMESTAMP = "Chart.timestamp";
 
   public final static int ID = Display.getId(Chart.class);
 
   public Chart() {
     super.addAction("event", "user.session.event.1");
+    super.addAction("timestamp", KEY_CHART_TIMESTAMP);
   }
 
   public void fillBodyContent(Request request, LocalizedStringBuffer buffer) {
@@ -39,8 +42,11 @@ public class Chart extends SVGDisplay {
 
   private final static Event getSelectedEvent() {
     String chartEvent = Request.getCurrentRequest().get(KEY_CHART_EVENT);
+    String chartTimestamp = Request.getCurrentRequest().get(KEY_CHART_TIMESTAMP);
     if ((chartEvent != null) && (chartEvent.trim().length() > 0)) {
       return new Event(Integer.parseInt(chartEvent));
+    } else if ((chartTimestamp != null) && (chartTimestamp.trim().length() > 0)) {
+      return new Event(Location.getLocation(1001003), Long.parseLong(chartTimestamp));
     } else {
       return Event.getSelectedEvent();
     }

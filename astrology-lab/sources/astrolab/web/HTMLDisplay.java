@@ -37,7 +37,7 @@ public abstract class HTMLDisplay extends Display {
 
     fillActionScript(request, buffer, false);
 
-    buffer.append("\r\n<body style='background-color:transparent'>");
+    buffer.append("\r\n<body style='background-color:transparent' onload='if (top.manage_control) top.manage_control()'>");
 
     if (getTitle() != null) {
       buffer.append("<div class='class_title'>");
