@@ -1,17 +1,16 @@
 package astrolab.astronom.planet;
 
+import astrolab.db.Text;
+
 public class Sun extends Planet {
 
-  public Sun() {
-    accordPoint.setCoordinates(0, 0, 0);
-    coordinates.setCoordinates(0, 0, 0);
-
-    positioned = true;
-  }
+  private final static int ID = Text.getId(SolarSystem.SUN);
 
   public Sun(PlanetSystem system) {
-    this();
-    this.system = system;
+    super(ID, system);
+
+    accordPoint.setCoordinates(0, 0, 0);
+    coordinates.setCoordinates(0, 0, 0);
   }
 
   public void markToBePositioned() {

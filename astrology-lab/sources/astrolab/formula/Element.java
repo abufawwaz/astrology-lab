@@ -1,8 +1,7 @@
 package astrolab.formula;
 
-import astrolab.astronom.houses.HouseSystem;
-import astrolab.astronom.planet.Planet;
-import astrolab.astronom.planet.SolarSystem;
+import astrolab.astronom.ActivePoint;
+import astrolab.db.Event;
 import astrolab.db.Text;
 
 public class Element {
@@ -30,13 +29,9 @@ public class Element {
     return id;
   }
 
-  public double getPosition(SolarSystem solar, HouseSystem houses, Planet center) {
-    Planet planet = solar.getPlanet(text);
-    if (planet != null) {
-      return (planet != center) ? planet.positionAround(center) : 0;
-    } else {
-      throw new RuntimeException("houses.getHouse(x) not implemented yet!");
-    }
+  public double getPosition(Event event) {
+    ActivePoint point = ActivePoint.getActivePoint(text, event.getTime());
+    return point.getPosition();
   }
 
   public String getText() {

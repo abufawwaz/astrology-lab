@@ -2,7 +2,6 @@ package astrolab.criteria;
 
 import java.sql.ResultSet;
 import java.util.ArrayList;
-import java.util.Calendar;
 
 import astrolab.db.Database;
 import astrolab.web.server.Request;
@@ -21,29 +20,11 @@ public class Criteria {
         list.add(Criterion.read(set));
       }
 
-      ensureTime(list);
-      ensureLocation(list);
-
       return list.toArray(EMPTY_LIST);
     } catch (Exception e) {
       e.printStackTrace();
       return EMPTY_LIST;
     }
-  }
-
-  private final static void ensureLocation(ArrayList<Criterion> list) {
-    
-  }
-
-  private final static void ensureTime(ArrayList<Criterion> list) {
-    for (int i = 0; i < list.size(); i++) {
-      if (list.get(i) instanceof CriterionStartTime) {
-        list.add(0, list.remove(i));
-        return;
-      }
-    }
-
-    list.add(0, new CriterionStartTime(Calendar.getInstance()));
   }
 
 }

@@ -8,8 +8,6 @@ import java.util.Hashtable;
 
 import astrolab.astronom.ActivePoint;
 import astrolab.astronom.Time;
-import astrolab.astronom.planet.Planet;
-import astrolab.astronom.planet.SolarSystem;
 import astrolab.db.Database;
 import astrolab.tools.Log;
 
@@ -18,19 +16,11 @@ public class ProjectDataFiller extends Thread {
   private String key;
   private Project project;
 
-  private SolarSystem solar;
-  private Planet earth;
-  private ActivePoint activePoint;
-
   private final static Hashtable<String, ProjectDataFiller> FILLER = new Hashtable<String, ProjectDataFiller>();
 
   private ProjectDataFiller(String key, Project project) {
     this.key = key;
     this.project = project;
-
-    solar = new SolarSystem();
-    earth = solar.getPlanet(SolarSystem.EARTH);
-    activePoint = solar.getPlanet(key);
 
     start();
   }
@@ -69,7 +59,7 @@ public class ProjectDataFiller extends Thread {
           Timestamp time = set.getTimestamp(1);
           Time astrotime = new Time(time);
 //          solar.calculate(new InMemoryEvent(astrotime)); // TODO: calculate based on time!
-          position = activePoint.getPosition(astrotime);
+          position = ActivePoint.getActivePoint(key, astrotime).getPosition();
 
           update.setDouble(1, position);
           update.setTimestamp(2, time);

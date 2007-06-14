@@ -1,21 +1,21 @@
 package astrolab.astronom.planet;
 
 import astrolab.astronom.util.Latia;
+import astrolab.db.Text;
 
 public class Pluto extends Planet {
 
-  public Pluto() {
+  private final static int ID = Text.getId(SolarSystem.PLUTO);
+
+  public Pluto(PlanetSystem system) {
+    super(ID, system);
+
     mL = new Latia(229.94722, 144.91306, 0);
     eL = new Latia(0.24864, 0, 0);
     au = 39.51774;
     apL = new Latia(113.52139, 0, 0);
     anL = new Latia(108.95444, 1.39601, 0.00031);
     i_nL = new Latia(17.14678, 0, 0);
-  }
-
-  public Pluto(PlanetSystem system) {
-    this();
-    this.system = system;
   }
 
   public String getName() {

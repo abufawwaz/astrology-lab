@@ -15,6 +15,7 @@ public class DisplayDailyElectionaryChart extends SVGDisplay {
 
   private final static int HEIGHT = 10;
   private final static int WIDTH = 31;
+  private final static int HOUR_STEP = 6;
 
   private int DAYS = 31;
   private Calendar timestamp;
@@ -52,29 +53,36 @@ public class DisplayDailyElectionaryChart extends SVGDisplay {
     DAYS = timestamp.getActualMaximum(Calendar.DAY_OF_MONTH);
   }
 
-  private final Calendar getCalendar(int day) {
-    timestamp.set(Calendar.DAY_OF_MONTH, day + 1);
-    return timestamp;
+  private final Calendar getCalendar(int day, int hour) {
+    Calendar result = Calendar.getInstance();
+    result.setTime(timestamp.getTime());
+    result.set(Calendar.DAY_OF_MONTH, day + 1);
+    result.set(Calendar.HOUR_OF_DAY, hour + 1);
+    return result;
   }
 
   private final void fillMarks(LocalizedStringBuffer buffer, Criterion[] criteria) {
-    int[][] marks = new int[criteria.length][DAYS];
+    int[][] marks = new int[criteria.length][DAYS * 24 / HOUR_STEP];
     int maxValue = 0;
+    Calendar periodStart;
+    Calendar periodEnd;
 
     for (int d = 0; d < DAYS; d ++) {
-      Calendar calendar = getCalendar(d);
-
-      for (int c = 0; c < criteria.length; c++) {
-        marks[c][d] = criteria[c].getMark(calendar) + ((c > 0) ? marks[c - 1][d] : 0);
-      }
-
-      if (marks[criteria.length - 1][d] > maxValue) {
-        maxValue = marks[criteria.length - 1][d];
+      periodEnd = getCalendar(d, 0);
+      for (int h = 0; h < 24; h += HOUR_STEP) {
+        periodStart = periodEnd;
+        periodEnd = getCalendar(d, h + 1);
+  
+        for (int c = 0; c < criteria.length; c++) {
+          marks[c][(d * 24 + h) / HOUR_STEP] = criteria[c].getMark(periodStart, periodEnd) + ((c > 0) ? marks[c - 1][(d * 24 + h) / HOUR_STEP] : 0);
+        }
+  
+        if ((criteria.length > 0) && marks[criteria.length - 1][(d * 24 + h) / HOUR_STEP] > maxValue) {
+          maxValue = marks[criteria.length - 1][(d * 24 + h) / HOUR_STEP];
+        }
       }
     }
-    if (maxValue == 0) {
-      maxValue = HEIGHT;
-    }
+    maxValue++;
 
     for (int c = criteria.length - 1; c >= 0; c--) {
       buffer.append("<polygon points='");
@@ -82,10 +90,14 @@ public class DisplayDailyElectionaryChart extends SVGDisplay {
       buffer.append(",0 0,0");
 
       for (int d = 0; d < DAYS; d ++) {
-        buffer.append(" ");
-        buffer.append(String.valueOf(d));
-        buffer.append(",");
-        buffer.append(String.valueOf(((float) HEIGHT * marks[c][d]) / maxValue));
+        for (int h = 0; h < 24; h += HOUR_STEP) {
+          buffer.append(" ");
+          buffer.append(String.valueOf(d));
+          buffer.append(".");
+          buffer.append(String.valueOf((int) (((float) h) / 24 * 100)));
+          buffer.append(",");
+          buffer.append(String.valueOf(((float) HEIGHT * marks[c][(d * 24 + h) / HOUR_STEP]) / maxValue));
+        }
       }
 
       buffer.append("' style='stroke:none;fill:");
@@ -163,7 +175,7 @@ public class DisplayDailyElectionaryChart extends SVGDisplay {
     buffer.append("  text_node.appendChild(text);");
     buffer.append(" }");
     buffer.newline();
-    buffer.append(" var start_timestamp = " + getCalendar(0).getTimeInMillis());
+    buffer.append(" var start_timestamp = " + getCalendar(0, 0).getTimeInMillis());
     buffer.newline();
     buffer.append(" var a_day = 1000 * 60 * 60 * 24");
     buffer.newline();

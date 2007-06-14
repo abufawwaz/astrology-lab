@@ -1,21 +1,21 @@
 package astrolab.astronom.planet;
 
 import astrolab.astronom.util.Latia;
+import astrolab.db.Text;
 
 public class Uranus extends Planet {
 
-  public Uranus() {
+  private final static int ID = Text.getId(SolarSystem.URANUS);
+
+  public Uranus(PlanetSystem system) {
+    super(ID, system);
+
     mL = new Latia(74.1757, 427.2742, 0);
     eL = new Latia(.04682, .00042, 0);
     au = 19.2215;
     apL = new Latia(95.6863, 2.0508, 0);
     anL = new Latia(73.5222, .5242, 0);
     i_nL = new Latia(.7726, .1E-3, 0);
-  }
-
-  public Uranus(PlanetSystem system) {
-    this();
-    this.system = system;
   }
 
   public String getName() {

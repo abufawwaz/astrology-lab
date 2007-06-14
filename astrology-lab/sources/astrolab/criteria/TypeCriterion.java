@@ -1,72 +1,92 @@
 package astrolab.criteria;
 
-import java.util.HashSet;
-import java.util.Hashtable;
-import java.util.Map;
-import java.util.Set;
+import java.util.ArrayList;
 
 public abstract class TypeCriterion {
 
-  private final static TypeCriterion[] TYPES = new TypeCriterion[] {
-    null
+  private final static Criterion[] TYPES = new Criterion[] {
+    new CriterionZodiacSign(),
+    new CriterionPositionDirection(),
+    new CriterionCourseDirection(),
+    new CriterionCourseVoid(),
   };
 
-  public final static Map<String, Set<String>> getCriteria(String[] data) {
-    String[] keys;
-    Hashtable<String, Set<String>> result = new Hashtable<String, Set<String>>();
+  public final static boolean isCriteriaDetermined(String type, String[] inputValues) {
+    String[] types = convertTypes(type, inputValues);
 
-    for (int type = 0; type < TYPES.length; type++) {
-      keys = match(data, TYPES[type].getActorTypes());
-      if (keys != null) {
-        put(result, TYPES[type].getName(), keys);
+    for (int i = 0; i < types.length; i++) {
+      if (types[i] == null) {
+        return false;
       }
     }
-    return null;
+    return true;
+  }
+
+  public final static String[][] getCriteria(String type, String[] inputValues) {
+    String[] types = convertTypes(type, inputValues);
+    ArrayList<String[]> list = new ArrayList<String[]>();
+
+    for (int i = 0; i < TYPES.length; i++) {
+      String[] typeTypes = TYPES[i].getActorTypes();
+      if (isMatching(types, typeTypes)) {
+        ArrayList<String> criteria = new ArrayList<String>();
+        criteria.add(TYPES[i].getName());
+        for (int t = 0; t < typeTypes.length; t++) {
+          criteria.add(typeTypes[t]);
+        }
+        list.add(criteria.toArray((String[]) new String[0]));
+      }
+    }
+    return list.toArray((String[][]) new String[0][]);
+  }
+
+  public final static void store(String type, String[] inputValues) {
+    for (int i = 0; i < TYPES.length; i++) {
+      if (TYPES[i].getName().equals(type)) {
+        TYPES[i].store(inputValues);
+        return;
+      }
+    }
   }
 
   public abstract String getName();
 
   public abstract String[] getActorTypes();
 
-  private final static String[] match(String[] data, String[] actorTypes) {
-    for (int i = 0; i < data.length; i++) {
-      boolean found = false;
-      for (int j = 0; j < actorTypes.length; j++) {
-        if (data[i].equals(actorTypes[j])) {
-          found = true;
-          break;
-        }
-      }
-      if (!found) {
-        return null;
-      }
-    }
+  protected abstract void store(String[] inputValues);
 
-    HashSet<String> result = new HashSet<String>();
-    for (int i = 0; i < actorTypes.length; i++) {
-      boolean found = false;
-      for (int j = 0; j < data.length; j++) {
-        if (data[j].equals(actorTypes[i])) {
-          found = true;
-          break;
-        }
+  private final static boolean isMatching(String[] t1, String[] t2) {
+    for (int i = 0; i < t1.length; i++) {
+      if (t1[i] == null) {
+        continue;
       }
-      if (!found) {
-        result.add(actorTypes[i]);
+      if (i >= t2.length) {
+        return false;
+      }
+      if (!t1[i].equals(t2[i])) {
+        return false;
       }
     }
-    return result.toArray(new String[0]);
+    return true;
   }
 
-  private final static void put(Map<String, Set<String>> map, String criterionType, String[] actorTypes) {
-    Set<String> result = map.get(criterionType);
-    if (result == null) {
-      result = new HashSet<String>();
-      map.put(criterionType, result);
+  private final static String[] convertTypes(String type, String[] values) {
+    String[] criteriaTypes = null;
+    for (int i = 0; i < TYPES.length; i++) {
+      if (TYPES[i].getName().equals(type)) {
+        criteriaTypes = TYPES[i].getActorTypes();
+        break;
+      }
     }
-
-    for (int i = 0; i < actorTypes.length; i++) {
-      result.add(actorTypes[i]);
+    if (criteriaTypes == null) {
+      criteriaTypes = new String[0];
+    } else {
+      for (int i = 0; i < criteriaTypes.length; i++) {
+        if ((values[i] == null) && !criteriaTypes[i].startsWith("'")) {
+          criteriaTypes[i] = null;
+        }
+      }
     }
+    return criteriaTypes;
   }
 }

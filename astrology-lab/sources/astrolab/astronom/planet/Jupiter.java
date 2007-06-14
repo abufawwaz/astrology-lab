@@ -1,21 +1,21 @@
 package astrolab.astronom.planet;
 
 import astrolab.astronom.util.Latia;
+import astrolab.db.Text;
 
 public class Jupiter extends Planet {
 
-  public Jupiter() {
+  private final static int ID = Text.getId(SolarSystem.JUPITER);
+
+  public Jupiter(PlanetSystem system) {
+    super(ID, system);
+
     mL = new Latia(225.4928, 3033.6879, 0);
     eL = new Latia(.04838, -.2E-4, 0);
     au = 5.2029;
     apL = new Latia(273.393, 1.3383, 0);
     anL = new Latia(99.4198, 1.0583, 0);
     i_nL = new Latia(1.3097, -.52E-2, 0);
-  }
-
-  public Jupiter(PlanetSystem system) {
-    this();
-    this.system = system;
   }
 
   public String getName() {

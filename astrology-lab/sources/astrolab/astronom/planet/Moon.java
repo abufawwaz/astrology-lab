@@ -1,17 +1,16 @@
 package astrolab.astronom.planet;
 
 import astrolab.astronom.util.*;
+import astrolab.db.Text;
 
 public class Moon extends Planet {
 
+  private final static int ID = Text.getId(SolarSystem.MOON);
+
   private double position;
 
-  public Moon() {
-  }
-
   public Moon(PlanetSystem system) {
-    this();
-    this.system = system;
+    super(ID, system);
   }
 
   public String getName() {
@@ -82,7 +81,6 @@ public class Moon extends Planet {
     l = (l + 0.557 * FNsin(2 * ll + 2 * ff - 2 * de) + 0.538 * FNsin(2 * ll - 2 * ff - 2 * de)) / 3600;
 
     position = Zodiac.degree(ml + l + nu);
-    positioned = true;
     return true;
   }
 

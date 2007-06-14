@@ -2,10 +2,6 @@ package astrolab.formula;
 
 import java.util.HashMap;
 
-import astrolab.astronom.houses.HouseSystem;
-import astrolab.astronom.houses.PlacidusSystem;
-import astrolab.astronom.planet.Planet;
-import astrolab.astronom.planet.SolarSystem;
 import astrolab.db.Event;
 
 public class ElementData {
@@ -20,14 +16,8 @@ public class ElementData {
     this.target = target;
     this.values = new HashMap<Integer, Double>();
 
-    HouseSystem houses = new PlacidusSystem(event);
-    SolarSystem solar = new SolarSystem();
-//    Planet center = solar.getPlanet(SolarSystem.EARTH);
-    Planet center = solar.getPlanet(SolarSystem.SUN);
-    solar.calculate(event);
-
     for (int i = 0; i < elements.length; i++) {
-      values.put(elements[i].getId(), elements[i].getPosition(solar, houses, center));
+      values.put(elements[i].getId(), elements[i].getPosition(event));
     }
   }
 

@@ -1,5 +1,7 @@
 package astrolab.astronom.planet;
 
+import java.util.Calendar;
+
 public class SolarSystem extends PlanetSystem {
 
   public static final String SUN = "Sun";
@@ -14,12 +16,18 @@ public class SolarSystem extends PlanetSystem {
   public static final String NEPTUNE = "Neptune";
   public static final String PLUTO = "Pluto";
 
-  public SolarSystem() {
+  public static final String[] PLANETS = {
+    SUN, MOON, MERCURY, VENUS, EARTH, MARS, JUPITER, SATURN, URANUS, NEPTUNE, PLUTO
+  };
+
+  public SolarSystem(Calendar calendar) {
+    super(calendar);
+
+    planets.put(EARTH, new Earth(this));
     planets.put(SUN, new Sun(this));
     planets.put(MOON, new Moon(this));
     planets.put(MERCURY, new Mercury(this));
     planets.put(VENUS, new Venus(this));
-    planets.put(EARTH, new Earth(this));
     planets.put(MARS, new Mars(this));
     planets.put(JUPITER, new Jupiter(this));
     planets.put(SATURN, new Saturn(this));
