@@ -1,21 +1,21 @@
 package astrolab.astronom.planet;
 
 import astrolab.astronom.util.Latia;
+import astrolab.db.Text;
 
 public class Venus extends Planet {
 
-  public Venus() {
+  private final static int ID = Text.getId(SolarSystem.VENUS);
+
+  public Venus(PlanetSystem system) {
+    super(ID, system);
+
     mL = new Latia(212.6032, 58517.8039, 0.0013);
     eL = new Latia(0.00682, -5.0000000000000002E-005D, 0);
     au = 0.7233;
     apL = new Latia(54.3842, 0.5082, -0.0014);
     anL = new Latia(75.7796, 0.8999, 0.0004);
     i_nL = new Latia(3.3936, 0.001, 0);
-  }
-
-  public Venus(PlanetSystem planetsystem) {
-    this();
-    system = planetsystem;
   }
 
   public String getName() {

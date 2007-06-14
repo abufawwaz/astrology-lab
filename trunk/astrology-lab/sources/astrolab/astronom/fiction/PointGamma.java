@@ -6,10 +6,13 @@ import astrolab.astronom.util.Zodiac;
 
 import astrolab.astronom.houses.PlacidusSystem;
 import astrolab.astronom.track.ActivePointTrajectory;
+import astrolab.db.Text;
 
 public class PointGamma extends ActivePointFictional {
 
-	public static final int START_FROM_ARIES = 0;
+  private final static int ID = Text.getId("Gamma");
+
+  public static final int START_FROM_ARIES = 0;
 	public static final int START_FROM_ASCENDANT = 1;
 
 	private static final double YEAR = 365.24 * 24 * 60 * 60 * 1000;
@@ -18,7 +21,9 @@ public class PointGamma extends ActivePointFictional {
 	private int startFrom;
 
 	public PointGamma(int cycle, int startFrom) {
-		this.cycle = cycle;
+    super(ID);
+
+    this.cycle = cycle;
 		this.startFrom = startFrom;
 	}
 
@@ -30,9 +35,11 @@ public class PointGamma extends ActivePointFictional {
 		return (startFrom == START_FROM_ASCENDANT) ? new PlacidusSystem(getBirth()).getHouse(1) : 0;
 	}
 
-	public double getPosition(Calendar calendar) {
-		double millis = calendar.getTimeInMillis() - getBirth().getTime().getTimeInMillis();
-		return Zodiac.degree(getStart() - (millis / YEAR) / cycle * 360);
+	public double getPosition() {
+    // TODO: restore Gamma
+//		double millis = calendar.getTimeInMillis() - getBirth().getTime().getTimeInMillis();
+//		return Zodiac.degree(getStart() - (millis / YEAR) / cycle * 360);
+    return 0;
 	}
 
 	public String getIcon() {

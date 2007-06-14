@@ -4,20 +4,24 @@ import java.util.Calendar;
 
 import astrolab.astronom.ActivePoint;
 
-public class CriterionPosition extends Criterion {
+public abstract class CriterionPosition extends Criterion {
 
   private int[] mark = new int[360];
 
-  protected CriterionPosition(int type, ActivePoint activePoint, String color) {
-    super(type, activePoint, color);
+  protected CriterionPosition() {
+    super();
+  }
+
+  protected CriterionPosition(int id, int type, int activePoint, String color) {
+    super(id, type, activePoint, color);
   }
 
   protected int getMark(int position) {
     return mark[position];
   }
 
-  public int getMark(Calendar calendar) {
-    return mark[(int) getActivePoint().getPosition(calendar)];
+  public int getMark(Calendar periodStart, Calendar periodEnd) {
+    return mark[(int) ActivePoint.getActivePoint(getActivePoint(), periodStart).getPosition()];
   }
 
   public void setMark(int position, int mark) {

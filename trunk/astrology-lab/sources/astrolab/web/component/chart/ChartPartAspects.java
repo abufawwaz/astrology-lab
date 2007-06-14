@@ -5,8 +5,6 @@ import java.util.Calendar;
 import java.util.Vector;
 
 import astrolab.astronom.ActivePoint;
-import astrolab.astronom.fiction.PointGamma;
-import astrolab.astronom.planet.Planet;
 import astrolab.astronom.planet.SolarSystem;
 import astrolab.db.Event;
 import astrolab.web.SVGDisplay;
@@ -16,9 +14,7 @@ import astrolab.web.server.content.LocalizedStringBuffer;
 // TODO: turn into ChartPartActivePoints
 public class ChartPartAspects extends SVGDisplay {
 
-  String[] PLANETS = new String[] { SolarSystem.JUPITER, SolarSystem.MARS, SolarSystem.MERCURY, SolarSystem.MOON, SolarSystem.NEPTUNE, SolarSystem.PLUTO, SolarSystem.SATURN, SolarSystem.SUN, SolarSystem.URANUS, SolarSystem.VENUS };
-
-	private double radius, x, y;
+  private double radius, x, y;
 
 	public void fillBodyContent(Request request, LocalizedStringBuffer buffer) {
 		fillContent(request, buffer, Event.getSelectedEvent(), 0.0, true);
@@ -26,17 +22,14 @@ public class ChartPartAspects extends SVGDisplay {
 
 	public void fillContent(Request request, LocalizedStringBuffer buffer, Event event, double offset, boolean ownImage) {
     Vector positions = new Vector();
+    Calendar calendar = event.getTime();
 
     radius = request.getConstraints().getRadius();
 		x = request.getConstraints().getWidth() / 2;
 		y = request.getConstraints().getHeight() / 2;
 
-		SolarSystem solar = new SolarSystem();
-    Planet earth = solar.getPlanet(SolarSystem.EARTH);
-    solar.calculate(event);
-
-		for (int i = 0; i < PLANETS.length; i++) {
-      positions.add(new Double(solar.getPlanet(PLANETS[i]).positionAround(earth)));
+		for (String planet: SolarSystem.PLANETS) {
+      positions.add(ActivePoint.getActivePoint(planet, calendar).getPosition());
 		}
     Object[] sorted = positions.toArray();
     Arrays.sort(sorted);

@@ -1,20 +1,9 @@
 package astrolab.perspective.election;
 
-import java.util.Calendar;
-import java.util.Map;
-import java.util.Set;
-
-import astrolab.astronom.ActivePoint;
-import astrolab.astronom.Time;
-import astrolab.criteria.Criteria;
-import astrolab.criteria.Criterion;
-import astrolab.criteria.CriterionStartTime;
-import astrolab.criteria.CriterionZodiacSign;
 import astrolab.criteria.TypeCriterion;
 import astrolab.web.Display;
 import astrolab.web.HTMLFormDisplay;
 import astrolab.web.component.ComponentControllable;
-import astrolab.web.component.time.ComponentSelectTime;
 import astrolab.web.server.Request;
 import astrolab.web.server.content.LocalizedStringBuffer;
 
@@ -22,104 +11,95 @@ public class DisplayElectionaryRestrictionList extends HTMLFormDisplay {
 
   public final static int ID = Display.getId(DisplayElectionaryRestrictionList.class);
 
-  private final static String CRITERIA_PREFIX = "criteria_";
-
-  private final static String NEW_OPTIONAL_CRITERIA = "new_optional_criteria";
-  private final static String NEW_OPTIONAL_CRITERIA_SIGN = "new_optional_criteria_sign";
-
-  private boolean fireChange = false;
+  private final static String CRITERIA_PREFIX = "_cr";
 
   public DisplayElectionaryRestrictionList() {
-    super("Criteria", ID, true);
+    super("New Criteria", ID, true);
   }
 
   public void fillBodyContent(Request request, LocalizedStringBuffer buffer) {
-    Time startTime = ComponentSelectTime.retrieve(request, CriterionStartTime.REQUEST_PARAMETER);
-    String newOptionalCriteria = request.get(NEW_OPTIONAL_CRITERIA);
-    String newOptionalCriteriaSign = request.get(NEW_OPTIONAL_CRITERIA_SIGN);
+    String selection = "";
+    String selectedType = request.get(CRITERIA_PREFIX + ".T");
+    String[] selectedActors = getSelection(request, buffer, selectedType);
+    String[][] criteria;
 
-    if (startTime != null) {
-      Calendar calendar = Calendar.getInstance();
-      calendar.setTimeZone(startTime.getTimeZone());
-      calendar.setTimeInMillis(startTime.getTimeInMillis());
-      new CriterionStartTime(calendar).store();
-      fireChange = true;
+    if (selectedActors != null) {
+      criteria = TypeCriterion.getCriteria(selectedType, selectedActors);
+    } else {
+      selectedActors = new String[10];
+      criteria = TypeCriterion.getCriteria(null, selectedActors);
     }
 
-//    request.getParameters().get(parameter)
-    if ((newOptionalCriteria != null) && (newOptionalCriteriaSign != null)) {
-      new CriterionZodiacSign(ActivePoint.getActivePoint(Integer.parseInt(newOptionalCriteria)), Integer.parseInt(newOptionalCriteriaSign), false, "green").store();
-      fireChange = true;
+    for (int i = 0; i < selectedActors.length; i++) {
+      if (selectedActors[i] != null) {
+        selection += "&amp;" + CRITERIA_PREFIX + "." + i + "=" + selectedActors[i];
+      }
     }
 
-    Criterion[] criteria = Criteria.getCriteria();
-    for (int i = 0; i < criteria.length; i++) {
-      buffer.append(criteria[i].toString());
+    boolean spanBorder;
+    int maxSpan = Integer.MAX_VALUE;
+    buffer.append("<table border='1'>");
+    for (int col = 0; col < criteria.length; col++) {
+      buffer.append("<tr>");
+      spanBorder = false;
+      maxSpan = Integer.MAX_VALUE;
+      for (int row = 1; row < criteria[col].length; row++) {
+//        if ((col == 0) || spanBorder || (!criteria[col][row].equals(criteria[col - 1][row]))) {
+          spanBorder = true;
+          int span = 1;
+          while ((span < maxSpan) && (col + span < criteria.length) && criteria[col][row].equals(criteria[col + span][row])) span++;
+          maxSpan = span; // next column cannot span more than this one
+
+//          if (span == 1) {
+            buffer.append("<td>");
+//          } else {
+//            buffer.append("<td rowspan='");
+//            buffer.append(span);
+//            buffer.append("'>");
+//          }
+          if (selectedActors[row - 1] != null) {
+            buffer.localize(Integer.parseInt(selectedActors[row - 1]));
+          } else if (criteria[col][row].startsWith("'")) {
+            buffer.append(criteria[col][row]);
+          } else {
+            String controlId = CRITERIA_PREFIX + "." + col + "." + row;
+            String function = "function(new_option) { window.location.href='new_option.html?"
+              + "_d=" + ID
+              + "&amp;" + CRITERIA_PREFIX + ".T=" + criteria[col][0]
+              + selection
+              + "&amp;" + CRITERIA_PREFIX + "." + (row - 1) + "=' + new_option"
+              + "}";
+
+            ComponentControllable.fill(buffer, controlId, criteria[col][row], function);
+            buffer.append("<div id='");
+            buffer.append(controlId);
+            buffer.append("' width='100%'><font color='gray'><i>");
+            buffer.localize(criteria[col][row]);
+            buffer.append("</i></font></div>");
+          }
+          buffer.append("</td>");
+//        }
+      }
+      buffer.append("</tr>");
+    }
+    buffer.append("</table>");
+  }
+
+  private final static String[] getSelection(Request request, LocalizedStringBuffer buffer, String selectedType) {
+    String[] selected = new String[10];
+
+    for (int i = 0; i < 10; i++) {
+      selected[i] = request.get(CRITERIA_PREFIX + "." + i);
     }
 
-    if ((newOptionalCriteria != null) && (newOptionalCriteriaSign == null)) {
-      fillOptionalCriteriaForm(request, buffer, Integer.parseInt(newOptionalCriteria));
-    }
-    fillControllables(buffer);
-
-    if (fireChange) {
+    // if criterion is fulfilled then store it and refresh the view
+    if (TypeCriterion.isCriteriaDetermined(selectedType, selected)) {
+      TypeCriterion.store(selectedType, selected);
       fillRefreshScript(buffer);
+      return null;
+    } else {
+      return selected;
     }
-  }
-
-//  private final static void fillCriteriaForm(Request request, LocalizedStringBuffer buffer, String[] data, String[] types) {
-//    Map<String, Set<String>> criteria = TypeCriterion.getCriteria(types);
-//    String[] keys = criteria.keySet().toArray(new String[0]);
-//
-//    buffer.append("<table><tr>");
-//    for (int key = 0; key < keys.length; key++) {
-//      buffer.append("<td>");
-//      buffer.append("</td>");
-//      
-//    }
-//
-//    buffer.append("<table><tr><td>");
-//    buffer.localize(planet);
-//    buffer.append("</td>");
-//
-//    buffer.append("<td>");
-//    String controlId = "controller_" + NEW_OPTIONAL_CRITERIA_SIGN;
-//    String function = "function(new_option_sign) { window.location.href='new_option.html?_d=" + ID + "&amp;" + NEW_OPTIONAL_CRITERIA + "=" + planet + "&amp;" + NEW_OPTIONAL_CRITERIA_SIGN + "=' + new_option_sign }";
-//    ComponentControllable.fill(buffer, controlId, "Sign", function);
-//    buffer.append("<div id='");
-//    buffer.append(controlId);
-//    buffer.append("' width='20'><font color='gray'><i>");
-//    buffer.localize("sign");
-//    buffer.append("</i></font></div>");
-//    buffer.append("</td></tr></table>");
-//  }
-
-  private final static void fillControllables(LocalizedStringBuffer buffer) {
-    String controlId = "controller_" + NEW_OPTIONAL_CRITERIA;
-    String function = "function(new_option) { window.location.href='new_option.html?_d=" + ID + "&amp;" + NEW_OPTIONAL_CRITERIA + "=' + new_option }";
-    ComponentControllable.fill(buffer, controlId, "Planet", function);
-    buffer.append("<div id='");
-    buffer.append(controlId);
-    buffer.append("' width='100%'><font color='gray'><i>");
-    buffer.localize("new optional criteria");
-    buffer.append("</i></font></div>");
-  }
-
-  private final static void fillOptionalCriteriaForm(Request request, LocalizedStringBuffer buffer, int planet) {
-    buffer.append("<table><tr><td>");
-    buffer.localize(planet);
-    buffer.append("</td>");
-
-    buffer.append("<td>");
-    String controlId = "controller_" + NEW_OPTIONAL_CRITERIA_SIGN;
-    String function = "function(new_option_sign) { window.location.href='new_option.html?_d=" + ID + "&amp;" + NEW_OPTIONAL_CRITERIA + "=" + planet + "&amp;" + NEW_OPTIONAL_CRITERIA_SIGN + "=' + new_option_sign }";
-    ComponentControllable.fill(buffer, controlId, "Sign", function);
-    buffer.append("<div id='");
-    buffer.append(controlId);
-    buffer.append("' width='20'><font color='gray'><i>");
-    buffer.localize("sign");
-    buffer.append("</i></font></div>");
-    buffer.append("</td></tr></table>");
   }
 
   private final static void fillRefreshScript(LocalizedStringBuffer buffer) {

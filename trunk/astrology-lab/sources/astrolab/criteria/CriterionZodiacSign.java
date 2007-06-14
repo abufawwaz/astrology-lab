@@ -1,9 +1,6 @@
 package astrolab.criteria;
 
-import astrolab.astronom.ActivePoint;
-import astrolab.db.Database;
 import astrolab.db.Text;
-import astrolab.web.server.Request;
 
 public class CriterionZodiacSign extends CriterionPosition {
 
@@ -20,8 +17,12 @@ public class CriterionZodiacSign extends CriterionPosition {
   public final static int SIGN_AQUARIUS    = 0x400;
   public final static int SIGN_PISCES      = 0x800;
 
-  public CriterionZodiacSign(ActivePoint activePoint, int signs, boolean isFlags, String color) {
-    super(Criterion.TYPE_ZODIAC_SIGN, activePoint, color);
+  public CriterionZodiacSign() {
+    super();
+  }
+
+  public CriterionZodiacSign(int id, int activePoint, int signs, boolean isFlags, String color) {
+    super(id, Criterion.TYPE_ZODIAC_SIGN, activePoint, color);
 
     int position = 0;
     if (isFlags) {
@@ -43,6 +44,14 @@ public class CriterionZodiacSign extends CriterionPosition {
     }
   }
 
+  public String getName() {
+    return "PositionSign";
+  }
+
+  public String[] getActorTypes() {
+    return new String[] { "Planet", "'position'", "Sign" };
+  }
+
   public int getFactor() {
     int aries = Text.getId("Aries");
     for (int i = 0; i < 360; i += 30) {
@@ -51,6 +60,11 @@ public class CriterionZodiacSign extends CriterionPosition {
       }
     }
     return 0;
+  }
+
+  protected void store(String[] inputValues) {
+    int sign = Integer.parseInt(inputValues[2]);
+    new CriterionZodiacSign(getId(), Integer.parseInt(inputValues[0]), sign, false, "orange").store();
   }
 
 }

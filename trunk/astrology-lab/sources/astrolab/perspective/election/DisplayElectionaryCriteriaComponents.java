@@ -1,6 +1,7 @@
 package astrolab.perspective.election;
 
 import astrolab.astronom.planet.SolarSystem;
+import astrolab.criteria.CriterionPositionDirection;
 import astrolab.db.Text;
 import astrolab.web.HTMLDisplay;
 import astrolab.web.component.ComponentController;
@@ -22,13 +23,9 @@ public class DisplayElectionaryCriteriaComponents extends HTMLDisplay {
   }
 
   public void fillBodyContent(Request request, LocalizedStringBuffer buffer) {
-    buffer.localize("Position");
-    buffer.append(" ");
-    buffer.localize("Course");
-    buffer.append(" ");
-    buffer.localize("Aspect");
-    buffer.append(" ");
+    fillDirectionComponents(buffer);
     buffer.append("<hr />");
+
     buffer.append("<table><tr>");
     for (int i = 0; i < PLANETS.length; i++) {
       int id = Text.getId(PLANETS[i]);
@@ -65,6 +62,42 @@ public class DisplayElectionaryCriteriaComponents extends HTMLDisplay {
     buffer.append("</tr></table>");
 
     buffer.append("<hr />");
+  }
+
+  private void fillDirectionComponents(LocalizedStringBuffer buffer) {
+    int id;
+    String controlId;
+
+    buffer.append("<table><tr>");
+
+    id = Text.getId(CriterionPositionDirection.DIRECTION_DIRECT);
+    controlId = "controller_dir_d"; 
+    ComponentController.fill(buffer, controlId, "Direction", String.valueOf(id));
+    buffer.append("<td id='");
+    buffer.append(controlId);
+    buffer.append("'>");
+    buffer.localize(CriterionPositionDirection.DIRECTION_DIRECT);
+    buffer.append("</td>");
+
+    id = Text.getId(CriterionPositionDirection.DIRECTION_STATIONARY);
+    controlId = "controller_dir_s";
+    ComponentController.fill(buffer, controlId, "Direction", String.valueOf(id));
+    buffer.append("<td id='");
+    buffer.append(controlId);
+    buffer.append("'>");
+    buffer.localize(CriterionPositionDirection.DIRECTION_STATIONARY);
+    buffer.append("</td>");
+
+    id = Text.getId(CriterionPositionDirection.DIRECTION_RETROGRADE);
+    controlId = "controller_dir_r";
+    ComponentController.fill(buffer, controlId, "Direction", String.valueOf(id));
+    buffer.append("<td id='");
+    buffer.append(controlId);
+    buffer.append("'>");
+    buffer.localize(CriterionPositionDirection.DIRECTION_RETROGRADE);
+    buffer.append("</td>");
+
+    buffer.append("</tr></table>");
   }
 
 }

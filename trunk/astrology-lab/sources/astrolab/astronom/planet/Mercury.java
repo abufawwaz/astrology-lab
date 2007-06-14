@@ -1,21 +1,21 @@
 package astrolab.astronom.planet;
 
 import astrolab.astronom.util.Latia;
+import astrolab.db.Text;
 
 public class Mercury extends Planet {
 
-  public Mercury() {
+  private final static int ID = Text.getId(SolarSystem.MERCURY);
+
+  public Mercury(PlanetSystem system) {
+    super(ID, system);
+
     mL = new Latia(102.2794, 149472.515, 0);
     eL = new Latia(.205614, .2E-4, 0);
     au = .3871;
     apL = new Latia(28.7538, .3703, .0001);
     anL = new Latia(47.1459, 1.1852, .0002);
     i_nL = new Latia(7.009, .00186, 0);
-  }
-
-  public Mercury(PlanetSystem system) {
-    this();
-    this.system = system;
   }
 
   public String getName() {

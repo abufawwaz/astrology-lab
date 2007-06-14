@@ -17,27 +17,25 @@ public abstract class Planet extends ActivePoint {
   Latia anL = new Latia(0, 0, 0);
   Latia i_nL = new Latia(0, 0, 0);
 
-  boolean positioned = false;
-
   TrigonometryPoint coordinates = new TrigonometryPoint();
   TrigonometryPoint accordPoint = new TrigonometryPoint();
 
-  public Planet() {
-  }
+  private boolean isPositioned = false;
 
-  public Planet(PlanetSystem system) {
+  public Planet(int id, PlanetSystem system) {
+    super(id);
     this.system = system;
+    this.system.registerPlanet(id, this);
   }
 
-  public boolean isPositioned() {
-    return positioned;
+  private void ensurePosition() {
+    if (!isPositioned) {
+      position(this.system.standardYearTime);
+      isPositioned = true;
+    }
   }
 
-  public void markToBePositioned() {
-    positioned = false;
-  }
-
-  public boolean position(double time) {
+  protected boolean position(double time) {
     double e = 0, ea = 0, e1 = 0; // m = 0;
     double ap = 0, an = 0, i_n = 0, x = 0, y = 0; //, r = 0, a = 0;
 //    double c = -1;
@@ -69,25 +67,22 @@ public abstract class Planet extends ActivePoint {
     //rotate;
     coordinates.setCoordinates(x, y, 0);
     coordinates.rotate(ap, i_n, an);
-
-    positioned = true;
     return true;
   }
 
   // TODO: obsolete
-  public double positionAround(Planet planet) {
-    Planet sun = planet;
+  protected double positionAround(Planet center) {
     double xw, yw;
     double xx, yy, zz;
     double xk;
 
-    xw = accordPoint.getX() - sun.accordPoint.getX();
-    yw = accordPoint.getY() - sun.accordPoint.getY();
+    xw = accordPoint.getX() - center.accordPoint.getX();
+    yw = accordPoint.getY() - center.accordPoint.getY();
 //    zw = accordPoint.getZ() - sun.accordPoint.getZ();
 
-    xx = coordinates.getX() - sun.coordinates.getX();
-    yy = coordinates.getY() - sun.coordinates.getY();
-    zz = coordinates.getZ() - sun.coordinates.getZ();
+    xx = coordinates.getX() - center.coordinates.getX();
+    yy = coordinates.getY() - center.coordinates.getY();
+    zz = coordinates.getZ() - center.coordinates.getZ();
     xk = Trigonometry.degrees((xx * yw - yy * xw) / (xx * xx + yy * yy));
 
     double br = 0.0057683 * Math.sqrt(xx * xx + yy * yy + zz * zz) * xk;
@@ -104,9 +99,16 @@ public abstract class Planet extends ActivePoint {
     return coordinates;
   }
 
-  public double getPosition(Calendar calendar) {
-    system.calculate(calendar);
-  	return positionAround(system.getPlanet(SolarSystem.EARTH));
+  public double getPosition() {
+    Planet center = system.getPlanet(SolarSystem.EARTH);
+    if (this == center) {
+      center = system.getPlanet(SolarSystem.SUN);
+    }
+
+    this.ensurePosition();
+    center.ensurePosition();
+
+    return positionAround(center);
   }
 
 	public ActivePointTrajectory getTrajectory(Calendar start, Calendar end) {

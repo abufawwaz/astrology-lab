@@ -4,9 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Calendar;
 
-import astrolab.astronom.ActivePoint;
 import astrolab.db.Database;
-import astrolab.db.Text;
 import astrolab.web.server.Request;
 import astrolab.web.server.content.LocalizedStringBuffer;
 
@@ -15,21 +13,37 @@ public abstract class Criterion {
   public final static int TYPE_START_TIME = 0;
   public final static int TYPE_LOCATION = 1;
   public final static int TYPE_ZODIAC_SIGN = 2;
+  public final static int TYPE_POSITION_DIRECTION = 3;
+  public final static int TYPE_COURSE_DIRECTION = 4;
+  public final static int TYPE_COURSE_VOID = 5;
 
+  private int id;
   private int type;
   private int action;
   private int factor;
-  private ActivePoint activePoint;
+  private int activePoint;
   private String color;
 
-  protected Criterion(int type, ActivePoint activePoint, String color) {
+  protected Criterion() {
+  }
+
+  protected Criterion(int id, int type, int activePoint, String color) {
+    this.id = id;
     this.type = type;
     this.activePoint = activePoint;
     this.color = color;
   }
 
-  public ActivePoint getActivePoint() {
+  public abstract String getName();
+
+  public abstract String[] getActorTypes();
+
+  public int getActivePoint() {
     return activePoint;
+  }
+
+  public int getId() {
+    return id;
   }
 
   public int getType() {
@@ -37,7 +51,7 @@ public abstract class Criterion {
   }
 
   public int getActor() {
-    return Text.getId(activePoint.getName());
+    return activePoint;
   }
 
   public int getAction() {
@@ -52,13 +66,11 @@ public abstract class Criterion {
     return color;
   }
 
-  public abstract int getMark(Calendar calendar);
+  public abstract int getMark(Calendar periodStart, Calendar periodEnd);
 
   public String toString() {
     LocalizedStringBuffer buffer = new LocalizedStringBuffer();
     buffer.append("<table><tr><td>");
-    buffer.localize(getColor());
-    buffer.append("</td><td>");
     buffer.localize(getActor());
     buffer.append("</td><td>");
     buffer.localize(getAction());
@@ -68,20 +80,27 @@ public abstract class Criterion {
     return buffer.toString();
   }
 
-  public int getMark(Calendar periodStart, Calendar periodEnd) {
-    return Math.max(getMark(periodStart), getMark(periodEnd));
-  }
-
   protected static Criterion read(ResultSet query) throws SQLException {
-    int type = query.getInt(2);
+    int type = query.getInt(3);
     switch (type) {
       case TYPE_START_TIME: {
-        return new CriterionStartTime(query.getInt(3), query.getInt(4)); 
+        return new CriterionStartTime(query.getInt(1), query.getInt(4), query.getInt(5)); 
       }
       case TYPE_ZODIAC_SIGN: {
-        ActivePoint activePoint = ActivePoint.getActivePoint(query.getInt(3));
-        String color = query.getString(6);
-        return new CriterionZodiacSign(activePoint, query.getInt(5), false, color); 
+        String color = query.getString(7);
+        return new CriterionZodiacSign(query.getInt(1), query.getInt(4), query.getInt(6), false, color); 
+      }
+      case TYPE_POSITION_DIRECTION: {
+        String color = query.getString(7);
+        return new CriterionPositionDirection(query.getInt(1), query.getInt(4), query.getInt(6), color); 
+      }
+      case TYPE_COURSE_DIRECTION: {
+        String color = query.getString(7);
+        return new CriterionCourseDirection(query.getInt(1), query.getInt(4), query.getInt(6), color); 
+      }
+      case TYPE_COURSE_VOID: {
+        String color = query.getString(7);
+        return new CriterionCourseVoid(query.getInt(1), query.getInt(4), color); 
       }
     }
     return null;
@@ -89,7 +108,31 @@ public abstract class Criterion {
 
   public void store() {
     int user = Request.getCurrentRequest().getUser();
-    Database.execute("INSERT INTO perspective_elect_criteria VALUES ('" + user + "', '" + getType() + "', '" + getActor() + "', '" + getAction() + "', '" + getFactor() + "', '" + getColor() + "')");
+    Database.execute("INSERT INTO perspective_elect_criteria (criteria_owner, criteria_type, criteria_actor, criteria_action, criteria_factor, criteria_color) VALUES ('" + user + "', '" + getType() + "', '" + getActor() + "', '" + getAction() + "', '" + getFactor() + "', '" + getColor() + "')");
   }
+
+  public void delete() {
+    int user = Request.getCurrentRequest().getUser();
+    Database.execute("DELETE FROM perspective_elect_criteria where criteria_id = " + getId() + " AND criteria_owner = " + user);
+  }
+
+  public void changeColor() {
+    final String[] COLORS = { "red", "orange", "yellow", "green", "blue", "indigo", "black" };
+    int user = Request.getCurrentRequest().getUser();
+    int c = 0;
+    for (; c < COLORS.length; c++) {
+      if (COLORS[c].equals(getColor())) {
+        break;
+      }
+    }
+    if (c < COLORS.length - 1) {
+      c++;
+    } else {
+      c = 0;
+    }
+    Database.execute("UPDATE perspective_elect_criteria SET criteria_color = '" + COLORS[c] + "' WHERE criteria_id = " + getId() + " AND criteria_owner = " + user);
+  }
+
+  protected abstract void store(String[] inputValues);
 
 }

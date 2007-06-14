@@ -4,7 +4,6 @@ import java.util.Calendar;
 
 import astrolab.criteria.Criteria;
 import astrolab.criteria.Criterion;
-import astrolab.criteria.CriterionStartTime;
 import astrolab.web.SVGDisplay;
 import astrolab.web.server.Request;
 import astrolab.web.server.content.LocalizedStringBuffer;
@@ -12,6 +11,7 @@ import astrolab.web.server.content.LocalizedStringBuffer;
 public class DisplayHourlyElectionaryChart extends SVGDisplay {
 
   private final static int HEIGHT = 10;
+  private final static float MINUTE_STEP = ((float) 15) / 60;
 
   private Calendar timestamp;
 
@@ -115,15 +115,8 @@ public class DisplayHourlyElectionaryChart extends SVGDisplay {
   private final void determineStartingTime(Request request, Criterion[] criteria) {
     String timeParameter = request.get("timestamp");
     if (timeParameter != null) {
-System.err.println(" START parameter: " + new java.util.Date(Long.parseLong(timeParameter)));
       timestamp = Calendar.getInstance();
       timestamp.setTimeInMillis(Long.parseLong(timeParameter));
-    } else {
-      for (int i = 0; i < criteria.length; i++) {
-        if (criteria[i] instanceof CriterionStartTime) {
-          timestamp = ((CriterionStartTime) criteria[i]).getStartTime();
-        }
-      }
     }
     if (timestamp == null) {
       timestamp = Calendar.getInstance();
@@ -131,36 +124,36 @@ System.err.println(" START parameter: " + new java.util.Date(Long.parseLong(time
     timestamp.set(Calendar.HOUR_OF_DAY, 0);
     timestamp.set(Calendar.MINUTE, 0);
     timestamp.set(Calendar.SECOND, 0);
-System.err.println(" START: " + timestamp.getTime());
   }
 
   private final void fillMarks(LocalizedStringBuffer buffer, Criterion[] criteria) {
-    int[][] marks = new int[criteria.length][240];
+    int[][] marks = new int[criteria.length][(int) (24 / MINUTE_STEP)];
     int maxValue = 0;
+    Calendar periodStart;
+    Calendar periodEnd = getCalendar(0);
 
-    for (int h = 0; h < 240; h++) {
-      Calendar calendar = getCalendar(((float) h) / 10);
+    for (int h = 0; h < 24 / MINUTE_STEP; h++) {
+      periodStart = periodEnd;
+      periodEnd = getCalendar(MINUTE_STEP * (h + 1));
 
       for (int c = 0; c < criteria.length; c++) {
-        marks[c][h] = criteria[c].getMark(calendar) + ((c > 0) ? marks[c - 1][h] : 0);
+        marks[c][h] = criteria[c].getMark(periodStart, periodEnd) + ((c > 0) ? marks[c - 1][h] : 0);
       }
 
-      if (marks[criteria.length - 1][h] > maxValue) {
+      if ((criteria.length > 0) && marks[criteria.length - 1][h] > maxValue) {
         maxValue = marks[criteria.length - 1][h];
       }
     }
-    if (maxValue == 0) {
-      maxValue = HEIGHT;
-    }
+    maxValue++;
 
     for (int c = criteria.length - 1; c >= 0; c--) {
       buffer.append("<polygon points='");
       buffer.append(String.valueOf(24));
       buffer.append(",0 0,0");
 
-      for (int h = 0; h < 240; h ++) {
+      for (int h = 0; h < 24 / MINUTE_STEP; h ++) {
         buffer.append(" ");
-        buffer.append(String.valueOf(((float) h) / 10));
+        buffer.append(String.valueOf(MINUTE_STEP * h));
         buffer.append(",");
         buffer.append(String.valueOf(((float) HEIGHT * marks[c][h]) / maxValue));
       }
@@ -172,9 +165,11 @@ System.err.println(" START: " + timestamp.getTime());
   }
 
   private final Calendar getCalendar(float hour) {
-    timestamp.set(Calendar.HOUR_OF_DAY, (int) hour);
-    timestamp.set(Calendar.MINUTE, (int) ((hour - (int) hour) * 60));
-    return timestamp;
+    Calendar result = Calendar.getInstance();
+    result.setTime(timestamp.getTime());
+    result.set(Calendar.HOUR_OF_DAY, (int) hour);
+    result.set(Calendar.MINUTE, (int) ((hour - (int) hour) * 60));
+    return result;
   }
 
   public void fillViewBox(Request request, LocalizedStringBuffer buffer) {

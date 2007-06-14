@@ -1,21 +1,21 @@
 package astrolab.astronom.planet;
 
 import astrolab.astronom.util.Latia;
+import astrolab.db.Text;
 
 public class Mars extends Planet {
 
-  public Mars() {
+  private final static int ID = Text.getId(SolarSystem.MARS);
+
+  public Mars(PlanetSystem system) {
+    super(ID, system);
+
     mL = new Latia(319.5294, 19139.8585, .2E-3);
     eL = new Latia(.09331, .9E-4, 0);
     au = 1.5237;
     apL = new Latia(285.4318, 1.0698, .1E-3);
     anL = new Latia(48.7864, .77099, 0);
     i_nL = new Latia(1.8503, -.7E-3, 0);
-  }
-
-  public Mars(PlanetSystem system) {
-    this();
-    this.system = system;
   }
 
   public String getName() {

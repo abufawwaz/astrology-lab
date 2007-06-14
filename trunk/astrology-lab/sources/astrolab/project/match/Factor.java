@@ -1,9 +1,8 @@
 package astrolab.project.match;
 
+import astrolab.astronom.ActivePoint;
 import astrolab.astronom.houses.HouseSystem;
 import astrolab.astronom.houses.PlacidusSystem;
-import astrolab.astronom.planet.Planet;
-import astrolab.astronom.planet.SolarSystem;
 import astrolab.astronom.util.Zodiac;
 import astrolab.db.Event;
 
@@ -140,11 +139,8 @@ public abstract class Factor {
 
     if (isPlanet()) {
       factor = new FactorPlanet(name, generalInfluence);
-      SolarSystem solar = new SolarSystem();
-      Planet earth = solar.getPlanet(SolarSystem.EARTH);
-      solar.calculate(event);
 
-      factor.position = solar.getPlanet(name).positionAround(earth);
+      factor.position = ActivePoint.getActivePoint(name, event.getTime()).getPosition();
     } else {
 
       int index = Integer.parseInt(name.substring(name.indexOf(" ") + 1));

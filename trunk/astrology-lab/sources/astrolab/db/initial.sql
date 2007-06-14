@@ -185,6 +185,7 @@ create table project_classmates (
 ) ENGINE=InnoDB;
 
 create table perspective_elect_criteria (
+  criteria_id INT UNSIGNED NOT NULL UNIQUE PRIMARY KEY AUTO_INCREMENT,
   criteria_owner INT UNSIGNED NOT NULL REFERENCES text (id),
   criteria_type INT UNSIGNED NOT NULL,
   criteria_actor INT UNSIGNED NOT NULL REFERENCES text (id),
@@ -231,6 +232,9 @@ insert into text values (2108, NULL, 'Uranus', 'Uranus', 'Уран');
 insert into text values (2109, NULL, 'Neptune', 'Neptune', 'Нептун');
 insert into text values (2110, NULL, 'Pluto', 'Pluto', 'Плутон');
 insert into text values (2201, NULL, 'Gamma', 'Gamma', 'Гама');
+insert into text values (2901, NULL, 'Direct', 'Direct', 'Директен');
+insert into text values (2902, NULL, 'Stationary', 'Stationary', 'Стационарен');
+insert into text values (2903, NULL, 'Retrograde', 'Retrograde', 'Ретрограден');
 
 insert into text values (3001, NULL, 'red', 'red', 'red');
 insert into text values (3002, NULL, 'orange', 'orange', 'orange');

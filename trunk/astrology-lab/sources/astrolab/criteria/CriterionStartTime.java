@@ -14,8 +14,8 @@ public class CriterionStartTime extends Criterion {
   public final static String REQUEST_PARAMETER = "criterion_start_time";
   private Calendar time;
 
-  CriterionStartTime(int time1, int time2) {
-    super(Criterion.TYPE_START_TIME, null, "black");
+  CriterionStartTime(int id, int time1, int time2) {
+    super(id, Criterion.TYPE_START_TIME, 0, "black");
 
     long timestamp = time2;
     timestamp <<= 31;
@@ -25,8 +25,8 @@ public class CriterionStartTime extends Criterion {
     this.time.setTimeInMillis(timestamp);
   }
 
-  public CriterionStartTime(Calendar time) {
-    super(Criterion.TYPE_START_TIME, null, "black");
+  public CriterionStartTime(int id, Calendar time) {
+    super(id, Criterion.TYPE_START_TIME, 0, "black");
     this.time = time;
   }
 
@@ -38,8 +38,8 @@ public class CriterionStartTime extends Criterion {
     return time;
   }
 
-  public int getMark(Calendar calendar) {
-    return (calendar.getTimeInMillis() >= time.getTimeInMillis()) ? 1 : 0;
+  public int getMark(Calendar periodStart, Calendar periodEnd) {
+    return (periodStart.getTimeInMillis() >= time.getTimeInMillis()) ? 1 : 0;
   }
 
   public String toString() {
@@ -59,7 +59,18 @@ public class CriterionStartTime extends Criterion {
     int time2 = (int) (timestamp >> 31);
 
     Database.execute("DELETE FROM perspective_elect_criteria WHERE criteria_owner = " + user + " AND criteria_type = " + getType());
-    Database.execute("INSERT INTO perspective_elect_criteria VALUES ('" + user + "', '" + getType() + "', '" + time1 + "', '" + time2 + "', '0', 'black')");
+    Database.execute("INSERT INTO perspective_elect_criteria (criteria_owner, criteria_type, criteria_actor, criteria_action, criteria_factor, criteria_color) VALUES ('" + user + "', '" + getType() + "', '" + time1 + "', '" + time2 + "', '0', 'black')");
+  }
+
+  public String getName() {
+    return "StartTime";
+  }
+
+  public String[] getActorTypes() {
+    return new String[0];
+  }
+
+  protected void store(String[] inputValues) {
   }
 
 }

@@ -1,7 +1,9 @@
 package astrolab.web.component.chart;
 
+import java.util.Calendar;
+
+import astrolab.astronom.ActivePoint;
 import astrolab.astronom.util.Zodiac;
-import astrolab.astronom.planet.Planet;
 import astrolab.astronom.planet.SolarSystem;
 import astrolab.db.Event;
 import astrolab.db.Text;
@@ -17,26 +19,18 @@ public class TablePlanets extends HTMLDisplay {
   }
 
 	public void fillBodyContent(Request request, LocalizedStringBuffer buffer) {
-		SolarSystem solar = new SolarSystem();
-    Planet center = solar.getPlanet(SolarSystem.EARTH);
-    solar.calculate(Event.getSelectedEvent());
+		Calendar calendar = Event.getSelectedEvent().getTime();
 
 		buffer.append("<table cellspacing='0'>");
-    append(buffer, solar.getPlanet(SolarSystem.SUN), center);
-    append(buffer, solar.getPlanet(SolarSystem.MOON), center);
-    append(buffer, solar.getPlanet(SolarSystem.MERCURY), center);
-    append(buffer, solar.getPlanet(SolarSystem.VENUS), center);
-    append(buffer, solar.getPlanet(SolarSystem.MARS), center);
-    append(buffer, solar.getPlanet(SolarSystem.JUPITER), center);
-    append(buffer, solar.getPlanet(SolarSystem.SATURN), center);
-    append(buffer, solar.getPlanet(SolarSystem.URANUS), center);
-    append(buffer, solar.getPlanet(SolarSystem.NEPTUNE), center);
-    append(buffer, solar.getPlanet(SolarSystem.PLUTO), center);
+    for (String planet: SolarSystem.PLANETS) {
+      append(buffer, ActivePoint.getActivePoint(planet, calendar));
+    }
 		buffer.append("</table>");
 	}
 
-	private void append(LocalizedStringBuffer buffer, Planet planet, Planet center) {
-    double position = planet.positionAround(center);
+	private void append(LocalizedStringBuffer buffer, ActivePoint planet) {
+    double position = planet.getPosition();
+
     buffer.newline();
     buffer.append("<tr title='");
     buffer.append(Text.getText(planet.getName()));

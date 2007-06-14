@@ -1,21 +1,21 @@
 package astrolab.astronom.planet;
 
 import astrolab.astronom.util.Latia;
+import astrolab.db.Text;
 
 public class Neptune extends Planet {
 
-  public Neptune() {
+  private final static int ID = Text.getId(SolarSystem.NEPTUNE);
+
+  public Neptune(PlanetSystem system) {
+    super(ID, system);
+
     mL = new Latia(30.13294, 240.45516, 0);
     eL = new Latia(.00913, -.00127, 0);
     au = 30.11375;
     apL = new Latia(284.1683, -21.6329, 0);
     anL = new Latia(130.68415, 1.1005, 0);
     i_nL = new Latia(1.7794, -.0098, 0);
-  }
-
-  public Neptune(PlanetSystem system) {
-    this();
-    this.system = system;
   }
 
   public String getName() {
