@@ -1,0 +1,70 @@
+package astrolab.criteria;
+
+import java.util.Calendar;
+
+import astrolab.astronom.ActivePoint;
+import astrolab.db.Text;
+
+public class CriterionPositionDirection extends Criterion {
+
+  public final static String DIRECTION_DIRECT = "Direct";
+  public final static String DIRECTION_STATIONARY = "Stationary";
+  public final static String DIRECTION_RETROGRADE = "Retrograde";
+
+  public final static int ID_DIRECT = Text.getId(DIRECTION_DIRECT);
+  public final static int ID_STATIONARY = Text.getId(DIRECTION_STATIONARY);
+  public final static int ID_RETROGRADE = Text.getId(DIRECTION_RETROGRADE);
+
+  private int direction;
+
+  public CriterionPositionDirection() {
+    super();
+  }
+
+  public CriterionPositionDirection(int id, int activePoint, int direction, String color) {
+    super(id, TYPE_POSITION_DIRECTION, activePoint, color);
+    this.direction = direction;
+  }
+
+  public int getMark(Calendar periodStart, Calendar periodEnd) {
+    double position1 = ActivePoint.getActivePoint(getActivePoint(), periodStart).getPosition();
+    periodStart.add(Calendar.HOUR, 1);
+    double position2 = ActivePoint.getActivePoint(getActivePoint(), periodStart).getPosition();
+    periodStart.add(Calendar.HOUR, -1);
+
+    if (position2 < position1 - 180) {
+      position2 += 360;
+    }
+    if (position2 > position1 + 180) {
+      position2 -= 360;
+    }
+ 
+    if (direction == ID_DIRECT) {
+      return (position2 > position1) ? 1 : 0;
+    } else if (direction == ID_STATIONARY) {
+      return (Math.abs(position2 - position1) < 0.0001) ? 1 : 0;
+    } else if (direction == ID_RETROGRADE) {
+      return (position2 < position1) ? 1 : 0;
+    } else {
+      return 0;
+    }
+  }
+
+  public String getName() {
+    return "PositionDirection";
+  }
+
+  public String[] getActorTypes() {
+    return new String[] { "Planet", "'position'", "Direction" };
+  }
+
+  public int getFactor() {
+    return direction;
+  }
+
+  protected void store(String[] inputValues) {
+    int direction = Integer.parseInt(inputValues[2]);
+    new CriterionPositionDirection(getId(), Integer.parseInt(inputValues[0]), direction, "blue").store();
+  }
+
+}
