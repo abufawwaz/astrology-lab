@@ -38,10 +38,6 @@ public class ComponentSelectEvent {
   }
 
   private static void fill(LocalizedStringBuffer buffer, Request request, Event event) {
-    if (event.getEvent() == null) {
-      return;
-    }
-
     buffer.append("<tr>");
 
     String controlId = "controller_" + event.getId(); 
@@ -49,11 +45,11 @@ public class ComponentSelectEvent {
     buffer.append("<td id='");
     buffer.append(controlId);
     buffer.append("'>");
-    buffer.append(event.getEvent());
+    buffer.localize(event.getId());
     buffer.append("</td>");
 
     buffer.append("<td>");
-    buffer.append(event.getTime().toString());
+    buffer.append(event.toSimpleString());
     buffer.append("</td>");
 
     buffer.append("<td>");

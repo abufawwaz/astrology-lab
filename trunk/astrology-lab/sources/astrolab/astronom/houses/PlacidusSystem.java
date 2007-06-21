@@ -1,12 +1,12 @@
 package astrolab.astronom.houses;
 
-import astrolab.db.Event;
+import astrolab.astronom.SpacetimeEvent;
 import astrolab.astronom.util.Zodiac;
 import astrolab.astronom.util.Trigonometry;
 
 public class PlacidusSystem extends HouseSystem {
 
-  public PlacidusSystem(Event event) {
+  public PlacidusSystem(SpacetimeEvent event) {
     super(event);
   }
 

@@ -3,7 +3,7 @@ package astrolab.web.project.finance.balance;
 import java.sql.ResultSet;
 import java.util.Date;
 
-import astrolab.astronom.Time;
+import astrolab.astronom.SpacetimeEvent;
 import astrolab.db.Database;
 import astrolab.db.RecordIterator;
 import astrolab.project.geography.Location;
@@ -32,8 +32,7 @@ public class PurchaseIterator extends RecordIterator {
     double quantity = set.getDouble(8);
     String measure = set.getString(9);
 
-    int location = RelocationRecord.getLocationOfPerson(owner, new Time(date).getTimeInMillis());
-    Time timestamp = new Time(date.getTime(), Location.getLocation(location).getTimeZone());
+    SpacetimeEvent timestamp = new SpacetimeEvent(date.getTime());
 
     return new Purchase(owner, operation, item_id, item_type, timestamp, price, currency, quantity, measure);
   }

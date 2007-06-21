@@ -1,8 +1,8 @@
 package astrolab.criteria;
 
-import java.util.Calendar;
+import java.util.TimeZone;
 
-import astrolab.astronom.Time;
+import astrolab.astronom.SpacetimeEvent;
 import astrolab.db.Database;
 import astrolab.db.Text;
 import astrolab.web.component.time.ComponentSelectTime;
@@ -12,7 +12,7 @@ import astrolab.web.server.content.LocalizedStringBuffer;
 public class CriterionStartTime extends Criterion {
 
   public final static String REQUEST_PARAMETER = "criterion_start_time";
-  private Calendar time;
+  private SpacetimeEvent time;
 
   CriterionStartTime(int id, int time1, int time2) {
     super(id, Criterion.TYPE_START_TIME, 0, "black");
@@ -21,11 +21,11 @@ public class CriterionStartTime extends Criterion {
     timestamp <<= 31;
     timestamp |= time1;
 
-    this.time = Calendar.getInstance();
-    this.time.setTimeInMillis(timestamp);
+    // TODO: check the time zone
+    this.time = new SpacetimeEvent(timestamp);
   }
 
-  public CriterionStartTime(int id, Calendar time) {
+  public CriterionStartTime(int id, SpacetimeEvent time) {
     super(id, Criterion.TYPE_START_TIME, 0, "black");
     this.time = time;
   }
@@ -34,11 +34,11 @@ public class CriterionStartTime extends Criterion {
     return Text.getId("Time");
   }
 
-  public Calendar getStartTime() {
+  public SpacetimeEvent getStartTime() {
     return time;
   }
 
-  public int getMark(Calendar periodStart, Calendar periodEnd) {
+  public int getMark(SpacetimeEvent periodStart, SpacetimeEvent periodEnd) {
     return (periodStart.getTimeInMillis() >= time.getTimeInMillis()) ? 1 : 0;
   }
 
@@ -47,7 +47,7 @@ public class CriterionStartTime extends Criterion {
     buffer.append("<table><tr><td>");
     buffer.localize("Time");
     buffer.append("</td><td>");
-    ComponentSelectTime.fill(buffer, new Time(time.getTime()), REQUEST_PARAMETER, true);
+    ComponentSelectTime.fill(buffer, time, REQUEST_PARAMETER, true);
     buffer.append("</td></tr></table>");
     return buffer.toString();
   }
@@ -71,6 +71,11 @@ public class CriterionStartTime extends Criterion {
   }
 
   protected void store(String[] inputValues) {
+  }
+
+  public void toString(LocalizedStringBuffer output) {
+    output.localize("Start at");
+    output.append(time.toString());
   }
 
 }

@@ -1,6 +1,6 @@
 package astrolab.project.sleep;
 
-import astrolab.astronom.Time;
+import astrolab.astronom.SpacetimeEvent;
 import astrolab.db.Event;
 import astrolab.project.relocation.RelocationRecord;
 import astrolab.web.Modify;
@@ -17,9 +17,9 @@ public class ModifySleepRecord extends Modify {
     try {
       int user = request.getUser();
       // TODO: fix this!
-      int location = RelocationRecord.getLocationOfPerson(user, new Time(request.get("_sleep_from"), 0).getTimeInMillis());
-      long sleep_from = new Time(request.get("_sleep_from"), location).getTimeInMillis();
-      long sleep_to = new Time(request.get("_sleep_to"), location).getTimeInMillis();
+      int location = RelocationRecord.getLocationOfPerson(user, new SpacetimeEvent(request.get("_sleep_from"), 0).getTimeInMillis());
+      long sleep_from = new SpacetimeEvent(request.get("_sleep_from"), location).getTimeInMillis();
+      long sleep_to = new SpacetimeEvent(request.get("_sleep_to"), location).getTimeInMillis();
 
       int record = SleepRecord.store(user, sleep_from, sleep_to, ComponentSelectAccuracy.retrieve(request), ComponentSelectSource.retrieve(request));
       Event.setSelectedEvent(record, 1);

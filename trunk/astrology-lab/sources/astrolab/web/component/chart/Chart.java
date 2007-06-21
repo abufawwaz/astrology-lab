@@ -1,9 +1,9 @@
 package astrolab.web.component.chart;
 
+import astrolab.astronom.SpacetimeEvent;
 import astrolab.astronom.houses.HouseSystem;
 import astrolab.astronom.houses.PlacidusSystem;
 import astrolab.db.Event;
-import astrolab.project.geography.Location;
 import astrolab.web.Display;
 import astrolab.web.SVGDisplay;
 import astrolab.web.component.ComponentControllable;
@@ -23,7 +23,7 @@ public class Chart extends SVGDisplay {
   }
 
   public void fillBodyContent(Request request, LocalizedStringBuffer buffer) {
-    Event event = getSelectedEvent();
+    SpacetimeEvent event = getSelectedEvent();
 		HouseSystem houses = new PlacidusSystem(event);
 		double offset = houses.getHouse(1);
 
@@ -40,13 +40,13 @@ public class Chart extends SVGDisplay {
     buffer.append("</svg>");
 	}
 
-  private final static Event getSelectedEvent() {
+  private final static SpacetimeEvent getSelectedEvent() {
     String chartEvent = Request.getCurrentRequest().get(KEY_CHART_EVENT);
     String chartTimestamp = Request.getCurrentRequest().get(KEY_CHART_TIMESTAMP);
     if ((chartEvent != null) && (chartEvent.trim().length() > 0)) {
       return new Event(Integer.parseInt(chartEvent));
     } else if ((chartTimestamp != null) && (chartTimestamp.trim().length() > 0)) {
-      return new Event(Location.getLocation(1001003), Long.parseLong(chartTimestamp));
+      return new SpacetimeEvent(Long.parseLong(chartTimestamp));
     } else {
       return Event.getSelectedEvent();
     }

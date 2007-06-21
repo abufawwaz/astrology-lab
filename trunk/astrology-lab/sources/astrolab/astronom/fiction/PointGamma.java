@@ -1,11 +1,7 @@
 package astrolab.astronom.fiction;
 
-import java.util.Calendar;
-
-import astrolab.astronom.util.Zodiac;
-
-import astrolab.astronom.houses.PlacidusSystem;
-import astrolab.astronom.track.ActivePointTrajectory;
+import astrolab.astronom.ActivePoint;
+import astrolab.astronom.houses.HouseSystem;
 import astrolab.db.Text;
 
 public class PointGamma extends ActivePointFictional {
@@ -32,7 +28,7 @@ public class PointGamma extends ActivePointFictional {
 	}
 
 	public double getStart() {
-		return (startFrom == START_FROM_ASCENDANT) ? new PlacidusSystem(getBirth()).getHouse(1) : 0;
+		return (startFrom == START_FROM_ASCENDANT) ? ActivePoint.getActivePoint(HouseSystem.HOUSE_1, getBirth()).getPosition() : 0;
 	}
 
 	public double getPosition() {
@@ -46,8 +42,8 @@ public class PointGamma extends ActivePointFictional {
 		return "<text x='0' y='0'>G</text>";
 	}
 
-	public ActivePointTrajectory getTrajectory(Calendar start, Calendar end) {
-		return PointGammaTrajectory.getTrajectory(this, start, end, YEAR * cycle);
-	}
+  protected final int getSystemType() {
+    return SYSTEM_OTHER;
+  }
 
 }

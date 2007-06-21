@@ -1,8 +1,7 @@
 package astrolab.web.component.chart;
 
-import java.util.Calendar;
-
 import astrolab.astronom.ActivePoint;
+import astrolab.astronom.SpacetimeEvent;
 import astrolab.astronom.planet.SolarSystem;
 import astrolab.db.Event;
 import astrolab.db.Text;
@@ -21,14 +20,13 @@ public class ChartPartPlanets extends SVGDisplay {
 		fillContent(request, buffer, Event.getSelectedEvent(), 0.0, true);
 	}
 
-	public void fillContent(Request request, LocalizedStringBuffer buffer, Event event, double offset, boolean ownImage) {
-    Calendar calendar = event.getTime();
-		radius = request.getConstraints().getRadius();
+	public void fillContent(Request request, LocalizedStringBuffer buffer, SpacetimeEvent event, double offset, boolean ownImage) {
+    radius = request.getConstraints().getRadius();
 		x = request.getConstraints().getWidth() / 2;
 		y = request.getConstraints().getHeight() / 2;
 
 		for (String planet: SolarSystem.PLANETS) {
-			fillPlanet(ActivePoint.getActivePoint(planet, calendar), offset, buffer);
+			fillPlanet(ActivePoint.getActivePoint(planet, event), offset, buffer);
 		}
 
 // TODO: restore gamma

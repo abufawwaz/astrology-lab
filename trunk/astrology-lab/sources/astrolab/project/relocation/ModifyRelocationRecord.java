@@ -1,6 +1,6 @@
 package astrolab.project.relocation;
 
-import astrolab.astronom.Time;
+import astrolab.astronom.SpacetimeEvent;
 import astrolab.project.geography.ComponentSelectLocation;
 import astrolab.web.Modify;
 import astrolab.web.component.time.ComponentSelectTime;
@@ -13,7 +13,7 @@ public class ModifyRelocationRecord extends Modify {
       int user = request.getUser();
       int location = ComponentSelectLocation.retrieve(request);
 
-      long timestamp = new Time(request.get(ComponentSelectTime.PARAMETER_KEY), location).getTimeInMillis();
+      long timestamp = new SpacetimeEvent(request.get(ComponentSelectTime.PARAMETER_KEY), location).getTimeInMillis();
 
       if (user > 0 && location > 0) {
         RelocationRecord.store(user, timestamp, location);

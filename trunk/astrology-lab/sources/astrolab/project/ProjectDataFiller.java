@@ -7,7 +7,7 @@ import java.sql.Timestamp;
 import java.util.Hashtable;
 
 import astrolab.astronom.ActivePoint;
-import astrolab.astronom.Time;
+import astrolab.astronom.SpacetimeEvent;
 import astrolab.db.Database;
 import astrolab.tools.Log;
 
@@ -57,7 +57,7 @@ public class ProjectDataFiller extends Thread {
         while (set.next()) {
           isEmpty = false;
           Timestamp time = set.getTimestamp(1);
-          Time astrotime = new Time(time);
+          SpacetimeEvent astrotime = new SpacetimeEvent(time.getTime());
 //          solar.calculate(new InMemoryEvent(astrotime)); // TODO: calculate based on time!
           position = ActivePoint.getActivePoint(key, astrotime).getPosition();
 

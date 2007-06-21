@@ -26,24 +26,31 @@ public class DisplayElectionaryCriteriaList extends HTMLFormDisplay {
   public void fillBodyContent(Request request, LocalizedStringBuffer buffer) {
     checkDeletionRequest(request, buffer);
 
+    Properties parameters;
     Criterion[] criteria = Criteria.getCriteria();
     buffer.append("<table>");
     for (int i = 0; i < criteria.length; i++) {
-      buffer.append("<tr><td>");
-      Properties parameters = new Properties();
-      parameters.put(PARAMETER_ACTION, ACTION_DELETE);
-      parameters.put(PARAMETER_TARGET, String.valueOf(criteria[i].getId()));
-      ComponentLink.fillLink(buffer, request.getDisplay().getClass(), parameters, "X");
+      buffer.append("<tr>");
 
-      buffer.append("</td><td>");
+      buffer.append("<td>");
       parameters = new Properties();
       parameters.put(PARAMETER_ACTION, ACTION_COLOR);
       parameters.put(PARAMETER_TARGET, String.valueOf(criteria[i].getId()));
       ComponentLink.fillLink(buffer, request.getDisplay().getClass(), parameters, criteria[i].getColor());
+      buffer.append("</td>");
 
-      buffer.append("</td><td>");
-      buffer.append(criteria[i].toString());
-      buffer.append("</td></tr>");
+      buffer.append("<td>");
+      criteria[i].toString(buffer);
+      buffer.append("</td>");
+
+      buffer.append("<td>");
+      parameters = new Properties();
+      parameters.put(PARAMETER_ACTION, ACTION_DELETE);
+      parameters.put(PARAMETER_TARGET, String.valueOf(criteria[i].getId()));
+      ComponentLink.fillLink(buffer, request.getDisplay().getClass(), parameters, "X");
+      buffer.append("</td>");
+
+      buffer.append("</tr>");
     }
     buffer.append("</table>");
   }

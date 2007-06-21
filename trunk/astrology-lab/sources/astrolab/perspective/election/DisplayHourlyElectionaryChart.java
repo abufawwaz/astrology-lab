@@ -2,6 +2,7 @@ package astrolab.perspective.election;
 
 import java.util.Calendar;
 
+import astrolab.astronom.SpacetimeEvent;
 import astrolab.criteria.Criteria;
 import astrolab.criteria.Criterion;
 import astrolab.web.SVGDisplay;
@@ -129,8 +130,8 @@ public class DisplayHourlyElectionaryChart extends SVGDisplay {
   private final void fillMarks(LocalizedStringBuffer buffer, Criterion[] criteria) {
     int[][] marks = new int[criteria.length][(int) (24 / MINUTE_STEP)];
     int maxValue = 0;
-    Calendar periodStart;
-    Calendar periodEnd = getCalendar(0);
+    SpacetimeEvent periodStart;
+    SpacetimeEvent periodEnd = getCalendar(0);
 
     for (int h = 0; h < 24 / MINUTE_STEP; h++) {
       periodStart = periodEnd;
@@ -164,12 +165,12 @@ public class DisplayHourlyElectionaryChart extends SVGDisplay {
     }
   }
 
-  private final Calendar getCalendar(float hour) {
+  private final SpacetimeEvent getCalendar(float hour) {
     Calendar result = Calendar.getInstance();
     result.setTime(timestamp.getTime());
     result.set(Calendar.HOUR_OF_DAY, (int) hour);
     result.set(Calendar.MINUTE, (int) ((hour - (int) hour) * 60));
-    return result;
+    return new SpacetimeEvent(result.getTimeInMillis());
   }
 
   public void fillViewBox(Request request, LocalizedStringBuffer buffer) {

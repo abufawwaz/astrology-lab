@@ -2,6 +2,7 @@ package astrolab.perspective.election;
 
 import java.util.Calendar;
 
+import astrolab.astronom.SpacetimeEvent;
 import astrolab.criteria.Criteria;
 import astrolab.criteria.Criterion;
 import astrolab.criteria.CriterionStartTime;
@@ -18,7 +19,7 @@ public class DisplayDailyElectionaryChart extends SVGDisplay {
   private final static int HOUR_STEP = 6;
 
   private int DAYS = 31;
-  private Calendar timestamp;
+  private SpacetimeEvent timestamp;
 
   public DisplayDailyElectionaryChart() {
     super.addAction("timestamp", "javascript:updateTime(message)");
@@ -45,27 +46,24 @@ public class DisplayDailyElectionaryChart extends SVGDisplay {
       }
     }
     if (timestamp == null) {
-      timestamp = Calendar.getInstance();
+      timestamp = new SpacetimeEvent(System.currentTimeMillis());
     }
-    timestamp.set(Calendar.HOUR, 0);
-    timestamp.set(Calendar.MINUTE, 0);
-    timestamp.set(Calendar.SECOND, 0);
-    DAYS = timestamp.getActualMaximum(Calendar.DAY_OF_MONTH);
+    DAYS = timestamp.get(SpacetimeEvent.MAX_DAY_OF_MONTH);
   }
 
-  private final Calendar getCalendar(int day, int hour) {
+  private final SpacetimeEvent getCalendar(int day, int hour) {
     Calendar result = Calendar.getInstance();
-    result.setTime(timestamp.getTime());
+    result.setTimeInMillis(timestamp.getTimeInMillis());
     result.set(Calendar.DAY_OF_MONTH, day + 1);
     result.set(Calendar.HOUR_OF_DAY, hour + 1);
-    return result;
+    return new SpacetimeEvent(result.getTimeInMillis());
   }
 
   private final void fillMarks(LocalizedStringBuffer buffer, Criterion[] criteria) {
     int[][] marks = new int[criteria.length][DAYS * 24 / HOUR_STEP];
     int maxValue = 0;
-    Calendar periodStart;
-    Calendar periodEnd;
+    SpacetimeEvent periodStart;
+    SpacetimeEvent periodEnd;
 
     for (int d = 0; d < DAYS; d ++) {
       periodEnd = getCalendar(d, 0);

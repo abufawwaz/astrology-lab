@@ -1,6 +1,6 @@
 package astrolab.web.project.finance.balance;
 
-import astrolab.astronom.Time;
+import astrolab.astronom.SpacetimeEvent;
 import astrolab.db.Text;
 import astrolab.project.relocation.RelocationRecord;
 import astrolab.web.Modify;
@@ -26,8 +26,8 @@ public class ModifyPurchase extends Modify {
       String currency = ComponentSelectChoice.retrieve(request, "_currency");
       double quantity = ComponentSelectNumber.retrieve(request, "_quantity");
       String measure = ComponentSelectChoice.retrieve(request, "_measure");
-      int location = RelocationRecord.getLocationOfPerson(user, new Time(request.get(ComponentSelectTime.PARAMETER_KEY), 0).getTimeInMillis());
-      long timestamp = new Time(request.get(ComponentSelectTime.PARAMETER_KEY), location).getTimeInMillis();
+      int location = RelocationRecord.getLocationOfPerson(user, new SpacetimeEvent(request.get(ComponentSelectTime.PARAMETER_KEY), 0).getTimeInMillis());
+      long timestamp = new SpacetimeEvent(request.get(ComponentSelectTime.PARAMETER_KEY), location).getTimeInMillis();
 
       Purchase.store(user, operation, 0, item_type, price, currency, quantity, measure, timestamp);
     } catch (Exception e) {

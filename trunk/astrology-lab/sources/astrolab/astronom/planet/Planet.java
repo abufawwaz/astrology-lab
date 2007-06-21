@@ -1,9 +1,6 @@
 package astrolab.astronom.planet;
 
-import java.util.Calendar;
-
 import astrolab.astronom.ActivePoint;
-import astrolab.astronom.track.ActivePointTrajectory;
 import astrolab.astronom.util.*;
 
 public abstract class Planet extends ActivePoint {
@@ -30,7 +27,7 @@ public abstract class Planet extends ActivePoint {
 
   private void ensurePosition() {
     if (!isPositioned) {
-      position(this.system.standardYearTime);
+      position(this.system.spacetimeEvent.getStandardYearTime());
       isPositioned = true;
     }
   }
@@ -70,8 +67,7 @@ public abstract class Planet extends ActivePoint {
     return true;
   }
 
-  // TODO: obsolete
-  protected double positionAround(Planet center) {
+  private double positionAround(Planet center) {
     double xw, yw;
     double xx, yy, zz;
     double xk;
@@ -111,12 +107,12 @@ public abstract class Planet extends ActivePoint {
     return positionAround(center);
   }
 
-	public ActivePointTrajectory getTrajectory(Calendar start, Calendar end) {
-		return null;
-	}
+  public String getIcon() {
+    return null;
+  }
 
-	public String getIcon() {
-		return null;
-	}
+  public int getSystemType() {
+    return ActivePoint.SYSTEM_PLANET;
+  }
 
 }

@@ -76,7 +76,7 @@ public class DisplayElectionaryCriteriaComponents extends HTMLDisplay {
     buffer.append("<td id='");
     buffer.append(controlId);
     buffer.append("'>");
-    buffer.localize(CriterionPositionDirection.DIRECTION_DIRECT);
+    buffer.append(Text.getDescriptiveId(id));
     buffer.append("</td>");
 
     id = Text.getId(CriterionPositionDirection.DIRECTION_STATIONARY);
@@ -85,7 +85,7 @@ public class DisplayElectionaryCriteriaComponents extends HTMLDisplay {
     buffer.append("<td id='");
     buffer.append(controlId);
     buffer.append("'>");
-    buffer.localize(CriterionPositionDirection.DIRECTION_STATIONARY);
+    buffer.append(Text.getDescriptiveId(id));
     buffer.append("</td>");
 
     id = Text.getId(CriterionPositionDirection.DIRECTION_RETROGRADE);
@@ -94,7 +94,7 @@ public class DisplayElectionaryCriteriaComponents extends HTMLDisplay {
     buffer.append("<td id='");
     buffer.append(controlId);
     buffer.append("'>");
-    buffer.localize(CriterionPositionDirection.DIRECTION_RETROGRADE);
+    buffer.append(Text.getDescriptiveId(id));
     buffer.append("</td>");
 
     buffer.append("</tr></table>");

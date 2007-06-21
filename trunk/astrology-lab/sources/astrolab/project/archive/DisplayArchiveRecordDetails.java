@@ -22,18 +22,18 @@ public class DisplayArchiveRecordDetails extends HTMLDisplay {
     buffer.append(event.getSubject());
     buffer.append("</td></tr>");
 
-    if (event.getSubjectId() != event.getEventId()) {
+    if (event.getSubjectId() != event.getId()) {
       buffer.append("<tr><td>");
       buffer.localize("Event");
       buffer.append(":</td><td>");
-      buffer.append(event.getEvent());
+      buffer.localize(event.getId());
       buffer.append("</td></tr>");
     }
 
     buffer.append("<tr><td>");
     buffer.localize("Time of occurance");
     buffer.append(":</td><td>");
-    buffer.append(event.getTime().toString());
+    buffer.append(event.toSimpleString());
     buffer.append("</td></tr>");
     buffer.append("<tr><td>");
     buffer.localize("Accuracy");

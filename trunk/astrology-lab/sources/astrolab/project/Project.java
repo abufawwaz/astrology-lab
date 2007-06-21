@@ -5,7 +5,7 @@ import java.sql.SQLException;
 import java.util.Date;
 import java.util.TimeZone;
 
-import astrolab.astronom.Time;
+import astrolab.astronom.SpacetimeEvent;
 import astrolab.db.Database;
 import astrolab.formula.FormulaeBase;
 import astrolab.formula.FormulaePeriod;
@@ -18,8 +18,8 @@ public class Project {
   private int id;
   private String name;
   private ProjectDataKey[] keys;
-  private Time minTime = null;
-  private Time maxTime = null;
+  private SpacetimeEvent minTime = null;
+  private SpacetimeEvent maxTime = null;
 
   public Project(int id, String name) {
     this.id = id;
@@ -42,15 +42,15 @@ public class Project {
     return keys;
   }
 
-  public Time getMinTime() {
+  public SpacetimeEvent getMinTime() {
     if (minTime == null) {
       ResultSet set = Database.executeQuery("SELECT time FROM " + Project.TABLE_PREFIX + getName() + " ORDER BY time ASC LIMIT 1");
       try {
         if (set.next()) {
           Date timestamp = set.getTimestamp(1);
-          minTime = new Time(timestamp.getTime(), TimeZone.getDefault()); // TODO: fix the time zone
+          minTime = new SpacetimeEvent(timestamp.getTime());
         } else {
-          minTime = new Time();
+          minTime = new SpacetimeEvent(System.currentTimeMillis());
         }
       } catch (Exception e) {
         e.printStackTrace();
@@ -65,15 +65,15 @@ public class Project {
     return minTime;
   }
 
-  public Time getMaxTime() {
+  public SpacetimeEvent getMaxTime() {
     if (maxTime == null) {
       ResultSet set = Database.executeQuery("SELECT time FROM " + Project.TABLE_PREFIX + getName() + " ORDER BY time DESC LIMIT 1");
       try {
         if (set.next()) {
           Date timestamp = set.getTimestamp(1);
-          maxTime = new Time(timestamp.getTime(), TimeZone.getDefault()); // TODO: fix the time zone
+          maxTime = new SpacetimeEvent(timestamp.getTime());
         } else {
-          maxTime = new Time();
+          maxTime = new SpacetimeEvent(System.currentTimeMillis());
         }
       } catch (Exception e) {
         e.printStackTrace();
@@ -92,7 +92,7 @@ public class Project {
     return new ProjectData(this);
   }
 
-  public ProjectData getData(FormulaeSeries[] series, FormulaeBase base, FormulaePeriod period, Time fromTime, Time toTime) {
+  public ProjectData getData(FormulaeSeries[] series, FormulaeBase base, FormulaePeriod period, SpacetimeEvent fromTime, SpacetimeEvent toTime) {
     checkKey(base.getText());
     for (int f = 0; f < series.length; f++) {
       checkKey(series[f].getText());

@@ -67,7 +67,7 @@ public class DisplayArchiveRecordList extends HTMLFormDisplay {
       buffer.append("' title='");
       buffer.localize(event.getSubject());
       buffer.append("; "); //TODO: add a new line here
-      buffer.append(event.getTime().toSimpleString());
+      buffer.append(event.toSimpleString());
       buffer.append("; ");
       buffer.localize(event.getLocation().getId());
       buffer.append("'>");

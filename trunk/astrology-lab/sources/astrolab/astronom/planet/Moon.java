@@ -7,6 +7,7 @@ public class Moon extends Planet {
 
   private final static int ID = Text.getId(SolarSystem.MOON);
 
+  private boolean isPositioned = false;
   private double position;
 
   public Moon(PlanetSystem system) {
@@ -84,7 +85,12 @@ public class Moon extends Planet {
     return true;
   }
 
-  public double positionAround(Planet planet) {
+  public double getPosition() {
+    if (!isPositioned) {
+      position(this.system.spacetimeEvent.getStandardYearTime());
+      isPositioned = true;
+    }
+
     return position;
   }
 

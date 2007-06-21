@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.TimeZone;
 
-import astrolab.astronom.Time;
+import astrolab.astronom.SpacetimeEvent;
 import astrolab.db.Database;
 import astrolab.db.Personalize;
 import astrolab.db.RecordIterator;
@@ -87,19 +87,19 @@ public class FormulaIterator extends RecordIterator {
     return list.toArray(new FormulaeSeries[0]);
   }
 
-  public static Time getChartFromTime() {
+  public static SpacetimeEvent getChartFromTime() {
     Project project = Projects.getProject();
-    Time result = getChartTime(project, "from_time");
+    SpacetimeEvent result = getChartTime(project, "from_time");
     return (result != null) ? result : project.getMinTime();
   }
 
-  public static Time getChartToTime() {
+  public static SpacetimeEvent getChartToTime() {
     Project project = Projects.getProject();
-    Time result = getChartTime(project, "to_time");
+    SpacetimeEvent result = getChartTime(project, "to_time");
     return (result != null) ? result : project.getMaxTime();
   }
 
-  private final static Time getChartTime(Project project, String key) {
+  private final static SpacetimeEvent getChartTime(Project project, String key) {
     int userId = Personalize.getUser();
     String query = "SELECT " + key + " FROM formula_chart_base" +
         " WHERE project_id = " + project.getId() +
@@ -111,7 +111,7 @@ public class FormulaIterator extends RecordIterator {
       if (set.next()) {
         Date timestamp = set.getTimestamp(1);
         if (timestamp != null) {
-          return new Time(timestamp.getTime(), TimeZone.getDefault()); // TODO: fix the time zone
+          return new SpacetimeEvent(timestamp.getTime());
         }
       }
     } catch (Exception e) {

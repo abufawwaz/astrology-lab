@@ -135,25 +135,26 @@ public abstract class Factor {
   public abstract boolean isPlanet();
 
   Factor copy(Event event, Factors factors) {
-    Factor factor;
-
-    if (isPlanet()) {
-      factor = new FactorPlanet(name, generalInfluence);
-
-      factor.position = ActivePoint.getActivePoint(name, event.getTime()).getPosition();
-    } else {
-
-      int index = Integer.parseInt(name.substring(name.indexOf(" ") + 1));
-      HouseSystem houses = new PlacidusSystem(event);
-
-      double start = houses.getHouse(index);
-      double size = houses.getHouse(index + ((index < 12) ? 1 : -11));
-      factor = new FactorHouse(name, generalInfluence, Zodiac.degree(size - start));
-      factor.position = start;
-    }
-
-    factor.factors = factors;
-    return factor;
+    throw new IllegalStateException("TODO: fix this");
+//    Factor factor;
+//
+//    if (isPlanet()) {
+//      factor = new FactorPlanet(name, generalInfluence);
+//
+//      factor.position = ActivePoint.getActivePoint(name, event.getTime()).getPosition();
+//    } else {
+//
+//      int index = Integer.parseInt(name.substring(name.indexOf(" ") + 1));
+//      HouseSystem houses = new PlacidusSystem(event);
+//
+//      double start = houses.getHouse(index);
+//      double size = houses.getHouse(index + ((index < 12) ? 1 : -11));
+//      factor = new FactorHouse(name, generalInfluence, Zodiac.degree(size - start));
+//      factor.position = start;
+//    }
+//
+//    factor.factors = factors;
+//    return factor;
   }
 
   public String toString() {

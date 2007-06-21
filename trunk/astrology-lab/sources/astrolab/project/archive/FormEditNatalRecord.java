@@ -25,7 +25,7 @@ public class FormEditNatalRecord extends HTMLFormDisplay {
 	public void fillBodyContent(Request request, LocalizedStringBuffer buffer) {
     Event record = Event.getSelectedEvent();
 
-    ComponentSelectNumber.fillHidden(buffer, "_event_id", record.getEventId());
+    ComponentSelectNumber.fillHidden(buffer, "_event_id", record.getId());
     buffer.append("<table border='0'>");
     buffer.append("<tr>");
     buffer.append("<td>");
@@ -70,7 +70,7 @@ public class FormEditNatalRecord extends HTMLFormDisplay {
     buffer.localize("Time of occurance");
     buffer.append(":</td>");
     buffer.append("<td>");
-    ComponentSelectTime.fill(buffer, record.getTime(), ComponentSelectTime.PARAMETER_KEY, false);
+    ComponentSelectTime.fill(buffer, record, ComponentSelectTime.PARAMETER_KEY, false);
     buffer.append("</td>");
     buffer.append("</tr>");
     buffer.append("<tr>");

@@ -1,8 +1,7 @@
 package astrolab.web.component.chart;
 
-import java.util.Calendar;
-
 import astrolab.astronom.ActivePoint;
+import astrolab.astronom.SpacetimeEvent;
 import astrolab.astronom.planet.SolarSystem;
 import astrolab.db.Event;
 import astrolab.web.SVGDisplay;
@@ -16,13 +15,13 @@ public class TrackPartStaticPlanets extends SVGDisplay {
 	}
 
 	public void fillContent(Request request, LocalizedStringBuffer buffer, boolean ownImage) {
-    Calendar calendar = Event.getSelectedEvent().getTime();
+    SpacetimeEvent time = Event.getSelectedEvent();
 
 		if (ownImage) {
 			buffer.append("<svg:svg version='1.1' baseProfile='full' width='500px' height='500px'>");
 		}
 		for (String planet: SolarSystem.PLANETS) {
-			fillPlanet(ActivePoint.getActivePoint(planet, calendar), buffer);
+			fillPlanet(ActivePoint.getActivePoint(planet, time), buffer);
 		}
 
 		if (ownImage) {
