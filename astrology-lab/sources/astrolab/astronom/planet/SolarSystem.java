@@ -1,6 +1,6 @@
 package astrolab.astronom.planet;
 
-import java.util.Calendar;
+import astrolab.astronom.SpacetimeEvent;
 
 public class SolarSystem extends PlanetSystem {
 
@@ -20,8 +20,8 @@ public class SolarSystem extends PlanetSystem {
     SUN, MOON, MERCURY, VENUS, EARTH, MARS, JUPITER, SATURN, URANUS, NEPTUNE, PLUTO
   };
 
-  public SolarSystem(Calendar calendar) {
-    super(calendar);
+  public SolarSystem(SpacetimeEvent spacetime) {
+    super(spacetime);
 
     planets.put(EARTH, new Earth(this));
     planets.put(SUN, new Sun(this));

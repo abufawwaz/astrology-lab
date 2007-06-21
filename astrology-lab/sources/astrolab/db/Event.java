@@ -3,15 +3,13 @@ package astrolab.db;
 import java.sql.ResultSet;
 import java.util.Date;
 
-import astrolab.astronom.Time;
+import astrolab.astronom.SpacetimeEvent;
 
-import astrolab.astronom.util.Trigonometry;
-import astrolab.astronom.util.Zodiac;
 import astrolab.project.archive.DisplayArchiveRecordList;
 import astrolab.project.geography.Location;
 import astrolab.web.server.Request;
 
-public class Event extends AttributedObject {
+public class Event extends SpacetimeEvent {
 
   public final static String ACCURACY_SECOND = "a second";
   public final static String ACCURACY_MINUTE = "a minute";
@@ -35,9 +33,8 @@ public class Event extends AttributedObject {
   public final static String TYPE_FEMALE = "female";
   public final static String TYPE_EVENT = "event";
 
+  private int id;
   private int subject_id;
-  private Time timestamp;
-  private int location;
   private String type;
   private String accuracy;
   private String source;
@@ -85,50 +82,37 @@ public class Event extends AttributedObject {
   }
 
   public Event(int id) {
-    super(id);
+    this.id = id;
 
     try {
       ResultSet set = Database.executeQuery("SELECT subject_id, event_time, location, type, accuracy, source FROM project_archive WHERE event_id = " + id);
   
       if (set != null && set.next()) {
         subject_id = set.getInt(1);
-        location = set.getInt(3);
+        int location = set.getInt(3);
         type = set.getString(4);
         accuracy = set.getString(5);
         source = set.getString(6);
 
-        timestamp = new Time(set.getTimestamp(2).getTime(), getLocation().getTimeZone());
+        init(set.getTimestamp(2).getTime(), Location.getLocation(location));
+      } else {
+        throw new IllegalStateException("No event with id " + id);
       }
     } catch (Exception e) {
       e.printStackTrace();
 
-      timestamp = new Time();
+      throw new IllegalStateException("Record of event with id " + id + " cannot be parsed.");
     }
   }
 
-  public Event(Location location, long timestamp) {
-    super(-1);
-    this.location = location.getId();
-    this.timestamp = new Time(timestamp, getLocation().getTimeZone());
-  }
-
   protected Event(int event, int subject, Date timestamp, int location, String type, String accuracy, String source) {
-  	super(event);
-    this.subject_id = subject;
-    this.location = location;
+    this.id = event;
+  	this.subject_id = subject;
     this.type = type;
     this.accuracy = accuracy;
     this.source = source;
 
-    this.timestamp = new Time(timestamp.getTime(), getLocation().getTimeZone());
-  }
-
-  public Time getTime() {
-    return timestamp;
-  }
-
-  public Location getLocation() {
-    return Location.getLocation(location);
+    init(timestamp.getTime(), Location.getLocation(location));
   }
 
   public String getSubject() {
@@ -151,21 +135,8 @@ public class Event extends AttributedObject {
     return source;
   }
 
-  public String getEvent() {
-    return Text.getText(getId());
-  }
-
-  public int getEventId() {
-    return getId();
-  }
-
-  public double getRa() {
-    double t = getTime().getJulianYearTime();
-    return Trigonometry.radians(Zodiac.degree((6.6460656 + (2400.0513 * t) + (2.58E-05 * t * t) + timestamp.getGMTHourOfDay()) * 15 - getLocation().getLongitude()));
-  }
-
-  public double getOb() {
-    return Trigonometry.radians(23.452294 - 0.0130125 * getTime().getJulianYearTime());
+  public int getId() {
+    return id;
   }
 
   public String toString() {

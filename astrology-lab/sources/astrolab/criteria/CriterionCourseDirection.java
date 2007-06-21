@@ -1,15 +1,15 @@
 package astrolab.criteria;
 
-import java.util.Calendar;
-
 import astrolab.astronom.ActivePoint;
+import astrolab.astronom.SpacetimeEvent;
 import astrolab.db.Text;
+import astrolab.web.server.content.LocalizedStringBuffer;
 
 public class CriterionCourseDirection extends Criterion {
 
-  public final static String DIRECTION_DIRECT = "Direct";
-  public final static String DIRECTION_STATIONARY = "Stationary";
-  public final static String DIRECTION_RETROGRADE = "Retrograde";
+  public final static String DIRECTION_DIRECT = "direct";
+  public final static String DIRECTION_STATIONARY = "stationary";
+  public final static String DIRECTION_RETROGRADE = "retrograde";
 
   public final static int ID_DIRECT = Text.getId(DIRECTION_DIRECT);
   public final static int ID_STATIONARY = Text.getId(DIRECTION_STATIONARY);
@@ -26,31 +26,28 @@ public class CriterionCourseDirection extends Criterion {
     this.direction = direction;
   }
 
-  public int getMark(Calendar periodStart, Calendar periodEnd) {
+  public int getMark(SpacetimeEvent periodStart, SpacetimeEvent periodEnd) {
     double position = ActivePoint.getActivePoint(getActivePoint(), periodStart).getPosition();
     int limitFrom = (int) Math.floor(position / 30) * 30;
     int limitTo = limitFrom + 30;
-    Calendar c = Calendar.getInstance();
+    SpacetimeEvent c = periodStart;
 
-    c.setTime(periodStart.getTime());
     do {
       if (hasDirectionAt(c)) {
         return 1;
       }
 
       // move a day ahead
-      c.add(Calendar.DAY_OF_YEAR, 1);
+      c = c.getMovedSpacetimeEvent(SpacetimeEvent.DAY_OF_YEAR, 1);
       position = ActivePoint.getActivePoint(getActivePoint(), c).getPosition();
     } while ((position > limitFrom) && (position < limitTo));
 
     return 0;
   }
 
-  public boolean hasDirectionAt(Calendar calendar) {
+  public boolean hasDirectionAt(SpacetimeEvent calendar) {
     double position1 = ActivePoint.getActivePoint(getActivePoint(), calendar).getPosition();
-    calendar.add(Calendar.HOUR, 1);
-    double position2 = ActivePoint.getActivePoint(getActivePoint(), calendar).getPosition();
-    calendar.add(Calendar.HOUR, -1);
+    double position2 = ActivePoint.getActivePoint(getActivePoint(), calendar.getMovedSpacetimeEvent(SpacetimeEvent.HOUR_OF_DAY, 1)).getPosition();
 
     if (position2 < position1 - 180) {
       position2 += 360;
@@ -85,6 +82,24 @@ public class CriterionCourseDirection extends Criterion {
   protected void store(String[] inputValues) {
     int direction = Integer.parseInt(inputValues[2]);
     new CriterionCourseDirection(getId(), Integer.parseInt(inputValues[0]), direction, "black").store();
+  }
+
+  public void toString(LocalizedStringBuffer output) {
+    output.localize(getActor());
+    output.append(" ");
+    output.localize("is");
+    output.append(" ");
+
+    if (direction == ID_DIRECT) {
+      output.localize(DIRECTION_DIRECT.toLowerCase());
+    } else if (direction == ID_STATIONARY) {
+      output.localize(DIRECTION_STATIONARY.toLowerCase());
+    } else if (direction == ID_RETROGRADE) {
+      output.localize(DIRECTION_RETROGRADE.toLowerCase());
+    }
+
+    output.append(" ");
+    output.localize("of course");
   }
 
 }

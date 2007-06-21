@@ -23,13 +23,13 @@
  **/
 package astrolab.astronom.houses;
 
+import astrolab.astronom.SpacetimeEvent;
 import astrolab.astronom.util.Trigonometry;
 import astrolab.astronom.util.Zodiac;
-import astrolab.db.Event;
 
 public class KochSystem extends HouseSystem {
 
-  public KochSystem(Event event) {
+  public KochSystem(SpacetimeEvent event) {
     super(event);
   }
 

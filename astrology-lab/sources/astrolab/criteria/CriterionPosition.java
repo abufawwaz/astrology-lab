@@ -1,8 +1,7 @@
 package astrolab.criteria;
 
-import java.util.Calendar;
-
 import astrolab.astronom.ActivePoint;
+import astrolab.astronom.SpacetimeEvent;
 
 public abstract class CriterionPosition extends Criterion {
 
@@ -20,7 +19,7 @@ public abstract class CriterionPosition extends Criterion {
     return mark[position];
   }
 
-  public int getMark(Calendar periodStart, Calendar periodEnd) {
+  public int getMark(SpacetimeEvent periodStart, SpacetimeEvent periodEnd) {
     return mark[(int) ActivePoint.getActivePoint(getActivePoint(), periodStart).getPosition()];
   }
 

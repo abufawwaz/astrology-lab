@@ -1,6 +1,6 @@
 package astrolab.project.archive;
 
-import astrolab.astronom.Time;
+import astrolab.astronom.SpacetimeEvent;
 import astrolab.db.Event;
 import astrolab.db.Text;
 import astrolab.project.geography.ComponentSelectLocation;
@@ -20,7 +20,7 @@ public class ModifyCreateNatalRecord extends Modify {
       int event_id = (int) ComponentSelectNumber.retrieve(request, "_event_id");
   		String name = request.get(RequestParameters.TEXT_NAME);
       int location = ComponentSelectLocation.retrieve(request);
-      Time time = new Time(request.get(ComponentSelectTime.PARAMETER_KEY), location);
+      SpacetimeEvent time = new SpacetimeEvent(request.get(ComponentSelectTime.PARAMETER_KEY), location);
       long timestamp = time.getTimeInMillis();
       String accuracy = ComponentSelectAccuracy.retrieve(request);
       String source = ComponentSelectSource.retrieve(request);

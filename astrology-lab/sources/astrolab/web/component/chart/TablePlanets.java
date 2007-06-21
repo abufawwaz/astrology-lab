@@ -1,8 +1,7 @@
 package astrolab.web.component.chart;
 
-import java.util.Calendar;
-
 import astrolab.astronom.ActivePoint;
+import astrolab.astronom.SpacetimeEvent;
 import astrolab.astronom.util.Zodiac;
 import astrolab.astronom.planet.SolarSystem;
 import astrolab.db.Event;
@@ -19,11 +18,11 @@ public class TablePlanets extends HTMLDisplay {
   }
 
 	public void fillBodyContent(Request request, LocalizedStringBuffer buffer) {
-		Calendar calendar = Event.getSelectedEvent().getTime();
+		SpacetimeEvent time = Event.getSelectedEvent();
 
 		buffer.append("<table cellspacing='0'>");
     for (String planet: SolarSystem.PLANETS) {
-      append(buffer, ActivePoint.getActivePoint(planet, calendar));
+      append(buffer, ActivePoint.getActivePoint(planet, time));
     }
 		buffer.append("</table>");
 	}

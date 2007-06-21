@@ -1,15 +1,15 @@
 package astrolab.criteria;
 
-import java.util.Calendar;
-
 import astrolab.astronom.ActivePoint;
+import astrolab.astronom.SpacetimeEvent;
 import astrolab.db.Text;
+import astrolab.web.server.content.LocalizedStringBuffer;
 
 public class CriterionPositionDirection extends Criterion {
 
-  public final static String DIRECTION_DIRECT = "Direct";
-  public final static String DIRECTION_STATIONARY = "Stationary";
-  public final static String DIRECTION_RETROGRADE = "Retrograde";
+  public final static String DIRECTION_DIRECT = "direct";
+  public final static String DIRECTION_STATIONARY = "stationary";
+  public final static String DIRECTION_RETROGRADE = "retrograde";
 
   public final static int ID_DIRECT = Text.getId(DIRECTION_DIRECT);
   public final static int ID_STATIONARY = Text.getId(DIRECTION_STATIONARY);
@@ -26,11 +26,9 @@ public class CriterionPositionDirection extends Criterion {
     this.direction = direction;
   }
 
-  public int getMark(Calendar periodStart, Calendar periodEnd) {
+  public int getMark(SpacetimeEvent periodStart, SpacetimeEvent periodEnd) {
     double position1 = ActivePoint.getActivePoint(getActivePoint(), periodStart).getPosition();
-    periodStart.add(Calendar.HOUR, 1);
-    double position2 = ActivePoint.getActivePoint(getActivePoint(), periodStart).getPosition();
-    periodStart.add(Calendar.HOUR, -1);
+    double position2 = ActivePoint.getActivePoint(getActivePoint(), periodStart.getMovedSpacetimeEvent(SpacetimeEvent.HOUR_OF_DAY, 1)).getPosition();
 
     if (position2 < position1 - 180) {
       position2 += 360;
@@ -65,6 +63,21 @@ public class CriterionPositionDirection extends Criterion {
   protected void store(String[] inputValues) {
     int direction = Integer.parseInt(inputValues[2]);
     new CriterionPositionDirection(getId(), Integer.parseInt(inputValues[0]), direction, "blue").store();
+  }
+
+  public void toString(LocalizedStringBuffer output) {
+    output.localize(getActor());
+    output.append(" ");
+    output.localize("is");
+    output.append(" ");
+
+    if (direction == ID_DIRECT) {
+      output.localize(DIRECTION_DIRECT.toLowerCase());
+    } else if (direction == ID_STATIONARY) {
+      output.localize(DIRECTION_STATIONARY.toLowerCase());
+    } else if (direction == ID_RETROGRADE) {
+      output.localize(DIRECTION_RETROGRADE.toLowerCase());
+    }
   }
 
 }

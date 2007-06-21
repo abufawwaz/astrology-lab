@@ -30,7 +30,7 @@ public class Element {
   }
 
   public double getPosition(Event event) {
-    ActivePoint point = ActivePoint.getActivePoint(text, event.getTime());
+    ActivePoint point = ActivePoint.getActivePoint(text, event);
     return point.getPosition();
   }
 

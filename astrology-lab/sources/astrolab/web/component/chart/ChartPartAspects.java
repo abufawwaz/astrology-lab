@@ -1,10 +1,10 @@
 package astrolab.web.component.chart;
 
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Vector;
 
 import astrolab.astronom.ActivePoint;
+import astrolab.astronom.SpacetimeEvent;
 import astrolab.astronom.planet.SolarSystem;
 import astrolab.db.Event;
 import astrolab.web.SVGDisplay;
@@ -20,16 +20,15 @@ public class ChartPartAspects extends SVGDisplay {
 		fillContent(request, buffer, Event.getSelectedEvent(), 0.0, true);
 	}
 
-	public void fillContent(Request request, LocalizedStringBuffer buffer, Event event, double offset, boolean ownImage) {
+	public void fillContent(Request request, LocalizedStringBuffer buffer, SpacetimeEvent event, double offset, boolean ownImage) {
     Vector positions = new Vector();
-    Calendar calendar = event.getTime();
 
     radius = request.getConstraints().getRadius();
 		x = request.getConstraints().getWidth() / 2;
 		y = request.getConstraints().getHeight() / 2;
 
 		for (String planet: SolarSystem.PLANETS) {
-      positions.add(ActivePoint.getActivePoint(planet, calendar).getPosition());
+      positions.add(ActivePoint.getActivePoint(planet, event).getPosition());
 		}
     Object[] sorted = positions.toArray();
     Arrays.sort(sorted);

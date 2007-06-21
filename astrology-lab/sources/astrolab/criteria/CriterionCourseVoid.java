@@ -1,6 +1,7 @@
 package astrolab.criteria;
 
-import java.util.Calendar;
+import astrolab.astronom.SpacetimeEvent;
+import astrolab.web.server.content.LocalizedStringBuffer;
 
 public class CriterionCourseVoid extends Criterion {
 
@@ -12,14 +13,9 @@ public class CriterionCourseVoid extends Criterion {
     super(id, TYPE_COURSE_VOID, activePoint, color);
   }
 
-  public int getMark(Calendar periodStart, Calendar periodEnd) {
-//long time = System.currentTimeMillis();
-try {
+  public int getMark(SpacetimeEvent periodStart, SpacetimeEvent periodEnd) {
     Course course = new Course(getActivePoint(), Course.MAJOR_POINTS, periodStart, periodEnd);
     return course.occurAspect(Course.MAJOR_ASPECTS) ? 0 : 1;
-} finally {
-//  System.err.println(" time: " + (System.currentTimeMillis() - time));
-}
   }
 
   public String getName() {
@@ -32,6 +28,14 @@ try {
 
   protected void store(String[] inputValues) {
     new CriterionCourseVoid(getId(), Integer.parseInt(inputValues[0]), "black").store();
+  }
+
+  public void toString(LocalizedStringBuffer output) {
+    output.localize(getActor());
+    output.append(" ");
+    output.localize("is");
+    output.append(" ");
+    output.localize("void of course");
   }
 
 }

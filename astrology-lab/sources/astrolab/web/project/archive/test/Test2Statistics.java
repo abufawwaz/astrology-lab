@@ -22,7 +22,7 @@ public class Test2Statistics extends SVGDisplay {
 
     while (iterator.hasNext()) {
       event = (Event) iterator.next();
-      time = event.getTime().getTimeInMillis();
+      time = event.getTimeInMillis();
       times.add(new Double(time));
       sum += time;
       if (time > maxtime) {

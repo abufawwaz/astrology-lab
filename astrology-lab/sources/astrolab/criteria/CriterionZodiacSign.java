@@ -1,6 +1,7 @@
 package astrolab.criteria;
 
 import astrolab.db.Text;
+import astrolab.web.server.content.LocalizedStringBuffer;
 
 public class CriterionZodiacSign extends CriterionPosition {
 
@@ -65,6 +66,16 @@ public class CriterionZodiacSign extends CriterionPosition {
   protected void store(String[] inputValues) {
     int sign = Integer.parseInt(inputValues[2]);
     new CriterionZodiacSign(getId(), Integer.parseInt(inputValues[0]), sign, false, "orange").store();
+  }
+
+  public void toString(LocalizedStringBuffer output) {
+    output.localize(getActor());
+    output.append(" ");
+    output.localize("position");
+    output.append(" ");
+    output.localize("in");
+    output.append(" ");
+    output.localize(getFactor());
   }
 
 }

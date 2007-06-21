@@ -17,6 +17,7 @@ public class Location implements TreeObject {
   private TimeZone time_zone = null;
 
   private static Hashtable<Integer, Location> cache = new Hashtable<Integer, Location>();
+  private static Hashtable<TimeZone, Location> zones = new Hashtable<TimeZone, Location>();
 
   private Location(int id) {
     this.id = id;
@@ -102,6 +103,16 @@ public class Location implements TreeObject {
       cache.put(id, result);
     }
 
+    return result;
+  }
+
+  public static Location getLocation(TimeZone zone) {
+    Location result = zones.get(zone);
+    if (result == null) {
+      // TODO: get the correct center of the time zone
+      result = Location.getLocation(Text.getId("Sofia"));
+      zones.put(zone, result);
+    }
     return result;
   }
 

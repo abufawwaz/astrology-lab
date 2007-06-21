@@ -2,8 +2,8 @@ package astrolab.criteria;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Calendar;
 
+import astrolab.astronom.SpacetimeEvent;
 import astrolab.db.Database;
 import astrolab.web.server.Request;
 import astrolab.web.server.content.LocalizedStringBuffer;
@@ -66,7 +66,7 @@ public abstract class Criterion {
     return color;
   }
 
-  public abstract int getMark(Calendar periodStart, Calendar periodEnd);
+  public abstract int getMark(SpacetimeEvent periodStart, SpacetimeEvent periodEnd);
 
   public String toString() {
     LocalizedStringBuffer buffer = new LocalizedStringBuffer();
@@ -134,5 +134,7 @@ public abstract class Criterion {
   }
 
   protected abstract void store(String[] inputValues);
+
+  public abstract void toString(LocalizedStringBuffer output);
 
 }

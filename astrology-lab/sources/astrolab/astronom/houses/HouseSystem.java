@@ -84,14 +84,16 @@
 
 package astrolab.astronom.houses;
 
-import astrolab.db.Event;
+import astrolab.astronom.SpacetimeEvent;
 import astrolab.astronom.util.Zodiac;
 
 public abstract class HouseSystem {
 
-	Event event;
+  public final static int HOUSE_1 = 1;
 
-  protected HouseSystem(Event event) {
+  protected SpacetimeEvent event;
+
+  protected HouseSystem(SpacetimeEvent event) {
     this.event = event;
   }
 

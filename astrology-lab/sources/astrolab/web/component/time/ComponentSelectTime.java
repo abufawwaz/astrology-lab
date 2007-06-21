@@ -2,7 +2,7 @@ package astrolab.web.component.time;
 
 import java.util.Properties;
 
-import astrolab.astronom.Time;
+import astrolab.astronom.SpacetimeEvent;
 import astrolab.project.relocation.RelocationRecord;
 import astrolab.tools.Template;
 import astrolab.web.server.Request;
@@ -28,8 +28,8 @@ public class ComponentSelectTime {
     buffer.append(Template.populate(RAW_CONTENTS, parameters));
   }
 
-  public static void fill(LocalizedStringBuffer buffer, Time time, String choiceId, boolean singleSubmit) {
-    String date = "" + time.get(Time.YEAR) + ", " + time.get(Time.MONTH) + ", " + time.get(Time.DATE) + ", " + time.get(Time.HOUR) + ", " + time.get(Time.MINUTE) + ", " + time.get(Time.SECOND) + "";
+  public static void fill(LocalizedStringBuffer buffer, SpacetimeEvent time, String choiceId, boolean singleSubmit) {
+    String date = "" + time.get(SpacetimeEvent.YEAR) + ", " + time.get(SpacetimeEvent.MONTH) + ", " + time.get(SpacetimeEvent.DAY_OF_MONTH) + ", " + time.get(SpacetimeEvent.HOUR_OF_DAY) + ", " + time.get(SpacetimeEvent.MINUTE) + ", " + time.get(SpacetimeEvent.SECOND) + "";
 
     Properties parameters = new Properties();
     parameters.setProperty("{0}", choiceId);
@@ -44,14 +44,14 @@ public class ComponentSelectTime {
     return Integer.parseInt(request.get(PARAMETER_KEY));
   }
 
-  public static Time retrieve(Request request, String choiceId) {
+  public static SpacetimeEvent retrieve(Request request, String choiceId) {
     String timeText = request.get(choiceId);
 
     if (timeText != null) {
       int user = request.getUser();
       // TODO: fix this!
-      int location = RelocationRecord.getLocationOfPerson(user, new Time(timeText, 0).getTimeInMillis());
-      return new Time(timeText, location);
+      int location = RelocationRecord.getLocationOfPerson(user, new SpacetimeEvent(timeText, 0).getTimeInMillis());
+      return new SpacetimeEvent(timeText, location);
     } else {
       return null;
     }

@@ -2,7 +2,7 @@ package astrolab.web.project.finance.balance;
 
 import java.sql.Timestamp;
 
-import astrolab.astronom.Time;
+import astrolab.astronom.SpacetimeEvent;
 import astrolab.db.Database;
 import astrolab.db.Text;
 
@@ -13,12 +13,12 @@ public class Purchase {
   private int type;
   private double price;
   private double quantity;
-  private Time time;
+  private SpacetimeEvent time;
   private String currency;
   private String operation;
   private String measure;
 
-  Purchase(int owner, String operation, int item_id, int type, Time time, double price, String currency, double quantity, String measure) {
+  Purchase(int owner, String operation, int item_id, int type, SpacetimeEvent time, double price, String currency, double quantity, String measure) {
     this.owner = owner;
     this.operation = operation;
     this.item_id = item_id;
@@ -62,7 +62,7 @@ public class Purchase {
     return type;
   }
 
-  public Time getTime() {
+  public SpacetimeEvent getTime() {
     return time;
   }
 

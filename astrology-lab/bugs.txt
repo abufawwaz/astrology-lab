@@ -2,3 +2,44 @@ release: 23:42 25.03.2007
 
 - IE - selecting a location via location list updates the location edit form in "Enter data" perspective on second selection
 - project: geography: rename of location does not work
+
+Elective: wedding date
+1. Date: Friday, Saturday, Sunday
+2. Venus: -Retrograde
+3. Venus: +Taurus,Libra,Pisces -Aries,Scorpio,Virgo
+4. Mercury: -Retrograde
+5. Moon: +Taurus,Cancer
+6. Moon: -Aries,Scorpio,Capricorn
+7. Moon: -Void of course
+8. Moon: -Square,Opposition of course
+9. Moon: -Aspects with Saturn,Mars of course
+10. Mercury: -Void of course
+11. Venus: -Void of course
+12. Saturn, Mars, Uranus, Pluto: -4,7th house
+13. Moon, Venus, Mercury, Jupiter: +4th,7th house
+14. Ruler of 1st: +Venus, -Saturn,Mars
+
+Choosing the Date
+
+    * NO VENUS Rx!
+    * Good aspect Sun/Moon
+    * Moon must NOT be void of course.
+    * Moon MUST have good final aspect before going V.O.C.
+    * Avoid Sun approaching square or opposition to Saturn.
+    * NO MERCURY Rx!
+    * Venus should apply to good aspect, or be applied to by Moon or Mercury. Avoid hard aspects from Venus to malefics.Avoid moon in Aries, Scorpio, or Capricorn.
+    * Avoid Venus in Aries, Virgo, or Scorpio.
+    * Good aspect Venus/Mars
+    * Moon waxing (between New Moon and Full Moon) is best, but in my opinion, not as important as a good Moon/Sun aspect.
+    * Good applying Saturn aspect
+
+Choosing the Time
+
+    * Ruler of 1st  MUST NOT be in hard aspect to ruler of 7th house
+    * Keep malefics (Mars, Saturn, Uranus, Neptune, Pluto) out of 7th
+    * Keep Uranus out of 7th and out of adverse aspect with ruler of 7th, Venus, or planet in 7th.
+    * Moon in 7th house or angular; or, Moon applying to beneficial planet in 7th (avoid Moon in 6/12).
+    * Keep malefics off angles if at all possible
+    * Ascendant: no fewer than 3, no more than 27 degrees rising
+    * Fixed Ascendant is desirable
+    * Moon good aspect to rulers of 4th and 10th

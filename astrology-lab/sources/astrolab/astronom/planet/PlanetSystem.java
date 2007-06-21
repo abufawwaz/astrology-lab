@@ -1,19 +1,20 @@
 package astrolab.astronom.planet;
 
-import java.util.*;
+import java.util.Enumeration;
+import java.util.Hashtable;
 
 import astrolab.astronom.ActivePoint;
-import astrolab.astronom.Time;
+import astrolab.astronom.SpacetimeEvent;
 
 public class PlanetSystem {
 
   protected Hashtable<String, ActivePoint> planets = new Hashtable<String, ActivePoint>();
   protected Hashtable<Integer, ActivePoint> planetIndex = new Hashtable<Integer, ActivePoint>();
 
-  protected double standardYearTime;
+  protected SpacetimeEvent spacetimeEvent;
 
-  protected PlanetSystem(Calendar calendar) {
-    standardYearTime = new Time(calendar.getTime()).getStandardYearTime();
+  protected PlanetSystem(SpacetimeEvent spacetime) {
+    spacetimeEvent = spacetime;
   }
 
   public Enumeration getPlanetNames() {

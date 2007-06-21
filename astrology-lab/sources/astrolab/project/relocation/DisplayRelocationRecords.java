@@ -28,7 +28,7 @@ public class DisplayRelocationRecords extends HTMLDisplay {
 			buffer.localize(relocation.getLocation().getId());
       buffer.append("</td>");
       buffer.append("<td>");
-      buffer.append(relocation.getTime().toSimpleString());
+      buffer.append(relocation.toSimpleString());
       buffer.append("</td>");
       buffer.append("</tr>");
 		}

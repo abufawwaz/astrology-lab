@@ -4,7 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.TimeZone;
 
-import astrolab.astronom.Time;
+import astrolab.astronom.SpacetimeEvent;
 import astrolab.db.Database;
 import astrolab.web.resource.CloseableResource;
 
@@ -13,14 +13,14 @@ public class ProjectData implements CloseableResource {
   private ResultSet data;
 
   private int size = 0;
-  private Time fromTime;
-  private Time toTime;
+  private SpacetimeEvent fromTime;
+  private SpacetimeEvent toTime;
 
   ProjectData(Project project) {
     this(project, new String[0], null, project.getMinTime(), project.getMaxTime());
   }
 
-  ProjectData(Project project, String[] keys, String grouping, Time fromTime, Time toTime) {
+  ProjectData(Project project, String[] keys, String grouping, SpacetimeEvent fromTime, SpacetimeEvent toTime) {
     // TODO: use fromTime and toTime within the SQL query
     StringBuffer keyselect = new StringBuffer();
     for (int i = 0; i < project.getKeys().length; i++) {
@@ -83,7 +83,7 @@ public class ProjectData implements CloseableResource {
       previous();
       toTime = getTime();
     } else {
-      fromTime = toTime = new Time();
+      fromTime = toTime = new SpacetimeEvent(System.currentTimeMillis());
     }
   }
 
@@ -91,11 +91,11 @@ public class ProjectData implements CloseableResource {
     return size;
   }
 
-  public Time getFromTime() {
+  public SpacetimeEvent getFromTime() {
     return fromTime;
   }
 
-  public Time getToTime() {
+  public SpacetimeEvent getToTime() {
     return toTime;
   }
 
@@ -103,7 +103,7 @@ public class ProjectData implements CloseableResource {
     try {
       Object object = data.getObject(key);
       if (object instanceof java.sql.Timestamp) {
-        return new Time(((java.sql.Timestamp) object).getTime(), TimeZone.getDefault()); // TODO: get default time zone for project records
+        return new SpacetimeEvent(((java.sql.Timestamp) object).getTime(), SpacetimeEvent.GMT_TIME_ZONE); // TODO: check that project records are stored with GMT
       } else {
         return object;
       }
@@ -120,8 +120,8 @@ public class ProjectData implements CloseableResource {
       return 0;
     } else if (raw instanceof Number) {
       return ((Number) raw).doubleValue();
-    } else if (raw instanceof Time) {
-      return ((Time) raw).getTimeInMillis();
+    } else if (raw instanceof SpacetimeEvent) {
+      return ((SpacetimeEvent) raw).getTimeInMillis();
     } else {
       return 1.0;
     }
@@ -132,12 +132,12 @@ public class ProjectData implements CloseableResource {
     return (raw != null) ? String.valueOf(raw) : null;
   }
 
-  public Time getTime() {
+  public SpacetimeEvent getTime() {
     try {
-      return new Time(data.getTimestamp("time").getTime(), TimeZone.getDefault()); // TODO: fix the time zone
+      return new SpacetimeEvent(data.getTimestamp("time").getTime(), SpacetimeEvent.GMT_TIME_ZONE);
     } catch (SQLException e) {
       e.printStackTrace();
-      return new Time();
+      return new SpacetimeEvent(System.currentTimeMillis());
     }
   }
 

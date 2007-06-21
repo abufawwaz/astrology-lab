@@ -1,6 +1,6 @@
 package astrolab.formula.display;
 
-import astrolab.astronom.Time;
+import astrolab.astronom.SpacetimeEvent;
 import astrolab.db.Database;
 import astrolab.db.Personalize;
 import astrolab.project.Projects;
@@ -17,8 +17,8 @@ public class ModifyFormulaeSetTime extends Modify {
     try {
       int user = Personalize.getUser();
       int project = Projects.getProject().getId();
-      Time fromTime = ComponentSelectTime.retrieve(request, KEY_FROM_TIME);
-      Time toTime = ComponentSelectTime.retrieve(request, KEY_TO_TIME);
+      SpacetimeEvent fromTime = ComponentSelectTime.retrieve(request, KEY_FROM_TIME);
+      SpacetimeEvent toTime = ComponentSelectTime.retrieve(request, KEY_TO_TIME);
 
       if (fromTime != null) {
         Database.execute("UPDATE formula_chart_base SET from_time = '" + fromTime.toMySQLString() + "' WHERE user_id = " + user + " AND project_id = " + project + " AND selected");

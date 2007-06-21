@@ -1,5 +1,6 @@
 package astrolab.web.component.chart;
 
+import astrolab.astronom.SpacetimeEvent;
 import astrolab.astronom.houses.HouseSystem;
 import astrolab.astronom.houses.PlacidusSystem;
 import astrolab.db.Event;
@@ -23,7 +24,7 @@ public class ChartPartHouses extends SVGDisplay {
 		fillContent(request, buffer, Event.getSelectedEvent(), 0.0, true);
 	}
 
-	public void fillContent(Request request, LocalizedStringBuffer buffer, Event event, double offset, boolean ownImage) {
+	public void fillContent(Request request, LocalizedStringBuffer buffer, SpacetimeEvent event, double offset, boolean ownImage) {
 		radius = request.getConstraints().getRadius();
 		x = request.getConstraints().getWidth() / 2;
 		y = request.getConstraints().getHeight() / 2;
