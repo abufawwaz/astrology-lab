@@ -16,6 +16,7 @@ public abstract class Criterion {
   public final static int TYPE_POSITION_DIRECTION = 3;
   public final static int TYPE_COURSE_DIRECTION = 4;
   public final static int TYPE_COURSE_VOID = 5;
+  public final static int TYPE_POSITION_PHASE = 6;
 
   private int id;
   private int type;
@@ -101,6 +102,10 @@ public abstract class Criterion {
       case TYPE_COURSE_VOID: {
         String color = query.getString(7);
         return new CriterionCourseVoid(query.getInt(1), query.getInt(4), color); 
+      }
+      case TYPE_POSITION_PHASE: {
+        String color = query.getString(7);
+        return new CriterionPositionPhase(query.getInt(1), query.getInt(4), query.getInt(6), color); 
       }
     }
     return null;

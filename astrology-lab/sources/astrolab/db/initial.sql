@@ -235,6 +235,12 @@ insert into text values (2201, NULL, 'Gamma', 'Gamma', 'Гама');
 insert into text values (2901, NULL, 'Dx', 'direct', 'директен');
 insert into text values (2902, NULL, 'Sx', 'stationary', 'стационарен');
 insert into text values (2903, NULL, 'Rx', 'retrograde', 'ретрограден');
+insert into text values (2904, NULL, 'phase_new', 'phase New', 'фаза Нова');
+insert into text values (2905, NULL, 'phase_first_quarter', 'First phase', 'Първа четвърт');
+insert into text values (2906, NULL, 'phase_second_quarter', 'Second phase', 'Втора четвърт');
+insert into text values (2907, NULL, 'phase_full', 'phase Full', 'ретрограден');
+insert into text values (2908, NULL, 'phase_third_quarter', 'Third phase', 'Трета четвърт');
+insert into text values (2909, NULL, 'phase_fourth_quarter', 'Fourth phase', 'Четвърта четвърт');
 
 insert into text values (3001, NULL, 'red', 'red', 'red');
 insert into text values (3002, NULL, 'orange', 'orange', 'orange');
@@ -381,6 +387,8 @@ insert into text values (60074, NULL, NULL, 'me only', 'мен само');
 insert into text values (60075, NULL, NULL, 'From', 'От');
 insert into text values (60076, NULL, NULL, 'To', 'До');
 insert into text values (60077, NULL, NULL, 'sleeps', 'спи');
+insert into text values (60078, NULL, NULL, 'in', 'във');
+insert into text values (60079, NULL, NULL, 'phase', 'фаза');
 
 insert into text values (1000001, NULL, 'Europe/Sofia', 'Europe/Sofia', 'Европа/София');
 
@@ -422,6 +430,13 @@ insert into svg values (2108, "<svg:g style='stroke:cyan;stroke-width:20;fill:no
 insert into svg values (2109, "<svg:g style='stroke:teal;stroke-width:20;fill:none'><svg:path d='M-80 -90 A80 110 0 1 0 80 -90' /><svg:line y1='-80' y2='90' /><svg:line x1='-40' y1='60' x2='40' y2='60' /></svg:g>");
 insert into svg values (2110, "<svg:g style='stroke:firebrick;stroke-width:20;fill:none'><svg:circle cy='-60' r='30' /><svg:path d='M-80 -90 A80 110 0 1 0 80 -90' /><svg:line y1='20' y2='90' /><svg:line x1='-40' y1='60' x2='40' y2='60' /></svg:g>");
 insert into svg values (2201, "<svg:path d='M-40 90 L-40 -90 L40 -90' style='stroke:brown;stroke-width:20;fill:none' />");
+
+insert into svg values (2904, "<svg:circle r='70' style='fill:white;stroke:black;stroke-width:10' />");
+insert into svg values (2905, "<svg:path d='M0 -70 A70 70 0 0 1 0 70 A35 70 0 1 0 0 -70' style='fill:black' />");
+insert into svg values (2906, "<svg:path d='M0 -70 A70 70 0 0 1 0 70 A35 70 0 1 1 0 -70' style='fill:black' />");
+insert into svg values (2907, "<svg:circle r='70' style='fill:black;stroke:black;stroke-width:10' />");
+insert into svg values (2908, "<svg:path d='M0 -70 A35 70 0 0 1 0 70 A70 70 0 1 1 0 -70' style='fill:black' />");
+insert into svg values (2909, "<svg:path d='M0 -70 A35 70 0 1 1 0 70 A70 70 0 1 1 0 -70' style='fill:black' />");
 
 insert into svg values (3001, "<svg:rect x='-70' y='-70' width='140' height='140' style='fill:red' />");
 insert into svg values (3002, "<svg:rect x='-70' y='-70' width='140' height='140' style='fill:orange' />");

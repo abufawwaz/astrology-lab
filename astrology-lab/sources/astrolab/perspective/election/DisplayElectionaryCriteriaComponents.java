@@ -2,6 +2,7 @@ package astrolab.perspective.election;
 
 import astrolab.astronom.planet.SolarSystem;
 import astrolab.criteria.CriterionPositionDirection;
+import astrolab.criteria.CriterionPositionPhase;
 import astrolab.db.Text;
 import astrolab.web.HTMLDisplay;
 import astrolab.web.component.ComponentController;
@@ -24,6 +25,9 @@ public class DisplayElectionaryCriteriaComponents extends HTMLDisplay {
 
   public void fillBodyContent(Request request, LocalizedStringBuffer buffer) {
     fillDirectionComponents(buffer);
+    buffer.append("<hr />");
+
+    fillPhaseComponents(buffer);
     buffer.append("<hr />");
 
     buffer.append("<table><tr>");
@@ -96,6 +100,24 @@ public class DisplayElectionaryCriteriaComponents extends HTMLDisplay {
     buffer.append("'>");
     buffer.append(Text.getDescriptiveId(id));
     buffer.append("</td>");
+
+    buffer.append("</tr></table>");
+  }
+
+  private void fillPhaseComponents(LocalizedStringBuffer buffer) {
+    String controlId;
+
+    buffer.append("<table><tr>");
+
+    for (int id: CriterionPositionPhase.PHASES) {
+      controlId = "controller_phase_" + id; 
+      ComponentController.fill(buffer, controlId, "Phase", String.valueOf(id));
+      buffer.append("<td id='");
+      buffer.append(controlId);
+      buffer.append("'>");
+      buffer.localize(id);
+      buffer.append("</td>");
+    }
 
     buffer.append("</tr></table>");
   }

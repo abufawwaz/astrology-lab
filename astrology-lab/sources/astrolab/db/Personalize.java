@@ -2,6 +2,9 @@ package astrolab.db;
 
 import java.util.StringTokenizer;
 
+import astrolab.project.geography.Location;
+import astrolab.project.relocation.RelocationRecord;
+
 public final class Personalize extends AttributedObject {
 
   public final static int VALUE_NULL = -1;
@@ -15,6 +18,7 @@ public final class Personalize extends AttributedObject {
 
   private final int user;
   private String language = LANGUAGE_EN;
+  private Location location = null;
 
   private Personalize(int user) {
     super(user);
@@ -60,6 +64,17 @@ public final class Personalize extends AttributedObject {
     } else {
       return LANGUAGE_EN;
     }
+  }
+
+  public static Location getLocation() {
+    Personalize person = currentPersonalization.get();
+    if (person != null) {
+      if (person.location == null) {
+        person.location = Location.getLocation(RelocationRecord.getLocationOfPerson(Personalize.getUser(), System.currentTimeMillis()));
+      }
+      return person.location;
+    }
+    return null;
   }
 
   public static int getUser() {
