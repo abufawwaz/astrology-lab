@@ -9,6 +9,7 @@ public abstract class TypeCriterion {
     new CriterionPositionDirection(),
     new CriterionCourseDirection(),
     new CriterionCourseVoid(),
+    new CriterionPositionPhase(),
   };
 
   public final static boolean isCriteriaDetermined(String type, String[] inputValues) {

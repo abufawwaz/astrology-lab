@@ -11,7 +11,6 @@ import astrolab.astronom.util.Zodiac;
 import astrolab.db.Personalize;
 import astrolab.db.Text;
 import astrolab.project.geography.Location;
-import astrolab.project.relocation.RelocationRecord;
 
 public class SpacetimeEvent {
 
@@ -98,11 +97,11 @@ public class SpacetimeEvent {
     if ((location != null) && (location.getId() != 0)) {
       this.location = location;
     } else {
-      this.location = Location.getLocation(RelocationRecord.getLocationOfPerson(Personalize.getUser(), time));
+      this.location = Personalize.getLocation();
+    }
 
-      if ((this.location == null) || (this.location.getId() == 0)) {
-        this.location = Location.getLocation(GMT_TIME_ZONE);
-      }
+    if ((this.location == null) || (this.location.getId() == 0)) {
+      this.location = Location.getLocation(GMT_TIME_ZONE);
     }
 
     this.calendar.setTimeZone(this.location.getTimeZone());

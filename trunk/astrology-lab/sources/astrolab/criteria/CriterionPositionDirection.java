@@ -62,7 +62,7 @@ public class CriterionPositionDirection extends Criterion {
 
   protected void store(String[] inputValues) {
     int direction = Integer.parseInt(inputValues[2]);
-    new CriterionPositionDirection(getId(), Integer.parseInt(inputValues[0]), direction, "blue").store();
+    new CriterionPositionPhase(getId(), Integer.parseInt(inputValues[0]), direction, "blue").store();
   }
 
   public void toString(LocalizedStringBuffer output) {
