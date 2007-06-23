@@ -22,8 +22,8 @@ public class CriterionZodiacSign extends CriterionPosition {
     super();
   }
 
-  public CriterionZodiacSign(int id, int activePoint, int signs, boolean isFlags, String color) {
-    super(id, Criterion.TYPE_ZODIAC_SIGN, activePoint, color);
+  public CriterionZodiacSign(int id, int activePoint, int signs, boolean isFlags) {
+    super(id, Criterion.TYPE_ZODIAC_SIGN, activePoint);
 
     int position = 0;
     if (isFlags) {
@@ -65,7 +65,7 @@ public class CriterionZodiacSign extends CriterionPosition {
 
   protected void store(String[] inputValues) {
     int sign = Integer.parseInt(inputValues[2]);
-    new CriterionZodiacSign(getId(), Integer.parseInt(inputValues[0]), sign, false, "orange").store();
+    new CriterionZodiacSign(getId(), Integer.parseInt(inputValues[0]), sign, false).store();
   }
 
   public void toString(LocalizedStringBuffer output) {

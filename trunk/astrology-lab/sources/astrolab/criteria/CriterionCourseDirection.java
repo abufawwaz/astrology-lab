@@ -21,8 +21,8 @@ public class CriterionCourseDirection extends Criterion {
     super();
   }
 
-  public CriterionCourseDirection(int id, int activePoint, int direction, String color) {
-    super(id, TYPE_COURSE_DIRECTION, activePoint, color);
+  public CriterionCourseDirection(int id, int activePoint, int direction) {
+    super(id, TYPE_COURSE_DIRECTION, activePoint);
     this.direction = direction;
   }
 
@@ -81,7 +81,7 @@ public class CriterionCourseDirection extends Criterion {
 
   protected void store(String[] inputValues) {
     int direction = Integer.parseInt(inputValues[2]);
-    new CriterionCourseDirection(getId(), Integer.parseInt(inputValues[0]), direction, "black").store();
+    new CriterionCourseDirection(getId(), Integer.parseInt(inputValues[0]), direction).store();
   }
 
   public void toString(LocalizedStringBuffer output) {

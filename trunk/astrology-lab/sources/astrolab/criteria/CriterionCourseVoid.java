@@ -9,8 +9,8 @@ public class CriterionCourseVoid extends Criterion {
     super();
   }
 
-  public CriterionCourseVoid(int id, int activePoint, String color) {
-    super(id, TYPE_COURSE_VOID, activePoint, color);
+  public CriterionCourseVoid(int id, int activePoint) {
+    super(id, TYPE_COURSE_VOID, activePoint);
   }
 
   public int getMark(SpacetimeEvent periodStart, SpacetimeEvent periodEnd) {
@@ -27,7 +27,7 @@ public class CriterionCourseVoid extends Criterion {
   }
 
   protected void store(String[] inputValues) {
-    new CriterionCourseVoid(getId(), Integer.parseInt(inputValues[0]), "black").store();
+    new CriterionCourseVoid(getId(), Integer.parseInt(inputValues[0])).store();
   }
 
   public void toString(LocalizedStringBuffer output) {

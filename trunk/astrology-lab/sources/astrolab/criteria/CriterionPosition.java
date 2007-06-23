@@ -11,8 +11,8 @@ public abstract class CriterionPosition extends Criterion {
     super();
   }
 
-  protected CriterionPosition(int id, int type, int activePoint, String color) {
-    super(id, type, activePoint, color);
+  protected CriterionPosition(int id, int type, int activePoint) {
+    super(id, type, activePoint);
   }
 
   protected int getMark(int position) {

@@ -18,6 +18,8 @@ public class DisplayElectionaryCriteriaList extends HTMLFormDisplay {
   public final static String PARAMETER_TARGET = "_elective_criteria_target";
   public final static String ACTION_DELETE = "delete";
   public final static String ACTION_COLOR = "color";
+  public final static String ACTION_MULTIPLY_INCREASE = "multiply_increase";
+  public final static String ACTION_MULTIPLY_DECREASE = "multiply_decrease";
 
   public DisplayElectionaryCriteriaList() {
     super(getTemplateName(), ID, true);
@@ -50,6 +52,25 @@ public class DisplayElectionaryCriteriaList extends HTMLFormDisplay {
       buffer.append("</td>");
 
       buffer.append("<td>");
+      buffer.append("x");
+      buffer.append(criteria[i].getMultiplyBy());
+      buffer.append("</td>");
+
+      buffer.append("<td>");
+      parameters = new Properties();
+      parameters.put(PARAMETER_ACTION, ACTION_MULTIPLY_INCREASE);
+      parameters.put(PARAMETER_TARGET, String.valueOf(criteria[i].getId()));
+      ComponentLink.fillLink(buffer, request.getDisplay().getClass(), parameters, "+");
+      buffer.append("</td>");
+
+      buffer.append("<td>");
+      parameters = new Properties();
+      parameters.put(PARAMETER_ACTION, ACTION_MULTIPLY_DECREASE);
+      parameters.put(PARAMETER_TARGET, String.valueOf(criteria[i].getId()));
+      ComponentLink.fillLink(buffer, request.getDisplay().getClass(), parameters, "-");
+      buffer.append("</td>");
+
+      buffer.append("<td>");
       parameters = new Properties();
       parameters.put(PARAMETER_ACTION, ACTION_DELETE);
       parameters.put(PARAMETER_TARGET, String.valueOf(criteria[i].getId()));
@@ -70,6 +91,12 @@ public class DisplayElectionaryCriteriaList extends HTMLFormDisplay {
       fillRefreshScript(buffer);
     } else if (ACTION_COLOR.equals(action)) {
       getCriterion(criterion).changeColor();
+      fillRefreshScript(buffer);
+    } else if (ACTION_MULTIPLY_INCREASE.equals(action)) {
+      getCriterion(criterion).changeMultiply(true);
+      fillRefreshScript(buffer);
+    } else if (ACTION_MULTIPLY_DECREASE.equals(action)) {
+      getCriterion(criterion).changeMultiply(false);
       fillRefreshScript(buffer);
     }
   }

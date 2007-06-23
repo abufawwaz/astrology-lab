@@ -1,7 +1,5 @@
 package astrolab.criteria;
 
-import java.util.TimeZone;
-
 import astrolab.astronom.SpacetimeEvent;
 import astrolab.db.Database;
 import astrolab.db.Text;
@@ -15,7 +13,7 @@ public class CriterionStartTime extends Criterion {
   private SpacetimeEvent time;
 
   CriterionStartTime(int id, int time1, int time2) {
-    super(id, Criterion.TYPE_START_TIME, 0, "black");
+    super(id, Criterion.TYPE_START_TIME, 0);
 
     long timestamp = time2;
     timestamp <<= 31;
@@ -26,7 +24,7 @@ public class CriterionStartTime extends Criterion {
   }
 
   public CriterionStartTime(int id, SpacetimeEvent time) {
-    super(id, Criterion.TYPE_START_TIME, 0, "black");
+    super(id, Criterion.TYPE_START_TIME, 0);
     this.time = time;
   }
 
