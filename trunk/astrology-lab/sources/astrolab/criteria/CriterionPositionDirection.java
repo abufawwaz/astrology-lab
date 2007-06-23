@@ -44,7 +44,7 @@ public class CriterionPositionDirection extends Criterion {
     } else if (direction == ID_RETROGRADE) {
       return (position2 < position1) ? 1 : 0;
     } else {
-      return 0;
+      throw new IllegalStateException("Direction " + direction + " is not valid!");
     }
   }
 
@@ -62,7 +62,7 @@ public class CriterionPositionDirection extends Criterion {
 
   protected void store(String[] inputValues) {
     int direction = Integer.parseInt(inputValues[2]);
-    new CriterionPositionPhase(getId(), Integer.parseInt(inputValues[0]), direction, "blue").store();
+    new CriterionPositionDirection(getId(), Integer.parseInt(inputValues[0]), direction, "black").store();
   }
 
   public void toString(LocalizedStringBuffer output) {
