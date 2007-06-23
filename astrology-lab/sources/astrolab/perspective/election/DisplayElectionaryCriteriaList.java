@@ -4,6 +4,7 @@ import java.util.Properties;
 
 import astrolab.criteria.Criteria;
 import astrolab.criteria.Criterion;
+import astrolab.db.Text;
 import astrolab.web.Display;
 import astrolab.web.HTMLFormDisplay;
 import astrolab.web.component.ComponentLink;
@@ -19,8 +20,13 @@ public class DisplayElectionaryCriteriaList extends HTMLFormDisplay {
   public final static String ACTION_COLOR = "color";
 
   public DisplayElectionaryCriteriaList() {
-    super("Criteria", ID, true);
+    super(getTemplateName(), ID, true);
     super.addAction("criteria", "action");
+  }
+
+  private final static String getTemplateName() {
+    int template = Criteria.getSelectedTemplate();
+    return (template > 0) ? Text.getText(template) : "Criteria";
   }
 
   public void fillBodyContent(Request request, LocalizedStringBuffer buffer) {

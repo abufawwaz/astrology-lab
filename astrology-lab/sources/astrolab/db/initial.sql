@@ -186,6 +186,7 @@ create table project_classmates (
 
 create table perspective_elect_criteria (
   criteria_id INT UNSIGNED NOT NULL UNIQUE PRIMARY KEY AUTO_INCREMENT,
+  criteria_template INT UNSIGNED NOT NULL REFERENCES text (id),
   criteria_owner INT UNSIGNED NOT NULL REFERENCES text (id),
   criteria_type INT UNSIGNED NOT NULL,
   criteria_actor INT UNSIGNED NOT NULL REFERENCES text (id),
@@ -330,7 +331,8 @@ insert into text values (40038, NULL, NULL, 'Data Chart', 'Data Chart');
 insert into text values (40039, NULL, NULL, 'Data', 'Data');
 insert into text values (40040, NULL, NULL, 'Natal Chart', 'Натална карта');
 insert into text values (40041, NULL, NULL, 'Statistics', 'Статистически данни');
-insert into text values (40042, NULL, NULL, 'Electionary', 'Елективна карта');
+insert into text values (40042, NULL, NULL, 'Elective', 'Елективна карта');
+insert into text values (40043, NULL, NULL, 'Moon void of course', 'Луна без курс');
 
 insert into text values (60001, NULL, NULL, 'Description', 'Описание');
 insert into text values (60002, NULL, NULL, 'Subject', 'Субект');
@@ -589,4 +591,6 @@ insert into actions values (40031, 40028, NULL, NULL, 46, 47, 46, NULL);
 insert into actions values (40033, 40039, NULL, NULL, NULL, NULL, 52, NULL);
 insert into actions values (40037, 40039, NULL, 30027, NULL, NULL, 57, NULL);
 insert into actions values (40038, 40039, NULL, 30027, NULL, NULL, 58, NULL);
+
+insert into perspective_elect_criteria (criteria_template, criteria_owner, criteria_type, criteria_actor, criteria_action, criteria_factor, criteria_color) VALUES ('40043', '0', '5', '2102', '0', '0', 'black')
 

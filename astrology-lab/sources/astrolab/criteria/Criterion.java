@@ -82,38 +82,38 @@ public abstract class Criterion {
   }
 
   protected static Criterion read(ResultSet query) throws SQLException {
-    int type = query.getInt(3);
+    int type = query.getInt(4);
     switch (type) {
       case TYPE_START_TIME: {
-        return new CriterionStartTime(query.getInt(1), query.getInt(4), query.getInt(5)); 
+        return new CriterionStartTime(query.getInt(1), query.getInt(5), query.getInt(7)); 
       }
       case TYPE_ZODIAC_SIGN: {
-        String color = query.getString(7);
-        return new CriterionZodiacSign(query.getInt(1), query.getInt(4), query.getInt(6), false, color); 
+        String color = query.getString(8);
+        return new CriterionZodiacSign(query.getInt(1), query.getInt(5), query.getInt(7), false, color); 
       }
       case TYPE_POSITION_DIRECTION: {
-        String color = query.getString(7);
-        return new CriterionPositionDirection(query.getInt(1), query.getInt(4), query.getInt(6), color); 
+        String color = query.getString(8);
+        return new CriterionPositionDirection(query.getInt(1), query.getInt(5), query.getInt(7), color); 
       }
       case TYPE_COURSE_DIRECTION: {
-        String color = query.getString(7);
-        return new CriterionCourseDirection(query.getInt(1), query.getInt(4), query.getInt(6), color); 
+        String color = query.getString(8);
+        return new CriterionCourseDirection(query.getInt(1), query.getInt(5), query.getInt(7), color); 
       }
       case TYPE_COURSE_VOID: {
-        String color = query.getString(7);
-        return new CriterionCourseVoid(query.getInt(1), query.getInt(4), color); 
+        String color = query.getString(8);
+        return new CriterionCourseVoid(query.getInt(1), query.getInt(5), color); 
       }
       case TYPE_POSITION_PHASE: {
-        String color = query.getString(7);
-        return new CriterionPositionPhase(query.getInt(1), query.getInt(4), query.getInt(6), color); 
+        String color = query.getString(8);
+        return new CriterionPositionPhase(query.getInt(1), query.getInt(5), query.getInt(7), color); 
       }
     }
-    return null;
+    throw new IllegalStateException(" Type " + type + " is not a valid criteria type.");
   }
 
-  public void store() {
+  protected void store() {
     int user = Request.getCurrentRequest().getUser();
-    Database.execute("INSERT INTO perspective_elect_criteria (criteria_owner, criteria_type, criteria_actor, criteria_action, criteria_factor, criteria_color) VALUES ('" + user + "', '" + getType() + "', '" + getActor() + "', '" + getAction() + "', '" + getFactor() + "', '" + getColor() + "')");
+    Database.execute("INSERT INTO perspective_elect_criteria (criteria_template, criteria_owner, criteria_type, criteria_actor, criteria_action, criteria_factor, criteria_color) VALUES ('0', '" + user + "', '" + getType() + "', '" + getActor() + "', '" + getAction() + "', '" + getFactor() + "', '" + getColor() + "')");
   }
 
   public void delete() {
