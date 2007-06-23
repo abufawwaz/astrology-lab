@@ -595,5 +595,26 @@ insert into actions values (40037, 40039, NULL, 30027, NULL, NULL, 57, NULL);
 insert into actions values (40038, 40039, NULL, 30027, NULL, NULL, 58, NULL);
 
 insert into perspective_elect_criteria VALUES (1, 40043, 0, 5, 2102, 0, 0, 'black', -1);
-insert into perspective_elect_criteria VALUES (18, 40044, 0, 5, 2102, 0, 0, 'black', -1);
+
+insert into perspective_elect_criteria VALUES (2, 40044, 0, 7, 2102, 0, 0, 'black', -5);
+insert into perspective_elect_criteria VALUES (3, 40044, 0, 7, 2105, 0, 0, 'black', -5);
+insert into perspective_elect_criteria VALUES (4, 40044, 0, 7, 2103, 0, 0, 'black', -5);
+insert into perspective_elect_criteria VALUES (5, 40044, 0, 7, 2106, 0, 0, 'black', -5);
+insert into perspective_elect_criteria VALUES (6, 40044, 0, 7, 2104, 0, 0, 'black', -5);
+insert into perspective_elect_criteria VALUES (7, 40044, 0, 3, 2104, 0, 2903, 'black', -1);
+insert into perspective_elect_criteria VALUES (8, 40044, 0, 2, 2104, 0, 2002, 'green', 1);
+insert into perspective_elect_criteria VALUES (9, 40044, 0, 2, 2104, 0, 2007, 'green', 1);
+insert into perspective_elect_criteria VALUES (10, 40044, 0, 2, 2104, 0, 2012, 'green', 1);
+insert into perspective_elect_criteria VALUES (11, 40044, 0, 2, 2104, 0, 2001, 'black', -1);
+insert into perspective_elect_criteria VALUES (12, 40044, 0, 2, 2104, 0, 2006, 'black', -1);
+insert into perspective_elect_criteria VALUES (13, 40044, 0, 2, 2104, 0, 2008, 'black', -1);
+insert into perspective_elect_criteria VALUES (14, 40044, 0, 3, 2103, 0, 2903, 'black', -1);
+insert into perspective_elect_criteria VALUES (15, 40044, 0, 2, 2102, 0, 2002, 'orange', 1);
+insert into perspective_elect_criteria VALUES (16, 40044, 0, 2, 2102, 0, 2004, 'orange', 1);
+insert into perspective_elect_criteria VALUES (17, 40044, 0, 2, 2102, 0, 2001, 'black', -1);
+insert into perspective_elect_criteria VALUES (18, 40044, 0, 2, 2102, 0, 2008, 'black', -1);
+insert into perspective_elect_criteria VALUES (19, 40044, 0, 2, 2102, 0, 2010, 'black', -1);
+insert into perspective_elect_criteria VALUES (20, 40044, 0, 5, 2102, 0, 0, 'black', -1);
+insert into perspective_elect_criteria VALUES (21, 40044, 0, 5, 2103, 0, 0, 'black', -1);
+insert into perspective_elect_criteria VALUES (22, 40044, 0, 5, 2104, 0, 0, 'black', -1);
 

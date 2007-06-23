@@ -1,6 +1,5 @@
 package astrolab.perspective.election;
 
-import astrolab.criteria.Criteria;
 import astrolab.criteria.TypeCriterion;
 import astrolab.web.Display;
 import astrolab.web.HTMLFormDisplay;
@@ -95,9 +94,6 @@ public class DisplayElectionaryRestrictionList extends HTMLFormDisplay {
 
     // if criterion is fulfilled then store it and refresh the view
     if (TypeCriterion.isCriteriaDetermined(selectedType, selected)) {
-      if (Criteria.getSelectedTemplate() > 0) {
-        Criteria.copySelectedTemplate();
-      }
       TypeCriterion.store(selectedType, selected);
       fillRefreshScript(buffer);
       return null;

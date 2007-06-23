@@ -10,13 +10,13 @@ import astrolab.web.server.content.LocalizedStringBuffer;
 
 public abstract class Criterion {
 
-  public final static int TYPE_START_TIME = 0;
   public final static int TYPE_LOCATION = 1;
   public final static int TYPE_ZODIAC_SIGN = 2;
   public final static int TYPE_POSITION_DIRECTION = 3;
   public final static int TYPE_COURSE_DIRECTION = 4;
   public final static int TYPE_COURSE_VOID = 5;
   public final static int TYPE_POSITION_PHASE = 6;
+  public final static int TYPE_TIME_OF_WEEK = 7;
 
   private int id;
   private int type;
@@ -90,8 +90,8 @@ public abstract class Criterion {
     Criterion criterion = null;
 
     switch (type) {
-      case TYPE_START_TIME: {
-        criterion = new CriterionStartTime(query.getInt(1), query.getInt(5), query.getInt(7));
+      case TYPE_TIME_OF_WEEK: {
+        criterion = new CriterionTimeOfWeek(query.getInt(1), query.getInt(5));
         break;
       }
       case TYPE_ZODIAC_SIGN: {
@@ -125,7 +125,7 @@ public abstract class Criterion {
     return criterion;
   }
 
-  protected void store() {
+  protected final void store() {
     int user = Request.getCurrentRequest().getUser();
     Database.execute("INSERT INTO perspective_elect_criteria (criteria_template, criteria_owner, criteria_type, criteria_actor, criteria_action, criteria_factor, criteria_color, criteria_multiply) VALUES ('0', '" + user + "', '" + getType() + "', '" + getActor() + "', '" + getAction() + "', '" + getFactor() + "', '" + getColor() + "', '" + getMultiplyBy() + "')");
   }

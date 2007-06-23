@@ -10,6 +10,7 @@ public abstract class TypeCriterion {
     new CriterionCourseDirection(),
     new CriterionCourseVoid(),
     new CriterionPositionPhase(),
+    new CriterionTimeOfWeek(),
   };
 
   public final static boolean isCriteriaDetermined(String type, String[] inputValues) {
@@ -42,10 +43,13 @@ public abstract class TypeCriterion {
   }
 
   public final static void store(String type, String[] inputValues) {
+    if (Criteria.getSelectedTemplate() > 0) {
+      Criteria.copySelectedTemplate();
+    }
+
     for (int i = 0; i < TYPES.length; i++) {
       if (TYPES[i].getName().equals(type)) {
         TYPES[i].store(inputValues);
-        Criteria.selectTemplate(0);
         return;
       }
     }

@@ -17,6 +17,7 @@ public class SpacetimeEvent {
   public final static int YEAR = Calendar.YEAR;
   public final static int MONTH = Calendar.MONTH;
   public final static int MAX_DAY_OF_MONTH = -Calendar.DAY_OF_MONTH;
+  public final static int DAY_OF_WEEK = Calendar.DAY_OF_WEEK;
   public final static int DAY_OF_MONTH = Calendar.DAY_OF_MONTH;
   public final static int DAY_OF_YEAR = Calendar.DAY_OF_YEAR;
   public final static int HOUR_OF_DAY = Calendar.HOUR_OF_DAY;
