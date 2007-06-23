@@ -23,16 +23,16 @@ public abstract class Criterion {
   private int action;
   private int factor;
   private int activePoint;
-  private String color;
+  private int multiply = 1;
+  private String color = "black";
 
   protected Criterion() {
   }
 
-  protected Criterion(int id, int type, int activePoint, String color) {
+  protected Criterion(int id, int type, int activePoint) {
     this.id = id;
     this.type = type;
     this.activePoint = activePoint;
-    this.color = color;
   }
 
   public abstract String getName();
@@ -63,6 +63,10 @@ public abstract class Criterion {
     return factor;
   }
 
+  public int getMultiplyBy() {
+    return multiply;
+  }
+
   public String getColor() {
     return color;
   }
@@ -83,37 +87,47 @@ public abstract class Criterion {
 
   protected static Criterion read(ResultSet query) throws SQLException {
     int type = query.getInt(4);
+    Criterion criterion = null;
+
     switch (type) {
       case TYPE_START_TIME: {
-        return new CriterionStartTime(query.getInt(1), query.getInt(5), query.getInt(7)); 
+        criterion = new CriterionStartTime(query.getInt(1), query.getInt(5), query.getInt(7));
+        break;
       }
       case TYPE_ZODIAC_SIGN: {
-        String color = query.getString(8);
-        return new CriterionZodiacSign(query.getInt(1), query.getInt(5), query.getInt(7), false, color); 
+        criterion = new CriterionZodiacSign(query.getInt(1), query.getInt(5), query.getInt(7), false);
+        break;
       }
       case TYPE_POSITION_DIRECTION: {
-        String color = query.getString(8);
-        return new CriterionPositionDirection(query.getInt(1), query.getInt(5), query.getInt(7), color); 
+        criterion = new CriterionPositionDirection(query.getInt(1), query.getInt(5), query.getInt(7));
+        break;
       }
       case TYPE_COURSE_DIRECTION: {
-        String color = query.getString(8);
-        return new CriterionCourseDirection(query.getInt(1), query.getInt(5), query.getInt(7), color); 
+        criterion = new CriterionCourseDirection(query.getInt(1), query.getInt(5), query.getInt(7));
+        break;
       }
       case TYPE_COURSE_VOID: {
-        String color = query.getString(8);
-        return new CriterionCourseVoid(query.getInt(1), query.getInt(5), color); 
+        criterion = new CriterionCourseVoid(query.getInt(1), query.getInt(5));
+        break;
       }
       case TYPE_POSITION_PHASE: {
-        String color = query.getString(8);
-        return new CriterionPositionPhase(query.getInt(1), query.getInt(5), query.getInt(7), color); 
+        criterion = new CriterionPositionPhase(query.getInt(1), query.getInt(5), query.getInt(7));
+        break;
+      }
+      default: {
+//        throw new IllegalStateException(" Type " + type + " is not a valid criteria type.");
       }
     }
-    throw new IllegalStateException(" Type " + type + " is not a valid criteria type.");
+
+    criterion.type = type;
+    criterion.color = query.getString(8);
+    criterion.multiply = query.getInt(9);
+    return criterion;
   }
 
   protected void store() {
     int user = Request.getCurrentRequest().getUser();
-    Database.execute("INSERT INTO perspective_elect_criteria (criteria_template, criteria_owner, criteria_type, criteria_actor, criteria_action, criteria_factor, criteria_color) VALUES ('0', '" + user + "', '" + getType() + "', '" + getActor() + "', '" + getAction() + "', '" + getFactor() + "', '" + getColor() + "')");
+    Database.execute("INSERT INTO perspective_elect_criteria (criteria_template, criteria_owner, criteria_type, criteria_actor, criteria_action, criteria_factor, criteria_color, criteria_multiply) VALUES ('0', '" + user + "', '" + getType() + "', '" + getActor() + "', '" + getAction() + "', '" + getFactor() + "', '" + getColor() + "', '" + getMultiplyBy() + "')");
   }
 
   public void delete() {
@@ -136,6 +150,16 @@ public abstract class Criterion {
       c = 0;
     }
     Database.execute("UPDATE perspective_elect_criteria SET criteria_color = '" + COLORS[c] + "' WHERE criteria_id = " + getId() + " AND criteria_owner = " + user);
+  }
+
+  public void changeMultiply(boolean increase) {
+    int user = Request.getCurrentRequest().getUser();
+    int newMultiply = getMultiplyBy() + (increase ? 1 : -1);
+
+    if (newMultiply == 0) {
+      newMultiply += (increase ? 1 : -1);
+    }
+    Database.execute("UPDATE perspective_elect_criteria SET criteria_multiply = '" + newMultiply + "' WHERE criteria_id = " + getId() + " AND criteria_owner = " + user);
   }
 
   protected abstract void store(String[] inputValues);

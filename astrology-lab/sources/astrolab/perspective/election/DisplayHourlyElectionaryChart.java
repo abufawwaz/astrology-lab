@@ -12,6 +12,7 @@ import astrolab.web.server.content.LocalizedStringBuffer;
 public class DisplayHourlyElectionaryChart extends SVGDisplay {
 
   private final static int HEIGHT = 10;
+  private final static float HEIGHT_LINE_WIDTH = (float) HEIGHT / 100;
   private final static float MINUTE_STEP = ((float) 15) / 60;
 
   private Calendar timestamp;
@@ -128,7 +129,7 @@ public class DisplayHourlyElectionaryChart extends SVGDisplay {
   }
 
   private final void fillMarks(LocalizedStringBuffer buffer, Criterion[] criteria) {
-    int[][] marks = new int[criteria.length][(int) (24 / MINUTE_STEP)];
+    int[][][] marks = new int[criteria.length][(int) (24 / MINUTE_STEP)][2];
     int maxValue = 0;
     SpacetimeEvent periodStart;
     SpacetimeEvent periodEnd = getCalendar(0);
@@ -138,31 +139,65 @@ public class DisplayHourlyElectionaryChart extends SVGDisplay {
       periodEnd = getCalendar(MINUTE_STEP * (h + 1));
 
       for (int c = 0; c < criteria.length; c++) {
-        marks[c][h] = criteria[c].getMark(periodStart, periodEnd) + ((c > 0) ? marks[c - 1][h] : 0);
+        int value = criteria[c].getMark(periodStart, periodEnd) * criteria[c].getMultiplyBy();
+        if (value > 0) {
+          marks[c][h][0] = value + ((c > 0) ? marks[c - 1][h][0] : 0);
+          marks[c][h][1] = ((c > 0) ? marks[c - 1][h][1] : 0);
+        } else {
+          marks[c][h][0] = ((c > 0) ? marks[c - 1][h][0] : 0);
+          marks[c][h][1] = Math.abs(value) + ((c > 0) ? marks[c - 1][h][1] : 0);
+        }
       }
 
-      if ((criteria.length > 0) && marks[criteria.length - 1][h] > maxValue) {
-        maxValue = marks[criteria.length - 1][h];
+      if (criteria.length > 0) {
+        if (marks[criteria.length - 1][h][0] > maxValue) {
+          maxValue = marks[criteria.length - 1][h][0];
+        }
+        if (marks[criteria.length - 1][h][1] > maxValue) {
+          maxValue = marks[criteria.length - 1][h][1];
+        }
       }
     }
     maxValue++;
 
-    for (int c = criteria.length - 1; c >= 0; c--) {
-      buffer.append("<polygon points='");
-      buffer.append(String.valueOf(24));
-      buffer.append(",0 0,0");
-
-      for (int h = 0; h < 24 / MINUTE_STEP; h ++) {
-        buffer.append(" ");
-        buffer.append(String.valueOf(MINUTE_STEP * h));
+    float YCENTER = (float) HEIGHT / 2;
+    for (int s = 0; s < 2; s++) {
+      for (int c = criteria.length - 1; c >= 0; c--) {
+        buffer.append("<polygon points='");
+        buffer.append(String.valueOf(24));
         buffer.append(",");
-        buffer.append(String.valueOf(((float) HEIGHT * marks[c][h]) / maxValue));
-      }
+        buffer.append(YCENTER);
+        buffer.append(" 0,");
+        buffer.append(YCENTER);
 
-      buffer.append("' style='stroke:none;fill:");
-      buffer.append(criteria[c].getColor());
-      buffer.append("' />");
+        for (int h = 0; h < 24 / MINUTE_STEP; h ++) {
+          float yaxis = YCENTER;
+          buffer.append(" ");
+          buffer.append(String.valueOf(MINUTE_STEP * h));
+          buffer.append(",");
+          if (s == 0) {
+            yaxis -= yaxis * marks[c][h][s] / maxValue;
+          } else {
+            yaxis += yaxis * marks[c][h][s] / maxValue;
+          }
+          buffer.append(String.valueOf(yaxis));
+        }
+  
+        buffer.append("' style='stroke:none;fill:");
+        buffer.append(criteria[c].getColor());
+        buffer.append("' />");
+      }
     }
+
+    buffer.append("<line x1='0' x2='");
+    buffer.append(String.valueOf(24));
+    buffer.append("' y1='");
+    buffer.append(YCENTER);
+    buffer.append("' y2='");
+    buffer.append(YCENTER);
+    buffer.append("' style='stroke:black;stroke-width:");
+    buffer.append(HEIGHT_LINE_WIDTH);
+    buffer.append("' />");
   }
 
   private final SpacetimeEvent getCalendar(float hour) {

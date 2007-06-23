@@ -192,7 +192,8 @@ create table perspective_elect_criteria (
   criteria_actor INT UNSIGNED NOT NULL REFERENCES text (id),
   criteria_action INT UNSIGNED NOT NULL REFERENCES text (id),
   criteria_factor INT UNSIGNED NOT NULL REFERENCES text (id),
-  criteria_color VARCHAR(20)
+  criteria_color VARCHAR(20),
+  criteria_multiply INT
 ) ENGINE=InnoDB;
 
 insert into text values (0, NULL, NULL, '... not set ...', '... липсва ...');
@@ -333,6 +334,7 @@ insert into text values (40040, NULL, NULL, 'Natal Chart', 'Натална ка�
 insert into text values (40041, NULL, NULL, 'Statistics', 'Статистически данни');
 insert into text values (40042, NULL, NULL, 'Elective', 'Елективна карта');
 insert into text values (40043, NULL, NULL, 'Moon void of course', 'Луна без курс');
+insert into text values (40044, NULL, NULL, 'Wedding Date', 'Сватбен ден');
 
 insert into text values (60001, NULL, NULL, 'Description', 'Описание');
 insert into text values (60002, NULL, NULL, 'Subject', 'Субект');
@@ -592,5 +594,6 @@ insert into actions values (40033, 40039, NULL, NULL, NULL, NULL, 52, NULL);
 insert into actions values (40037, 40039, NULL, 30027, NULL, NULL, 57, NULL);
 insert into actions values (40038, 40039, NULL, 30027, NULL, NULL, 58, NULL);
 
-insert into perspective_elect_criteria (criteria_template, criteria_owner, criteria_type, criteria_actor, criteria_action, criteria_factor, criteria_color) VALUES ('40043', '0', '5', '2102', '0', '0', 'black')
+insert into perspective_elect_criteria VALUES (1, 40043, 0, 5, 2102, 0, 0, 'black', -1);
+insert into perspective_elect_criteria VALUES (18, 40044, 0, 5, 2102, 0, 0, 'black', -1);
 

@@ -27,8 +27,8 @@ public class CriterionPositionPhase extends Criterion {
     super();
   }
 
-  public CriterionPositionPhase(int id, int activePoint, int phase, String color) {
-    super(id, TYPE_POSITION_PHASE, activePoint, color);
+  public CriterionPositionPhase(int id, int activePoint, int phase) {
+    super(id, TYPE_POSITION_PHASE, activePoint);
     this.phase = phase;
   }
 
@@ -75,7 +75,7 @@ public class CriterionPositionPhase extends Criterion {
 
   protected void store(String[] inputValues) {
     int phase = Integer.parseInt(inputValues[2]);
-    new CriterionPositionPhase(getId(), Integer.parseInt(inputValues[0]), phase, "black").store();
+    new CriterionPositionPhase(getId(), Integer.parseInt(inputValues[0]), phase).store();
   }
 
   public void toString(LocalizedStringBuffer output) {

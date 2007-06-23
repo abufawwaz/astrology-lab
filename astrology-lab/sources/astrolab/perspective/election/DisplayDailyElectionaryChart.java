@@ -15,6 +15,7 @@ public class DisplayDailyElectionaryChart extends SVGDisplay {
   private final static String[] MONTHS = new String[] { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
 
   private final static int HEIGHT = 10;
+  private final static float HEIGHT_LINE_WIDTH = (float) HEIGHT / 100;
   private final static int WIDTH = 31;
   private final static int HOUR_STEP = 6;
 
@@ -60,7 +61,7 @@ public class DisplayDailyElectionaryChart extends SVGDisplay {
   }
 
   private final void fillMarks(LocalizedStringBuffer buffer, Criterion[] criteria) {
-    int[][] marks = new int[criteria.length][DAYS * 24 / HOUR_STEP];
+    int[][][] marks = new int[criteria.length][DAYS * 24 / HOUR_STEP][2];
     int maxValue = 0;
     SpacetimeEvent periodStart;
     SpacetimeEvent periodEnd;
@@ -68,40 +69,76 @@ public class DisplayDailyElectionaryChart extends SVGDisplay {
     for (int d = 0; d < DAYS; d ++) {
       periodEnd = getCalendar(d, 0);
       for (int h = 0; h < 24; h += HOUR_STEP) {
+        int hourIndex = (d * 24 + h) / HOUR_STEP;
         periodStart = periodEnd;
         periodEnd = getCalendar(d, h + 1);
   
         for (int c = 0; c < criteria.length; c++) {
-          marks[c][(d * 24 + h) / HOUR_STEP] = criteria[c].getMark(periodStart, periodEnd) + ((c > 0) ? marks[c - 1][(d * 24 + h) / HOUR_STEP] : 0);
+          int value = criteria[c].getMark(periodStart, periodEnd) * criteria[c].getMultiplyBy();
+          if (value > 0) {
+            marks[c][hourIndex][0] = value + ((c > 0) ? marks[c - 1][hourIndex][0] : 0);
+            marks[c][hourIndex][1] = ((c > 0) ? marks[c - 1][hourIndex][1] : 0);
+          } else {
+            marks[c][hourIndex][0] = ((c > 0) ? marks[c - 1][hourIndex][0] : 0);
+            marks[c][hourIndex][1] = Math.abs(value) + ((c > 0) ? marks[c - 1][hourIndex][1] : 0);
+          }
         }
-  
-        if ((criteria.length > 0) && marks[criteria.length - 1][(d * 24 + h) / HOUR_STEP] > maxValue) {
-          maxValue = marks[criteria.length - 1][(d * 24 + h) / HOUR_STEP];
+
+        if (criteria.length > 0) {
+          if (marks[criteria.length - 1][hourIndex][0] > maxValue) {
+            maxValue = marks[criteria.length - 1][hourIndex][0];
+          }
+          if (marks[criteria.length - 1][hourIndex][1] > maxValue) {
+            maxValue = marks[criteria.length - 1][hourIndex][1];
+          }
         }
       }
     }
     maxValue++;
 
-    for (int c = criteria.length - 1; c >= 0; c--) {
-      buffer.append("<polygon points='");
-      buffer.append(String.valueOf(DAYS));
-      buffer.append(",0 0,0");
+    float YCENTER = (float) HEIGHT / 2;
+    for (int s = 0; s < 2; s++) {
+      for (int c = criteria.length - 1; c >= 0; c--) {
+        buffer.append("<polygon points='");
+        buffer.append(String.valueOf(DAYS));
+        buffer.append(",");
+        buffer.append(YCENTER);
+        buffer.append(" 0,");
+        buffer.append(YCENTER);
 
-      for (int d = 0; d < DAYS; d ++) {
-        for (int h = 0; h < 24; h += HOUR_STEP) {
-          buffer.append(" ");
-          buffer.append(String.valueOf(d));
-          buffer.append(".");
-          buffer.append(String.valueOf((int) (((float) h) / 24 * 100)));
-          buffer.append(",");
-          buffer.append(String.valueOf(((float) HEIGHT * marks[c][(d * 24 + h) / HOUR_STEP]) / maxValue));
+        for (int d = 0; d < DAYS; d ++) {
+          for (int h = 0; h < 24; h += HOUR_STEP) {
+            int hourIndex = (d * 24 + h) / HOUR_STEP;
+            float yaxis = YCENTER;
+            buffer.append(" ");
+            buffer.append(String.valueOf(d));
+            buffer.append(".");
+            buffer.append(String.valueOf((int) (((float) h) / 24 * 100)));
+            buffer.append(",");
+            if (s == 0) {
+              yaxis -= yaxis * marks[c][hourIndex][s] / maxValue;
+            } else {
+              yaxis += yaxis * marks[c][hourIndex][s] / maxValue;
+            }
+            buffer.append(String.valueOf(yaxis));
+          }
         }
-      }
 
-      buffer.append("' style='stroke:none;fill:");
-      buffer.append(criteria[c].getColor());
-      buffer.append("' />");
+        buffer.append("' style='stroke:none;fill:");
+        buffer.append(criteria[c].getColor());
+        buffer.append("' />");
+      }
     }
+
+    buffer.append("<line x1='0' x2='");
+    buffer.append(String.valueOf(DAYS));
+    buffer.append("' y1='");
+    buffer.append(YCENTER);
+    buffer.append("' y2='");
+    buffer.append(YCENTER);
+    buffer.append("' style='stroke:black;stroke-width:");
+    buffer.append(HEIGHT_LINE_WIDTH);
+    buffer.append("' />");
   }
 
   private final void fillBackground(LocalizedStringBuffer buffer) {
