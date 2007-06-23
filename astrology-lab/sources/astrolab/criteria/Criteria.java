@@ -31,7 +31,7 @@ public class Criteria {
   }
 
   public static int[] getTemplates() {
-    String sql = "select criteria_template from perspective_elect_criteria where criteria_owner = 0 or criteria_owner = " + Personalize.getUser();
+    String sql = "select DISTINCT(criteria_template) from perspective_elect_criteria where criteria_owner = 0 or criteria_owner = " + Personalize.getUser();
     return Database.queryIds(sql);
   }
 
@@ -50,6 +50,7 @@ public class Criteria {
     for (Criterion criterion: getCriteria()) {
       criterion.store();
     }
+    Criteria.selectTemplate(0);
   }
 
 }

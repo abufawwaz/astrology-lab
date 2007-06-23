@@ -36,6 +36,8 @@ public class DisplayElectionaryCriteriaList extends HTMLFormDisplay {
 
     Properties parameters;
     Criterion[] criteria = Criteria.getCriteria();
+    boolean modifyable = Criteria.getSelectedTemplate() == 0;
+
     buffer.append("<table>");
     for (int i = 0; i < criteria.length; i++) {
       buffer.append("<tr>");
@@ -56,26 +58,28 @@ public class DisplayElectionaryCriteriaList extends HTMLFormDisplay {
       buffer.append(criteria[i].getMultiplyBy());
       buffer.append("</td>");
 
-      buffer.append("<td>");
-      parameters = new Properties();
-      parameters.put(PARAMETER_ACTION, ACTION_MULTIPLY_INCREASE);
-      parameters.put(PARAMETER_TARGET, String.valueOf(criteria[i].getId()));
-      ComponentLink.fillLink(buffer, request.getDisplay().getClass(), parameters, "+");
-      buffer.append("</td>");
-
-      buffer.append("<td>");
-      parameters = new Properties();
-      parameters.put(PARAMETER_ACTION, ACTION_MULTIPLY_DECREASE);
-      parameters.put(PARAMETER_TARGET, String.valueOf(criteria[i].getId()));
-      ComponentLink.fillLink(buffer, request.getDisplay().getClass(), parameters, "-");
-      buffer.append("</td>");
-
-      buffer.append("<td>");
-      parameters = new Properties();
-      parameters.put(PARAMETER_ACTION, ACTION_DELETE);
-      parameters.put(PARAMETER_TARGET, String.valueOf(criteria[i].getId()));
-      ComponentLink.fillLink(buffer, request.getDisplay().getClass(), parameters, "X");
-      buffer.append("</td>");
+      if (modifyable) {
+        buffer.append("<td>");
+        parameters = new Properties();
+        parameters.put(PARAMETER_ACTION, ACTION_MULTIPLY_INCREASE);
+        parameters.put(PARAMETER_TARGET, String.valueOf(criteria[i].getId()));
+        ComponentLink.fillLink(buffer, request.getDisplay().getClass(), parameters, "+");
+        buffer.append("</td>");
+  
+        buffer.append("<td>");
+        parameters = new Properties();
+        parameters.put(PARAMETER_ACTION, ACTION_MULTIPLY_DECREASE);
+        parameters.put(PARAMETER_TARGET, String.valueOf(criteria[i].getId()));
+        ComponentLink.fillLink(buffer, request.getDisplay().getClass(), parameters, "-");
+        buffer.append("</td>");
+  
+        buffer.append("<td>");
+        parameters = new Properties();
+        parameters.put(PARAMETER_ACTION, ACTION_DELETE);
+        parameters.put(PARAMETER_TARGET, String.valueOf(criteria[i].getId()));
+        ComponentLink.fillLink(buffer, request.getDisplay().getClass(), parameters, "X");
+        buffer.append("</td>");
+      }
 
       buffer.append("</tr>");
     }

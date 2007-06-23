@@ -5,7 +5,6 @@ import java.util.Calendar;
 import astrolab.astronom.SpacetimeEvent;
 import astrolab.criteria.Criteria;
 import astrolab.criteria.Criterion;
-import astrolab.criteria.CriterionStartTime;
 import astrolab.web.SVGDisplay;
 import astrolab.web.server.Request;
 import astrolab.web.server.content.LocalizedStringBuffer;
@@ -41,11 +40,12 @@ public class DisplayDailyElectionaryChart extends SVGDisplay {
   }
 
   private final void determineStartingTime(Criterion[] criteria) {
-    for (int i = 0; i < criteria.length; i++) {
-      if (criteria[i] instanceof CriterionStartTime) {
-        timestamp = ((CriterionStartTime) criteria[i]).getStartTime();
-      }
-    }
+// TODO: put back for month time
+//    for (int i = 0; i < criteria.length; i++) {
+//      if (criteria[i] instanceof CriterionTimeOfWeek) {
+//        timestamp = ((CriterionTimeOfWeek) criteria[i]).getStartTime();
+//      }
+//    }
     if (timestamp == null) {
       timestamp = new SpacetimeEvent(System.currentTimeMillis());
     }
