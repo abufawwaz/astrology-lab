@@ -45,6 +45,7 @@ public abstract class TypeCriterion {
     for (int i = 0; i < TYPES.length; i++) {
       if (TYPES[i].getName().equals(type)) {
         TYPES[i].store(inputValues);
+        Criteria.selectTemplate(0);
         return;
       }
     }
