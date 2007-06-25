@@ -17,6 +17,7 @@ public abstract class Criterion {
   public final static int TYPE_COURSE_VOID = 5;
   public final static int TYPE_POSITION_PHASE = 6;
   public final static int TYPE_TIME_OF_WEEK = 7;
+  public final static int TYPE_POSITION_PLANET_HOUSE = 8;
 
   private int id;
   private int type;
@@ -33,6 +34,11 @@ public abstract class Criterion {
     this.id = id;
     this.type = type;
     this.activePoint = activePoint;
+  }
+
+  protected Criterion(int id, int type, int activePoint, int factor) {
+    this(id, type, activePoint);
+    this.factor = factor;
   }
 
   public abstract String getName();
@@ -112,6 +118,10 @@ public abstract class Criterion {
       }
       case TYPE_POSITION_PHASE: {
         criterion = new CriterionPositionPhase(query.getInt(1), query.getInt(5), query.getInt(7));
+        break;
+      }
+      case TYPE_POSITION_PLANET_HOUSE: {
+        criterion = new CriterionPositionPlanetInHouse(query.getInt(1), query.getInt(5), query.getInt(7));
         break;
       }
       default: {

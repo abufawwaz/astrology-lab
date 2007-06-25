@@ -86,10 +86,16 @@ package astrolab.astronom.houses;
 
 import astrolab.astronom.SpacetimeEvent;
 import astrolab.astronom.util.Zodiac;
+import astrolab.db.Text;
 
 public abstract class HouseSystem {
 
-  public final static int HOUSE_1 = 1;
+  public final static int[] HOUSES = {
+    Text.getId("house.1"), Text.getId("house.2"), Text.getId("house.3"),
+    Text.getId("house.4"), Text.getId("house.5"), Text.getId("house.6"),
+    Text.getId("house.7"), Text.getId("house.8"), Text.getId("house.9"),
+    Text.getId("house.10"), Text.getId("house.11"), Text.getId("house.12")
+  };
 
   protected SpacetimeEvent event;
 
@@ -97,16 +103,35 @@ public abstract class HouseSystem {
     this.event = event;
   }
 
-  public abstract double getHouse(int number);
+  public abstract HouseCusp getHouseCusp(int id);
+
+  protected final int getHouseIndex(int house) {
+    for (int i = 0; i < HOUSES.length; i++) {
+      if (HOUSES[i] == house) {
+        return i + 1;
+      }
+    }
+    return 1;
+  }
+
+  public static int getNextHouse(int house) {
+    for (int i = 0; i < HOUSES.length - 1; i++) {
+      if (HOUSES[i] == house) {
+        return HOUSES[i + 1];
+      }
+    }
+    return HOUSES[0];
+  }
 
   public String toString() {
     StringBuffer buffer = new StringBuffer();
     buffer.append("[\n");
 
-    for (int i = 1; i < 13; i++) {
-      buffer.append(i);
+    for (int cusp: HouseSystem.HOUSES) {
+      HouseCusp h = getHouseCusp(cusp);
+      buffer.append(h.getName());
       buffer.append(" at ");
-      buffer.append(Zodiac.toString(getHouse(i), "DD ZZZ MM' SS\""));
+      buffer.append(Zodiac.toString(h.getPosition(), "DD ZZZ MM' SS\""));
       buffer.append("\n");
     }
     buffer.append("]");

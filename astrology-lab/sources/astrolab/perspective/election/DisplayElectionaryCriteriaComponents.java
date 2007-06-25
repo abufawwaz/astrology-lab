@@ -1,5 +1,6 @@
 package astrolab.perspective.election;
 
+import astrolab.astronom.houses.HouseSystem;
 import astrolab.astronom.planet.SolarSystem;
 import astrolab.criteria.CriterionPositionDirection;
 import astrolab.criteria.CriterionPositionPhase;
@@ -24,11 +25,12 @@ public class DisplayElectionaryCriteriaComponents extends HTMLDisplay {
   }
 
   public void fillBodyContent(Request request, LocalizedStringBuffer buffer) {
+    buffer.append("<table border='0' width='100%'><tr><td>");
     fillDirectionComponents(buffer);
-    buffer.append("<hr />");
+    buffer.append("</td></tr><tr><td>");
 
     fillPhaseComponents(buffer);
-    buffer.append("<hr />");
+    buffer.append("</td></tr><tr><td>");
 
     buffer.append("<table><tr>");
     for (int i = 0; i < PLANETS.length; i++) {
@@ -47,7 +49,7 @@ public class DisplayElectionaryCriteriaComponents extends HTMLDisplay {
     }
     buffer.append("</tr></table>");
 
-    buffer.append("<hr />");
+    buffer.append("</td></tr><tr><td>");
     buffer.append("<table><tr>");
     int id = Text.getId("Aries");
     for (int i = 0; i < 12; i++, id++) {
@@ -65,7 +67,10 @@ public class DisplayElectionaryCriteriaComponents extends HTMLDisplay {
     }
     buffer.append("</tr></table>");
 
-    buffer.append("<hr />");
+    buffer.append("</td></tr><tr><td>");
+    fillHouseComponents(buffer);
+
+    buffer.append("</td></tr></table>");
   }
 
   private void fillDirectionComponents(LocalizedStringBuffer buffer) {
@@ -117,6 +122,31 @@ public class DisplayElectionaryCriteriaComponents extends HTMLDisplay {
       buffer.append("'>");
       buffer.localize(id);
       buffer.append("</td>");
+    }
+
+    buffer.append("</tr></table>");
+  }
+
+  private void fillHouseComponents(LocalizedStringBuffer buffer) {
+    String controlId;
+
+    buffer.append("<table><tr>");
+
+    for (int i = 0; i < HouseSystem.HOUSES.length; i++) {
+      int id = HouseSystem.HOUSES[i];
+      controlId = "controller_phase_" + id; 
+      ComponentController.fill(buffer, controlId, "House", String.valueOf(id));
+      buffer.append("<td id='");
+      buffer.append(controlId);
+      buffer.append("'>");
+      buffer.append("<font size='-1'><b>");
+      buffer.localize(id);
+      buffer.append("</b></font>");
+      buffer.append("</td>");
+
+      if (i % 6 == 5) {
+        buffer.append("</tr><tr>");
+      }
     }
 
     buffer.append("</tr></table>");

@@ -1,8 +1,8 @@
 package astrolab.web.component.chart;
 
+import astrolab.astronom.ActivePoint;
 import astrolab.astronom.SpacetimeEvent;
 import astrolab.astronom.houses.HouseSystem;
-import astrolab.astronom.houses.PlacidusSystem;
 import astrolab.db.Event;
 import astrolab.web.SVGDisplay;
 import astrolab.web.server.Request;
@@ -29,11 +29,10 @@ public class ChartPartHouses extends SVGDisplay {
 		x = request.getConstraints().getWidth() / 2;
 		y = request.getConstraints().getHeight() / 2;
 
-		HouseSystem houses = new PlacidusSystem(event);
     double[] hpos = new double[14];
 
     for (int i = 1; i < 13; i++) {
-      hpos[i] = houses.getHouse(i);
+      hpos[i] = ActivePoint.getActivePoint(HouseSystem.HOUSES[i - 1], event).getPosition();
     }
     hpos[13] = hpos[1];
 

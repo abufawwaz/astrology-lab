@@ -7,9 +7,10 @@ public abstract class TypeCriterion {
   private final static Criterion[] TYPES = new Criterion[] {
     new CriterionZodiacSign(),
     new CriterionPositionDirection(),
+    new CriterionPositionPhase(),
+    new CriterionPositionPlanetInHouse(),
     new CriterionCourseDirection(),
     new CriterionCourseVoid(),
-    new CriterionPositionPhase(),
     new CriterionTimeOfWeek(),
   };
 

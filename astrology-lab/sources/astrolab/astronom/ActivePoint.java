@@ -2,6 +2,7 @@ package astrolab.astronom;
 
 import java.util.Hashtable;
 
+import astrolab.astronom.houses.PlacidusSystem;
 import astrolab.astronom.planet.PlanetSystemPool;
 import astrolab.db.Event;
 
@@ -20,6 +21,7 @@ public abstract class ActivePoint {
 
   static {
     PlanetSystemPool.getPlanetSystems(); // initializes the solar system
+    PlacidusSystem.initialize(); // initializes the house system
   }
 
   protected ActivePoint(int id) {
@@ -59,8 +61,7 @@ public abstract class ActivePoint {
         return PlanetSystemPool.getPlanetSystems().getPlanetSystem(time).getPlanet(id);
       }
       case SYSTEM_HOUSE: {
-// TODO: fix it        return new PlacidusSystem(time).getHouse(id);
-        return null;
+        return new PlacidusSystem(time).getHouseCusp(id);
       }
       default: {
         throw new IllegalStateException("No active point with id " + id);
