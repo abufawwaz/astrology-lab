@@ -33,7 +33,11 @@ public class KochSystem extends HouseSystem {
     super(event);
   }
 
-  public double getHouse(int number) {
+  public HouseCusp getHouseCusp(int id) {
+    return new HouseCusp(id, getHouse(getHouseIndex(id)));
+  }
+
+  private double getHouse(int number) {
     double a1 = Trigonometry.asn(Math.sin(event.getRa() * Math.tan(Trigonometry.radians(event.getLocation().getLattitude()) * Math.tan(event.getOb()))));
 
     double d = Zodiac.degree(60 + 30 * number);

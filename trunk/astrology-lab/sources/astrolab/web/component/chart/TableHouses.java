@@ -1,8 +1,8 @@
 package astrolab.web.component.chart;
 
+import astrolab.astronom.ActivePoint;
 import astrolab.astronom.util.Zodiac;
 import astrolab.astronom.houses.HouseSystem;
-import astrolab.astronom.houses.PlacidusSystem;
 import astrolab.db.Event;
 import astrolab.web.HTMLDisplay;
 import astrolab.web.server.Request;
@@ -20,11 +20,11 @@ public class TableHouses extends HTMLDisplay {
   }
 
 	public void fillBodyContent(Request request, LocalizedStringBuffer buffer) {
-		HouseSystem houses = new PlacidusSystem(Event.getSelectedEvent());
+    Event event = Event.getSelectedEvent();
 
 		buffer.append("<table cellspacing='0'>");
     for (int i = 1; i < 13; i++) {
-      double position = houses.getHouse(i);
+      double position = ActivePoint.getActivePoint(HouseSystem.HOUSES[i - 1], event).getPosition();
   		buffer.append("<tr title='");
       buffer.append(Zodiac.toString(position, "DD ZZZ MM SS"));
       buffer.append("'>");

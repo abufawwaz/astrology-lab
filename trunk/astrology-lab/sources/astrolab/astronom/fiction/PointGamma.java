@@ -28,7 +28,7 @@ public class PointGamma extends ActivePointFictional {
 	}
 
 	public double getStart() {
-		return (startFrom == START_FROM_ASCENDANT) ? ActivePoint.getActivePoint(HouseSystem.HOUSE_1, getBirth()).getPosition() : 0;
+		return (startFrom == START_FROM_ASCENDANT) ? ActivePoint.getActivePoint(HouseSystem.HOUSES[0], getBirth()).getPosition() : 0;
 	}
 
 	public double getPosition() {

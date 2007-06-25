@@ -10,7 +10,11 @@ public class PlacidusSystem extends HouseSystem {
     super(event);
   }
 
-  public double getHouse(int number) {
+  public HouseCusp getHouseCusp(int id) {
+    return new HouseCusp(id, getPosition(getHouseIndex(id)));
+  }
+
+  private double getPosition(int number) {
     double ra = event.getRa();
 
     switch (number) {
@@ -32,7 +36,7 @@ public class PlacidusSystem extends HouseSystem {
 
       case 4:
         {
-          return Zodiac.degree(getHouse(10) + 180);
+          return Zodiac.degree(getPosition(10) + 180);
         }
 
       case 5:
@@ -51,7 +55,7 @@ public class PlacidusSystem extends HouseSystem {
       case 11:
       case 12:
         {
-          return Zodiac.degree(getHouse(number - 6) + 180);
+          return Zodiac.degree(getPosition(number - 6) + 180);
         }
 
       case 10:
@@ -62,7 +66,7 @@ public class PlacidusSystem extends HouseSystem {
 
       default:
         {
-          return 0;
+          throw new IllegalStateException("House " + number + " is not in the range.");
         }
     }
   }
@@ -131,4 +135,10 @@ public class PlacidusSystem extends HouseSystem {
     return Zodiac.degree(Trigonometry.degrees(x));
   }
 
+  public static void initialize() {
+    PlacidusSystem system = new PlacidusSystem(new SpacetimeEvent(System.currentTimeMillis()));
+    for (int cusp: HouseSystem.HOUSES) {
+      system.getHouseCusp(cusp);
+    }
+  }
 }

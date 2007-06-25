@@ -1,5 +1,6 @@
 package astrolab.web.component.chart;
 
+import astrolab.astronom.ActivePoint;
 import astrolab.astronom.SpacetimeEvent;
 import astrolab.astronom.houses.HouseSystem;
 import astrolab.astronom.houses.PlacidusSystem;
@@ -24,8 +25,7 @@ public class Chart extends SVGDisplay {
 
   public void fillBodyContent(Request request, LocalizedStringBuffer buffer) {
     SpacetimeEvent event = getSelectedEvent();
-		HouseSystem houses = new PlacidusSystem(event);
-		double offset = houses.getHouse(1);
+		double offset = ActivePoint.getActivePoint(HouseSystem.HOUSES[0], event).getPosition();
 
     String controlId = "chart"; 
     ComponentControllable.fill(buffer, controlId, "Event", "function(chartEvent) { window.location.href='chart.svg?_d=" + ID + "&amp;" + KEY_CHART_EVENT + "=' + chartEvent }");
