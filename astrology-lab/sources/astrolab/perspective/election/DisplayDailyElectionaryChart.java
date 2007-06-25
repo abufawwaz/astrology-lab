@@ -11,7 +11,7 @@ import astrolab.web.server.content.LocalizedStringBuffer;
 
 public class DisplayDailyElectionaryChart extends SVGDisplay {
 
-  private final static String[] MONTHS = new String[] { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
+  public final static String[] MONTHS = new String[] { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
 
   private final static int HEIGHT = 10;
   private final static float HEIGHT_LINE_WIDTH = (float) HEIGHT / 100;
@@ -29,7 +29,8 @@ public class DisplayDailyElectionaryChart extends SVGDisplay {
   public void fillBodyContent(Request request, LocalizedStringBuffer buffer) {
     Criterion[] criteria = Criteria.getCriteria();
 
-    determineStartingTime(criteria);
+    timestamp = ElectiveEnvironment.getStartingTime();
+    DAYS = timestamp.get(SpacetimeEvent.MAX_DAY_OF_MONTH);
 
     fillMarks(buffer, criteria);
     fillBackground(buffer);
@@ -37,19 +38,6 @@ public class DisplayDailyElectionaryChart extends SVGDisplay {
     fillSelectLine(buffer);
     fillForeground(buffer);
     fillScript(buffer);
-  }
-
-  private final void determineStartingTime(Criterion[] criteria) {
-// TODO: put back for month time
-//    for (int i = 0; i < criteria.length; i++) {
-//      if (criteria[i] instanceof CriterionTimeOfWeek) {
-//        timestamp = ((CriterionTimeOfWeek) criteria[i]).getStartTime();
-//      }
-//    }
-    if (timestamp == null) {
-      timestamp = new SpacetimeEvent(System.currentTimeMillis());
-    }
-    DAYS = timestamp.get(SpacetimeEvent.MAX_DAY_OF_MONTH);
   }
 
   private final SpacetimeEvent getCalendar(int day, int hour) {
