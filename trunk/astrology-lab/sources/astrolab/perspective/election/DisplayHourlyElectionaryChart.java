@@ -122,6 +122,7 @@ public class DisplayHourlyElectionaryChart extends SVGDisplay {
     }
     if (timestamp == null) {
       timestamp = Calendar.getInstance();
+      timestamp.setTimeInMillis(ElectiveEnvironment.getStartingTime().getTimeInMillis());
     }
     timestamp.set(Calendar.HOUR_OF_DAY, 0);
     timestamp.set(Calendar.MINUTE, 0);

@@ -2,6 +2,7 @@ package astrolab.perspective.election;
 
 import java.util.Properties;
 
+import astrolab.astronom.SpacetimeEvent;
 import astrolab.criteria.Criteria;
 import astrolab.criteria.Criterion;
 import astrolab.db.Text;
@@ -20,6 +21,7 @@ public class DisplayElectionaryCriteriaList extends HTMLFormDisplay {
   public final static String ACTION_COLOR = "color";
   public final static String ACTION_MULTIPLY_INCREASE = "multiply_increase";
   public final static String ACTION_MULTIPLY_DECREASE = "multiply_decrease";
+  public final static String ACTION_START_TIME = "time";
 
   public DisplayElectionaryCriteriaList() {
     super(getTemplateName(), ID, true);
@@ -32,21 +34,27 @@ public class DisplayElectionaryCriteriaList extends HTMLFormDisplay {
   }
 
   public void fillBodyContent(Request request, LocalizedStringBuffer buffer) {
-    checkDeletionRequest(request, buffer);
+    checkActionRequest(request, buffer);
 
     Properties parameters;
     Criterion[] criteria = Criteria.getCriteria();
     boolean modifyable = Criteria.getSelectedTemplate() == 0;
+
+    fillTimestart(buffer);
 
     buffer.append("<table>");
     for (int i = 0; i < criteria.length; i++) {
       buffer.append("<tr>");
 
       buffer.append("<td>");
-      parameters = new Properties();
-      parameters.put(PARAMETER_ACTION, ACTION_COLOR);
-      parameters.put(PARAMETER_TARGET, String.valueOf(criteria[i].getId()));
-      ComponentLink.fillLink(buffer, request.getDisplay().getClass(), parameters, criteria[i].getColor());
+      if (modifyable) {
+        parameters = new Properties();
+        parameters.put(PARAMETER_ACTION, ACTION_COLOR);
+        parameters.put(PARAMETER_TARGET, String.valueOf(criteria[i].getId()));
+        ComponentLink.fillLink(buffer, request.getDisplay().getClass(), parameters, criteria[i].getColor());
+      } else {
+        buffer.localize(criteria[i].getColor());
+      }
       buffer.append("</td>");
 
       buffer.append("<td>");
@@ -86,7 +94,7 @@ public class DisplayElectionaryCriteriaList extends HTMLFormDisplay {
     buffer.append("</table>");
   }
 
-  private final static void checkDeletionRequest(Request request, LocalizedStringBuffer buffer) {
+  private final static void checkActionRequest(Request request, LocalizedStringBuffer buffer) {
     String action = request.get(PARAMETER_ACTION);
     String criterion = request.get(PARAMETER_TARGET);
 
@@ -102,7 +110,33 @@ public class DisplayElectionaryCriteriaList extends HTMLFormDisplay {
     } else if (ACTION_MULTIPLY_DECREASE.equals(action)) {
       getCriterion(criterion).changeMultiply(false);
       fillRefreshScript(buffer);
+    } else if (ACTION_START_TIME.equals(action)) {
+      ElectiveEnvironment.moveStartingTime(Integer.parseInt(criterion));
+      fillRefreshScript(buffer);
     }
+  }
+
+  private final static void fillTimestart(LocalizedStringBuffer buffer) {
+    SpacetimeEvent selection = ElectiveEnvironment.getStartingTime();
+    Properties parameters = new Properties();
+
+    buffer.newline();
+
+    parameters.put(PARAMETER_ACTION, ACTION_START_TIME);
+    parameters.put(PARAMETER_TARGET, "-1");
+    ComponentLink.fillLink(buffer, DisplayElectionaryCriteriaList.class, parameters, "&lt;&lt;");
+
+    buffer.append(" ");
+    buffer.localize(DisplayDailyElectionaryChart.MONTHS[selection.get(SpacetimeEvent.MONTH)]);
+    buffer.append(" ");
+    buffer.append(selection.get(SpacetimeEvent.YEAR));
+    buffer.append(" ");
+
+    parameters.put(PARAMETER_ACTION, ACTION_START_TIME);
+    parameters.put(PARAMETER_TARGET, "1");
+    ComponentLink.fillLink(buffer, DisplayElectionaryCriteriaList.class, parameters, "&gt;&gt;");
+
+    buffer.newline();
   }
 
   private final static void fillRefreshScript(LocalizedStringBuffer buffer) {
