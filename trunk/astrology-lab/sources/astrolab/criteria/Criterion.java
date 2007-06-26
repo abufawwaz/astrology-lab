@@ -18,6 +18,7 @@ public abstract class Criterion {
   public final static int TYPE_POSITION_PHASE = 6;
   public final static int TYPE_TIME_OF_WEEK = 7;
   public final static int TYPE_POSITION_PLANET_HOUSE = 8;
+  public final static int TYPE_IS_HOUSE_RULER = 9;
 
   private int id;
   private int type;
@@ -122,6 +123,10 @@ public abstract class Criterion {
       }
       case TYPE_POSITION_PLANET_HOUSE: {
         criterion = new CriterionPositionPlanetInHouse(query.getInt(1), query.getInt(5), query.getInt(7));
+        break;
+      }
+      case TYPE_IS_HOUSE_RULER: {
+        criterion = new CriterionRulerOfHouse(query.getInt(1), query.getInt(5), query.getInt(7));
         break;
       }
       default: {
