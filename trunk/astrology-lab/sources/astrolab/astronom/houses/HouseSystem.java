@@ -84,18 +84,25 @@
 
 package astrolab.astronom.houses;
 
+import java.util.Hashtable;
+
 import astrolab.astronom.SpacetimeEvent;
 import astrolab.astronom.util.Zodiac;
 import astrolab.db.Text;
 
 public abstract class HouseSystem {
 
-  public final static int[] HOUSES = {
-    Text.getId("house.1"), Text.getId("house.2"), Text.getId("house.3"),
-    Text.getId("house.4"), Text.getId("house.5"), Text.getId("house.6"),
-    Text.getId("house.7"), Text.getId("house.8"), Text.getId("house.9"),
-    Text.getId("house.10"), Text.getId("house.11"), Text.getId("house.12")
-  };
+  public final static int[] HOUSES = new int[12];
+  protected final static String[] HOUSE_NAMES = new String[12];
+  protected final static Hashtable<Integer, String> NAMES_MAP = new Hashtable<Integer, String>();
+
+  static {
+    for (int i = 0; i < 12; i++) {
+      HOUSE_NAMES[i] = "house." + (i + 1);
+      HOUSES[i] = Text.getId(HOUSE_NAMES[i]);
+      NAMES_MAP.put(HOUSES[i], HOUSE_NAMES[i]);
+    }
+  }
 
   protected SpacetimeEvent event;
 

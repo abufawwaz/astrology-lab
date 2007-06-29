@@ -18,9 +18,15 @@ public abstract class Display {
 	private static Hashtable viewsClassToId = new Hashtable();
 
   private Hashtable<String, String> actions = new Hashtable<String, String>();
+  private Hashtable<String, String[]> actionsAvoid = new Hashtable<String, String[]>();
 
   public void addAction(String eventType, String requestParameter) {
     actions.put(eventType, requestParameter);
+  }
+
+  public void addAction(String eventType, String requestParameter, String[] avoidParameters) {
+    actions.put(eventType, requestParameter);
+    actionsAvoid.put(eventType, avoidParameters);
   }
 
   public abstract String getType();
@@ -85,14 +91,15 @@ public abstract class Display {
         parameter = actions.get(key);
 
         if (!parameter.startsWith("javascript:")) {
-          String parameterURL = url;
-          int parameterIndex = url.indexOf(parameter + "=");
-          int parameterEnd = url.indexOf("&", parameterIndex);
+          String[] avoidParameters = actionsAvoid.get(key);
+          String parameterURL = (avoidParameters != null) ? removeParameters(url, avoidParameters) : url;
+          int parameterIndex = parameterURL.indexOf(parameter + "=");
+          int parameterEnd = parameterURL.indexOf("&", parameterIndex);
           if (parameterIndex >= 0) {
             if (parameterEnd >= 0) {
-              parameterURL = url.substring(0, parameterIndex) + url.substring(parameterEnd + 1);
+              parameterURL = parameterURL.substring(0, parameterIndex) + url.substring(parameterEnd + 1);
             } else {
-              parameterURL = url.substring(0, parameterIndex);
+              parameterURL = parameterURL.substring(0, parameterIndex);
             }
           }
   
@@ -116,7 +123,23 @@ public abstract class Display {
     }
   }
 
-	public final static Display getView(int intid) {
+  private final static String removeParameters(String url, String[] parameters) {
+    String result = url;
+    for (String parameter: parameters) {
+      int parameterIndex = result.indexOf(parameter + "=");
+      int parameterEnd = result.indexOf("&", parameterIndex);
+      if (parameterIndex >= 0) {
+        if (parameterEnd >= 0) {
+          result = result.substring(0, parameterIndex) + url.substring(parameterEnd + 1);
+        } else {
+          result = result.substring(0, parameterIndex);
+        }
+      }
+    }
+    return result;
+  }
+
+  public final static Display getView(int intid) {
 		Integer id = new Integer(intid);
 		String className = (String) viewsIdToClass.get(id);
 		Display result = null;

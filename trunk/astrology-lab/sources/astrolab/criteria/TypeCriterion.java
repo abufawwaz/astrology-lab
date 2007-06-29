@@ -9,6 +9,7 @@ public abstract class TypeCriterion {
     new CriterionPositionDirection(),
     new CriterionPositionPhase(),
     new CriterionPositionPlanetInHouse(),
+    new CriterionPositionAspect(),
     new CriterionCourseDirection(),
     new CriterionCourseVoid(),
     new CriterionRulerOfHouse(),

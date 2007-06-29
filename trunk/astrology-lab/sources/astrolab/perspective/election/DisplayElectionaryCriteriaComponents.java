@@ -1,5 +1,6 @@
 package astrolab.perspective.election;
 
+import astrolab.astronom.Aspects;
 import astrolab.astronom.houses.HouseSystem;
 import astrolab.astronom.planet.SolarSystem;
 import astrolab.criteria.CriterionPositionDirection;
@@ -25,14 +26,14 @@ public class DisplayElectionaryCriteriaComponents extends HTMLDisplay {
   }
 
   public void fillBodyContent(Request request, LocalizedStringBuffer buffer) {
-    buffer.append("<table border='0' width='100%'><tr><td>");
+    buffer.append("<table border='0' width='100%' cellspacing='0' cellpadding='0'><tr><td>");
     fillDirectionComponents(buffer);
     buffer.append("</td></tr><tr><td>");
 
     fillPhaseComponents(buffer);
     buffer.append("</td></tr><tr><td>");
 
-    buffer.append("<table><tr>");
+    buffer.append("<table cellspacing='0' cellpadding='0'><tr>");
     for (int i = 0; i < PLANETS.length; i++) {
       int id = Text.getId(PLANETS[i]);
       String controlId = "controller_planet_" + id; 
@@ -50,7 +51,10 @@ public class DisplayElectionaryCriteriaComponents extends HTMLDisplay {
     buffer.append("</tr></table>");
 
     buffer.append("</td></tr><tr><td>");
-    buffer.append("<table><tr>");
+    fillAspects(buffer);
+
+    buffer.append("</td></tr><tr><td>");
+    buffer.append("<table cellspacing='0' cellpadding='0'><tr>");
     int id = Text.getId("Aries");
     for (int i = 0; i < 12; i++, id++) {
       String controlId = "controller_sign_" + id; 
@@ -77,7 +81,7 @@ public class DisplayElectionaryCriteriaComponents extends HTMLDisplay {
     int id;
     String controlId;
 
-    buffer.append("<table><tr>");
+    buffer.append("<table cellspacing='0' cellpadding='0'><tr>");
 
     id = Text.getId(CriterionPositionDirection.DIRECTION_DIRECT);
     controlId = "controller_dir_d"; 
@@ -112,7 +116,7 @@ public class DisplayElectionaryCriteriaComponents extends HTMLDisplay {
   private void fillPhaseComponents(LocalizedStringBuffer buffer) {
     String controlId;
 
-    buffer.append("<table><tr>");
+    buffer.append("<table cellspacing='0' cellpadding='0'><tr>");
 
     for (int id: CriterionPositionPhase.PHASES) {
       controlId = "controller_phase_" + id; 
@@ -130,7 +134,7 @@ public class DisplayElectionaryCriteriaComponents extends HTMLDisplay {
   private void fillHouseComponents(LocalizedStringBuffer buffer) {
     String controlId;
 
-    buffer.append("<table><tr>");
+    buffer.append("<table cellspacing='0' cellpadding='0'><tr>");
 
     for (int i = 0; i < HouseSystem.HOUSES.length; i++) {
       int id = HouseSystem.HOUSES[i];
@@ -147,6 +151,24 @@ public class DisplayElectionaryCriteriaComponents extends HTMLDisplay {
       if (i % 6 == 5) {
         buffer.append("</tr><tr>");
       }
+    }
+
+    buffer.append("</tr></table>");
+  }
+
+  private void fillAspects(LocalizedStringBuffer buffer) {
+    String controlId;
+
+    buffer.append("<table cellspacing='0' cellpadding='0'><tr>");
+
+    for (int id: Aspects.MAJOR_ASPECTS) {
+      controlId = "controller_phase_" + id; 
+      ComponentController.fill(buffer, controlId, "Aspect", String.valueOf(id));
+      buffer.append("<td id='");
+      buffer.append(controlId);
+      buffer.append("'>");
+      buffer.localize(id);
+      buffer.append("</td>");
     }
 
     buffer.append("</tr></table>");

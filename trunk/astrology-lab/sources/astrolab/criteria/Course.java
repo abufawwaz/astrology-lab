@@ -124,38 +124,11 @@ public class Course {
     double positionEnd = ActivePoint.getActivePoint(activePoint, miniPeriodEnd).getPosition();
 
     for (int i = 0; i < points.length; i++) {
-      int aspect = hasAspectsWith(points[i], positionStart, miniPeriodStart, positionEnd, miniPeriodEnd);
+      int aspect = CriteriaUtilities.hasAspectsBetween(points[i], positionStart, miniPeriodStart, positionEnd, miniPeriodEnd);
       if (aspect >= 0) {
         ensureAspectSet(miniPeriodStart).add(aspect);
       }
     }
-  }
-
-  private int hasAspectsWith(int point, double positionStart, SpacetimeEvent periodStart, double positionEnd, SpacetimeEvent periodEnd) {
-    double position1 = ActivePoint.getActivePoint(point, periodStart).getPosition();
-    double position2 = ActivePoint.getActivePoint(point, periodEnd).getPosition();
-    double distance1 = position1 - positionStart;
-    double distance2 = position2 - positionEnd;
-    int signDistance1 = getSignDistance(distance1);
-    int signDistance2 = getSignDistance(distance2);
-
-    if (signDistance1 != signDistance2) {
-      return Math.max(signDistance1, signDistance2);
-    } else if ((int) Math.signum(distance1) != (int) Math.signum(distance2)) {
-      return 0;
-    } else if ((int) Math.signum(distance1 - 180) != (int) Math.signum(distance2 - 180)) {
-      return 180;
-    } else {
-      return -1;
-    }
-  }
-
-  private final int getSignDistance(double distance) {
-    int result = (int) (Math.abs(distance) / 30);
-    if (result > 5) {
-      result = 11 - result;
-    }
-    return result * 30;
   }
 
   private Set<Integer> ensureAspectSet(SpacetimeEvent calendar) {

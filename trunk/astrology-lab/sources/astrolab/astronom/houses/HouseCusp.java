@@ -1,7 +1,6 @@
 package astrolab.astronom.houses;
 
 import astrolab.astronom.ActivePoint;
-import astrolab.db.Text;
 
 public class HouseCusp extends ActivePoint {
 
@@ -17,7 +16,7 @@ public class HouseCusp extends ActivePoint {
   }
 
   public String getName() {
-    return Text.getText(getId());
+    return HouseSystem.NAMES_MAP.get(getId());
   }
 
   public double getPosition() {

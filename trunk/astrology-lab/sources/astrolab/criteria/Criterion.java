@@ -19,6 +19,7 @@ public abstract class Criterion {
   public final static int TYPE_TIME_OF_WEEK = 7;
   public final static int TYPE_POSITION_PLANET_HOUSE = 8;
   public final static int TYPE_IS_HOUSE_RULER = 9;
+  public final static int TYPE_POSITION_PLANET_ASPECT = 10;
 
   private int id;
   private int type;
@@ -40,6 +41,11 @@ public abstract class Criterion {
   protected Criterion(int id, int type, int activePoint, int factor) {
     this(id, type, activePoint);
     this.factor = factor;
+  }
+
+  protected Criterion(int id, int type, int activePoint, int factor, int action) {
+    this(id, type, activePoint, factor);
+    this.action = action;
   }
 
   public abstract String getName();
@@ -123,6 +129,10 @@ public abstract class Criterion {
       }
       case TYPE_POSITION_PLANET_HOUSE: {
         criterion = new CriterionPositionPlanetInHouse(query.getInt(1), query.getInt(5), query.getInt(7));
+        break;
+      }
+      case TYPE_POSITION_PLANET_ASPECT: {
+        criterion = new CriterionPositionAspect(query.getInt(1), query.getInt(5), query.getInt(7), query.getInt(6));
         break;
       }
       case TYPE_IS_HOUSE_RULER: {
