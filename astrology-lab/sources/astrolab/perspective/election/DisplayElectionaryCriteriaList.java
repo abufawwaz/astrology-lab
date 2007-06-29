@@ -1,5 +1,6 @@
 package astrolab.perspective.election;
 
+import java.util.ArrayList;
 import java.util.Properties;
 
 import astrolab.astronom.SpacetimeEvent;
@@ -26,6 +27,7 @@ public class DisplayElectionaryCriteriaList extends HTMLFormDisplay {
   public DisplayElectionaryCriteriaList() {
     super(getTemplateName(), ID, true);
     super.addAction("criteria", "action");
+    super.addAction("timestamp", "timestamp", new String[] { PARAMETER_ACTION, PARAMETER_TARGET });
   }
 
   private final static String getTemplateName() {
@@ -36,62 +38,111 @@ public class DisplayElectionaryCriteriaList extends HTMLFormDisplay {
   public void fillBodyContent(Request request, LocalizedStringBuffer buffer) {
     checkActionRequest(request, buffer);
 
-    Properties parameters;
-    Criterion[] criteria = Criteria.getCriteria();
     boolean modifyable = Criteria.getSelectedTemplate() == 0;
+    SpacetimeEvent timestamp = determineSelectedTime(request);
+    Criterion[] criteria = Criteria.getCriteria();
+    ArrayList<Criterion> positiveCriteria = new ArrayList<Criterion>();
+    ArrayList<Criterion> negativeCriteria = new ArrayList<Criterion>();
+    ArrayList<Criterion> neutralCriteria = new ArrayList<Criterion>();
+
+    if (timestamp != null) {
+      for (Criterion criterion: criteria) {
+        int mark = criterion.getMark(timestamp, timestamp) * criterion.getMultiplyBy();
+        if (mark > 0) {
+          positiveCriteria.add(criterion);
+        } else if (mark < 0) {
+          negativeCriteria.add(criterion);
+        } else {
+          neutralCriteria.add(criterion);
+        }
+      }
+    } else {
+      for (Criterion criterion: criteria) {
+        neutralCriteria.add(criterion);
+      }
+    }
 
     fillTimestart(buffer);
 
     buffer.append("<table>");
-    for (int i = 0; i < criteria.length; i++) {
-      buffer.append("<tr>");
-
-      buffer.append("<td>");
-      if (modifyable) {
-        parameters = new Properties();
-        parameters.put(PARAMETER_ACTION, ACTION_COLOR);
-        parameters.put(PARAMETER_TARGET, String.valueOf(criteria[i].getId()));
-        ComponentLink.fillLink(buffer, request.getDisplay().getClass(), parameters, criteria[i].getColor());
-      } else {
-        buffer.localize(criteria[i].getColor());
-      }
-      buffer.append("</td>");
-
-      buffer.append("<td>");
-      criteria[i].toString(buffer);
-      buffer.append("</td>");
-
-      buffer.append("<td>");
-      buffer.append("x");
-      buffer.append(criteria[i].getMultiplyBy());
-      buffer.append("</td>");
-
-      if (modifyable) {
-        buffer.append("<td>");
-        parameters = new Properties();
-        parameters.put(PARAMETER_ACTION, ACTION_MULTIPLY_INCREASE);
-        parameters.put(PARAMETER_TARGET, String.valueOf(criteria[i].getId()));
-        ComponentLink.fillLink(buffer, request.getDisplay().getClass(), parameters, "+");
-        buffer.append("</td>");
-  
-        buffer.append("<td>");
-        parameters = new Properties();
-        parameters.put(PARAMETER_ACTION, ACTION_MULTIPLY_DECREASE);
-        parameters.put(PARAMETER_TARGET, String.valueOf(criteria[i].getId()));
-        ComponentLink.fillLink(buffer, request.getDisplay().getClass(), parameters, "-");
-        buffer.append("</td>");
-  
-        buffer.append("<td>");
-        parameters = new Properties();
-        parameters.put(PARAMETER_ACTION, ACTION_DELETE);
-        parameters.put(PARAMETER_TARGET, String.valueOf(criteria[i].getId()));
-        ComponentLink.fillLink(buffer, request.getDisplay().getClass(), parameters, "X");
-        buffer.append("</td>");
-      }
-
-      buffer.append("</tr>");
+    for (Criterion criterion: positiveCriteria) {
+      fillCriteriaEntry(request, buffer, criterion, modifyable, 1);
+    }
+    for (Criterion criterion: negativeCriteria) {
+      fillCriteriaEntry(request, buffer, criterion, modifyable, -1);
+    }
+    for (Criterion criterion: neutralCriteria) {
+      fillCriteriaEntry(request, buffer, criterion, modifyable, 0);
     }
     buffer.append("</table>");
+  }
+
+  private final SpacetimeEvent determineSelectedTime(Request request) {
+    String timeParameter = request.get("timestamp");
+    if (timeParameter != null) {
+      return new SpacetimeEvent(Long.parseLong(timeParameter));
+    } else {
+      return null;
+    }
+  }
+
+  private void fillCriteriaEntry(Request request, LocalizedStringBuffer buffer, Criterion criterion, boolean modifyable, int mark) {
+    Properties parameters;
+
+    buffer.append("<tr>");
+
+    buffer.append("<td>");
+    if (modifyable) {
+      parameters = new Properties();
+      parameters.put(PARAMETER_ACTION, ACTION_COLOR);
+      parameters.put(PARAMETER_TARGET, String.valueOf(criterion.getId()));
+      ComponentLink.fillLink(buffer, request.getDisplay().getClass(), parameters, criterion.getColor());
+    } else {
+      buffer.localize(criterion.getColor());
+    }
+    buffer.append("</td>");
+
+    buffer.append("<td>");
+    if (mark > 0) {
+      buffer.append("<font color='green'>");
+    } else if (mark < 0) {
+      buffer.append("<font color='red'>");
+    }
+    criterion.toString(buffer);
+    if (mark != 0) {
+      buffer.append("</font>");
+    }
+    buffer.append("</td>");
+
+    buffer.append("<td>");
+    buffer.append("x");
+    buffer.append(criterion.getMultiplyBy());
+    buffer.append("</td>");
+
+    if (modifyable) {
+      buffer.append("<td>");
+      parameters = new Properties();
+      parameters.put(PARAMETER_ACTION, ACTION_MULTIPLY_INCREASE);
+      parameters.put(PARAMETER_TARGET, String.valueOf(criterion.getId()));
+      ComponentLink.fillLink(buffer, request.getDisplay().getClass(), parameters, "+");
+      buffer.append("</td>");
+
+      buffer.append("<td>");
+      parameters = new Properties();
+      parameters.put(PARAMETER_ACTION, ACTION_MULTIPLY_DECREASE);
+      parameters.put(PARAMETER_TARGET, String.valueOf(criterion.getId()));
+      ComponentLink.fillLink(buffer, request.getDisplay().getClass(), parameters, "-");
+      buffer.append("</td>");
+
+      buffer.append("<td>");
+      parameters = new Properties();
+      parameters.put(PARAMETER_ACTION, ACTION_DELETE);
+      parameters.put(PARAMETER_TARGET, String.valueOf(criterion.getId()));
+      ComponentLink.fillLink(buffer, request.getDisplay().getClass(), parameters, "X");
+      buffer.append("</td>");
+    }
+
+    buffer.append("</tr>");
   }
 
   private final static void checkActionRequest(Request request, LocalizedStringBuffer buffer) {
