@@ -20,6 +20,8 @@ public abstract class Criterion {
   public final static int TYPE_POSITION_PLANET_HOUSE = 8;
   public final static int TYPE_IS_HOUSE_RULER = 9;
   public final static int TYPE_POSITION_PLANET_ASPECT = 10;
+  public final static int TYPE_COURSE_PLANET_ASPECT = 11;
+  public final static int TYPE_COURSE_ASPECT = 12;
 
   private int id;
   private int type;
@@ -117,6 +119,14 @@ public abstract class Criterion {
       }
       case TYPE_COURSE_DIRECTION: {
         criterion = new CriterionCourseDirection(query.getInt(1), query.getInt(5), query.getInt(7));
+        break;
+      }
+      case TYPE_COURSE_ASPECT: {
+        criterion = new CriterionCourseAspect(query.getInt(1), query.getInt(5), query.getInt(7));
+        break;
+      }
+      case TYPE_COURSE_PLANET_ASPECT: {
+        criterion = new CriterionCourseAspectPlanet(query.getInt(1), query.getInt(5), query.getInt(7), query.getInt(6));
         break;
       }
       case TYPE_COURSE_VOID: {

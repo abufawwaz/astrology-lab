@@ -11,6 +11,8 @@ public abstract class TypeCriterion {
     new CriterionPositionPlanetInHouse(),
     new CriterionPositionAspect(),
     new CriterionCourseDirection(),
+    new CriterionCourseAspect(),
+    new CriterionCourseAspectPlanet(),
     new CriterionCourseVoid(),
     new CriterionRulerOfHouse(),
     new CriterionTimeOfWeek(),
