@@ -658,4 +658,9 @@ insert into perspective_elect_criteria VALUES (38, 40044, 0, 8, 2106, 0, 2027, '
 insert into perspective_elect_criteria VALUES (39, 40044, 0, 9, 2104, 0, 2021, 'green', 1);
 insert into perspective_elect_criteria VALUES (40, 40044, 0, 9, 2107, 0, 2021, 'black', -1);
 insert into perspective_elect_criteria VALUES (41, 40044, 0, 9, 2105, 0, 2021, 'black', -1);
+insert into perspective_elect_criteria VALUES (42, 40044, 0, 12, 2102, 0, 2043, 'black', -1);
+insert into perspective_elect_criteria VALUES (43, 40044, 0, 12, 2102, 0, 2045, 'black', -1);
+insert into perspective_elect_criteria VALUES (44, 40044, 0, 11, 2102, 2041, 2105, 'black', -1);
+insert into perspective_elect_criteria VALUES (45, 40044, 0, 11, 2102, 2041, 2107, 'black', -1);
+
 

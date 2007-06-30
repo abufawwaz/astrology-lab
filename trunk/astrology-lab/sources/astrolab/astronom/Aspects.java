@@ -14,4 +14,19 @@ public class Aspects {
     CONJUNCT, SEXTILE, SQUARE, TRINE, OPPOSITION
   };
 
+  public static int getDegrees(int aspect) {
+    if (aspect == CONJUNCT) {
+      return 0;
+    } else if (aspect == SEXTILE) {
+      return 60;
+    } else if (aspect == SQUARE) {
+      return 90;
+    } else if (aspect == TRINE) {
+      return 120;
+    } else if (aspect == OPPOSITION) {
+      return 180;
+    }
+    return 0;
+  }
+
 }
