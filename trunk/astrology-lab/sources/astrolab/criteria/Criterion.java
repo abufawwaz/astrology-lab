@@ -110,7 +110,7 @@ public abstract class Criterion {
         break;
       }
       case TYPE_ZODIAC_SIGN: {
-        criterion = new CriterionZodiacSign(query.getInt(1), query.getInt(5), query.getInt(7), false);
+        criterion = new CriterionZodiacSign(query.getInt(1), query.getInt(5), query.getInt(7));
         break;
       }
       case TYPE_POSITION_DIRECTION: {
