@@ -1,6 +1,7 @@
 package astrolab.astronom.planet;
 
 import astrolab.astronom.SpacetimeEvent;
+import astrolab.db.Text;
 
 public class SolarSystem extends PlanetSystem {
 
@@ -18,6 +19,18 @@ public class SolarSystem extends PlanetSystem {
 
   public static final String[] PLANETS = {
     SUN, MOON, MERCURY, VENUS, EARTH, MARS, JUPITER, SATURN, URANUS, NEPTUNE, PLUTO
+  };
+  public final static int[] PLANETS_IDS = {
+    Text.getId(SolarSystem.SUN),
+    Text.getId(SolarSystem.MOON),
+    Text.getId(SolarSystem.MERCURY),
+    Text.getId(SolarSystem.VENUS),
+    Text.getId(SolarSystem.MARS),
+    Text.getId(SolarSystem.JUPITER),
+    Text.getId(SolarSystem.SATURN),
+    Text.getId(SolarSystem.URANUS),
+    Text.getId(SolarSystem.NEPTUNE),
+    Text.getId(SolarSystem.PLUTO)
   };
 
   public SolarSystem(SpacetimeEvent spacetime) {

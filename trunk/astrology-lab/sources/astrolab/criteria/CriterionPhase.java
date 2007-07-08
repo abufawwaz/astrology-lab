@@ -5,9 +5,8 @@ import astrolab.astronom.SpacetimeEvent;
 import astrolab.astronom.planet.SolarSystem;
 import astrolab.astronom.util.Zodiac;
 import astrolab.db.Text;
-import astrolab.web.server.content.LocalizedStringBuffer;
 
-public class CriterionPositionPhase extends Criterion {
+public class CriterionPhase extends CriterionAlgorithm {
 
   public final static int PHASE_NEW = Text.getId("phase_new");
   public final static int PHASE_FIRST_QUATER = Text.getId("phase_first_quarter");
@@ -21,24 +20,45 @@ public class CriterionPositionPhase extends Criterion {
     PHASE_FULL, PHASE_THIRD_QUATER, PHASE_FOURTH_QUATER,
   };
 
-  private int phase;
-
-  public CriterionPositionPhase() {
-    super();
+  public CriterionPhase() {
+    super(ALGORITHM_PHASE);
   }
 
-  public CriterionPositionPhase(int id, int activePoint, int phase) {
-    super(id, TYPE_POSITION_PHASE, activePoint);
-    this.phase = phase;
+  public boolean accepts(Criterion criterion) {
+    if (criterion.getFactor() != 0) {
+      return false;
+    }
+    if (criterion.getAction() == 0) {
+      return true;
+    }
+    for (int phase: PHASES) {
+      if (criterion.getAction() == phase) {
+        return true;
+      }
+    }
+    return false;
   }
 
-  public int getMark(SpacetimeEvent periodStart, SpacetimeEvent periodEnd) {
-    ActivePoint point = ActivePoint.getActivePoint(getActivePoint(), periodStart);
+  public String[] getActorTypes() {
+    return new String[] { Criterion.TYPE_PLANET };
+  }
+
+  public String[] getActionTypes() {
+    return new String[] { Criterion.TYPE_PHASE };
+  }
+
+  public String[] getFactorTypes() {
+    return new String[0];
+  }
+
+  public int calculateMark(Criterion criterion, SpacetimeEvent periodStart, SpacetimeEvent periodEnd) {
+    int phase = criterion.getAction();
+    ActivePoint point = ActivePoint.getActivePoint(criterion.getActor(), periodStart);
     if (point.getName().equals(SolarSystem.SUN)) {
       // the Sun is always full
       return (phase == PHASE_FULL) ? 1 : 0;
     } else {
-      double positionPoint = ActivePoint.getActivePoint(getActivePoint(), periodStart).getPosition();
+      double positionPoint = ActivePoint.getActivePoint(criterion.getActor(), periodStart).getPosition();
       double positionSun = ActivePoint.getActivePoint(SolarSystem.SUN, periodStart).getPosition();
 
       double distance = positionPoint - positionSun;
@@ -59,31 +79,6 @@ public class CriterionPositionPhase extends Criterion {
       }
       return 0;
     }
-  }
-
-  public String getName() {
-    return "PositionPhase";
-  }
-
-  public String[] getActorTypes() {
-    return new String[] { "Planet", "'position'", "Phase" };
-  }
-
-  public int getFactor() {
-    return phase;
-  }
-
-  protected void store(String[] inputValues) {
-    int phase = Integer.parseInt(inputValues[2]);
-    new CriterionPositionPhase(getId(), Integer.parseInt(inputValues[0]), phase).store();
-  }
-
-  public void toString(LocalizedStringBuffer output) {
-    output.localize(getActor());
-    output.append(" ");
-    output.localize("is");
-    output.append(" ");
-    output.localize(phase);
   }
 
 }

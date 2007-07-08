@@ -12,7 +12,7 @@ create table text (
 
   PRIMARY KEY (id),
   INDEX (id)
-) ENGINE=InnoDB DEFAULT CHARSET cp1251 COLLATE cp1251_bulgarian_ci;
+) ENGINE=InnoDB DEFAULT CHARSET utf8;
 
 create table svg (
   id INT UNSIGNED NOT NULL REFERENCES text (id),
@@ -193,7 +193,8 @@ create table perspective_elect_criteria (
   criteria_action INT UNSIGNED NOT NULL REFERENCES text (id),
   criteria_factor INT UNSIGNED NOT NULL REFERENCES text (id),
   criteria_color VARCHAR(20),
-  criteria_multiply INT
+  criteria_multiply INT,
+  criteria_modifiers INT
 ) ENGINE=InnoDB;
 
 insert into text values (0, NULL, NULL, '... not set ...', '... липсва ...');
@@ -260,6 +261,14 @@ insert into text values (2906, NULL, 'phase_second_quarter', 'Second phase', 'В
 insert into text values (2907, NULL, 'phase_full', 'phase Full', 'ретрограден');
 insert into text values (2908, NULL, 'phase_third_quarter', 'Third phase', 'Трета четвърт');
 insert into text values (2909, NULL, 'phase_fourth_quarter', 'Fourth phase', 'Четвърта четвърт');
+insert into text values (2910, NULL, 'void', 'void', 'без аспект');
+insert into text values (2911, NULL, 'planet', 'Planet', 'Планета');
+insert into text values (2912, NULL, 'house', 'House', 'Дом');
+insert into text values (2913, NULL, 'aspect', 'Aspect', 'Аспект');
+insert into text values (2914, NULL, 'sign', 'Sign', 'Знак');
+insert into text values (2915, NULL, 'direction', 'Direction', 'Посока');
+insert into text values (2916, NULL, 'phase', 'Phase', 'Фаза');
+insert into text values (2917, NULL, 'rule_weekday', 'rules the day of week', 'владее деня от седмицата');
 
 insert into text values (3001, NULL, 'red', 'red', 'red');
 insert into text values (3002, NULL, 'orange', 'orange', 'orange');
@@ -352,6 +361,16 @@ insert into text values (40041, NULL, NULL, 'Statistics', 'Статистиче�
 insert into text values (40042, NULL, NULL, 'Elective', 'Елективна карта');
 insert into text values (40043, NULL, NULL, 'Moon void of course', 'Луна без курс');
 insert into text values (40044, NULL, NULL, 'Wedding Date', 'Сватбен ден');
+insert into text values (40045, NULL, NULL, 'Moon Phases', 'Фази на Луната');
+insert into text values (40046, NULL, NULL, 'Archive Search', 'Търсене в архива');
+insert into text values (40047, NULL, NULL, 'Perspectives', 'Перспективи');
+insert into text values (40048, NULL, NULL, 'Planets', 'Планети');
+insert into text values (40049, NULL, NULL, 'Houses', 'Домове');
+insert into text values (40050, NULL, NULL, 'Projects', 'Проекти');
+insert into text values (40051, NULL, NULL, 'Components', 'Компоненти');
+insert into text values (40052, NULL, NULL, 'Criteria', 'Критерии');
+insert into text values (40053, NULL, NULL, 'New Criteria', 'Нов критерий');
+insert into text values (40054, NULL, NULL, 'Template', 'Шаблон');
 
 insert into text values (60001, NULL, NULL, 'Description', 'Описание');
 insert into text values (60002, NULL, NULL, 'Subject', 'Субект');
@@ -409,12 +428,20 @@ insert into text values (60075, NULL, NULL, 'From', 'От');
 insert into text values (60076, NULL, NULL, 'To', 'До');
 insert into text values (60077, NULL, NULL, 'sleeps', 'спи');
 insert into text values (60078, NULL, NULL, 'in', 'във');
-insert into text values (60079, NULL, NULL, 'phase', 'фаза');
+insert into text values (60079, NULL, NULL, 'custom', 'личен');
+insert into text values (60080, NULL, NULL, 'of', 'на');
+insert into text values (60081, NULL, NULL, 'course', 'курс');
+insert into text values (60082, NULL, NULL, 'ruler', 'управител');
+insert into text values (60083, NULL, NULL, 'self', 'себе');
+insert into text values (60084, NULL, NULL, 'position', 'позиция');
+insert into text values (60085, NULL, NULL, 'applying', 'образуващ');
+insert into text values (60086, NULL, NULL, 'separating', 'разпадащ');
+insert into text values (60087, NULL, NULL, 'exact', 'точен');
 
 insert into text values (1000001, NULL, 'Europe/Sofia', 'Europe/Sofia', 'Европа/София');
 
 insert into text values (1001001, NULL, NULL, 'Bulgaria', 'България');
-insert into text values (1001002, NULL, NULL, 'Sofia', 'София');
+insert into text values (1001002, NULL, 'Sofia', 'Sofia', 'София');
 insert into text values (1001003, NULL, NULL, 'Stara Zagora', 'Стара Загора');
 insert into text values (1001004, NULL, NULL, 'Aytos', 'Айтос');
 insert into text values (1001005, NULL, NULL, 'Varna', 'Варна');
@@ -424,9 +451,6 @@ insert into text values (2000002, NULL, NULL, 'Svetlana Stancheva', 'Светл�
 insert into text values (2000003, NULL, NULL, 'Gufi', 'Gufi');
 insert into text values (2000004, NULL, NULL, 'Altrance', 'Altrance');
 insert into text values (2000005, NULL, NULL, 'EURUSD', 'EURUSD');
-
-insert into svg values (3101, "<svg:circle r='70' style='fill:green;stroke:black;stroke-width:10' />");
-insert into svg values (3102, "<svg:circle r='70' style='fill:white;stroke:black;stroke-width:10' />");
 
 insert into svg values (2001, "<svg:g style='stroke:black;stroke-width:30;fill:none'><svg:path d='M-130 0 A60 60 0 0 1 0 0 A50 50 0 0 1 130 0' /><svg:line y2='130' /></svg:g>");
 insert into svg values (2002, "<svg:g style='stroke:black;stroke-width:30;fill:none'><svg:path d='M-60 -110 A60 60 0 0 0 60 -110' /><svg:circle cy='30' r='80' /></svg:g>");
@@ -457,6 +481,9 @@ insert into svg values (2109, "<svg:g style='stroke:teal;stroke-width:20;fill:no
 insert into svg values (2110, "<svg:g style='stroke:firebrick;stroke-width:20;fill:none'><svg:circle cy='-60' r='30' /><svg:path d='M-80 -90 A80 110 0 1 0 80 -90' /><svg:line y1='20' y2='90' /><svg:line x1='-40' y1='60' x2='40' y2='60' /></svg:g>");
 insert into svg values (2201, "<svg:path d='M-40 90 L-40 -90 L40 -90' style='stroke:brown;stroke-width:20;fill:none' />");
 
+insert into svg values (2901, "<svg:text x='-100' style='font-size:120pt;fill:black'>Dx</svg:text>");
+insert into svg values (2902, "<svg:text x='-100' style='font-size:120pt;fill:black'>Sx</svg:text>");
+insert into svg values (2903, "<svg:text x='-100' style='font-size:120pt;fill:black'>Rx</svg:text>");
 insert into svg values (2904, "<svg:circle r='70' style='fill:white;stroke:black;stroke-width:10' />");
 insert into svg values (2905, "<svg:path d='M0 -70 A70 70 0 0 1 0 70 A35 70 0 1 0 0 -70' style='fill:black' />");
 insert into svg values (2906, "<svg:path d='M0 -70 A70 70 0 0 1 0 70 A35 70 0 1 1 0 -70' style='fill:black' />");
@@ -472,6 +499,9 @@ insert into svg values (3005, "<svg:rect x='-70' y='-70' width='140' height='140
 insert into svg values (3006, "<svg:rect x='-70' y='-70' width='140' height='140' style='fill:indigo' />");
 insert into svg values (3007, "<svg:rect x='-70' y='-70' width='140' height='140' style='fill:black' />");
 insert into svg values (3008, "<svg:rect x='-70' y='-70' width='140' height='140' style='fill:white;stroke:black;stroke-width:10' />");
+
+insert into svg values (3101, "<svg:circle r='70' style='fill:green;stroke:black;stroke-width:10' />");
+insert into svg values (3102, "<svg:circle r='70' style='fill:white;stroke:black;stroke-width:10' />");
 
 insert into project values (30001, 30002, 'white', now(), NULL, 30003);
 insert into project values (30013, 30012, 'white', now(), NULL, 30014);
@@ -571,7 +601,7 @@ insert into views_perspective values (0, '<frameset cols="15%,*" border="0"><fra
 insert into views_perspective values (40040, '<frameset cols="15%,*" border="0"><frameset rows="20%,40%,40%"><frame src="/view.html?_d=1" /><frame src="/view.html?_d=2" /><frame src="/view.html?_d=25" /></frameset><frameset rows="70%,*"><frameset cols="70%,15%,15%"><frame src="/view.svg?_d=4" /><frame src="/view.html?_d=10" /><frame src="/view.html?_d=11" /></frameset><frame src="/view.html?_d=45" /></frameset></frameset>');
 insert into views_perspective values (40041, '<frameset cols="15%,*" border="0"><frameset rows="30%,*"><frame src="/view.html?_d=1" /><frame src="/view.html?_d=23" /></frameset><frameset rows="70%,*"><frameset cols="70%,30%"><frame src="/view.svg?_d=58" /><frame src="/view.html?_d=52" /></frameset><frame src="/view.html?_d=45" /></frameset></frameset>');
 insert into views_perspective values (40018, '<frameset cols="15%,*" border="0"><frameset rows="30%,*"><frame src="/view.html?_d=1" /><frame src="/view.html?_d=23" /></frameset><frameset cols="50%,*"><frame src="/view.html?_a=40018" /><frame src="/view.html?_a=40019" /></frameset></frameset>');
-insert into views_perspective values (40042, '<frameset cols="60%,25%,15%" border="0"><frameset rows="50%,25%,25%"><frameset cols="25%,75%"><frame src="/view.html?_d=1" /><frame src="/view.html?_d=4" /></frameset><frame src="/view.html?_d=63" /><frame src="/view.html?_d=64" /></frameset><frameset rows="50%,*"><frame src="/view.html?_d=65" /><frame src="/view.html?_d=68" /></frameset><frameset rows="50%,*"><frame src="/view.html?_d=67" /><frame src="/view.html?_d=66" /></frameset></frameset>');
+insert into views_perspective values (40042, '<frameset cols="60%,25%,15%" border="0"><frameset rows="50%,25%,25%"><frameset cols="25%,75%"><frame src="/view.html?_d=1" /><frame src="/view.html?_d=4" /></frameset><frame src="/view.html?_d=63" /><frame src="/view.html?_d=64" /></frameset><frameset rows="50%,*"><frame src="/view.html?_d=65" /><frame src="/view.html?_d=68" /></frameset><frameset rows="35%,*"><frame src="/view.html?_d=67" /><frame src="/view.html?_d=66" /></frameset></frameset>');
 
 insert into actions values (40002, 40016, NULL, NULL, NULL, NULL, 45, NULL);
 insert into actions values (40003, 40020, 4016, NULL, NULL, NULL, 4, NULL);
@@ -616,51 +646,59 @@ insert into actions values (40033, 40039, NULL, NULL, NULL, NULL, 52, NULL);
 insert into actions values (40037, 40039, NULL, 30027, NULL, NULL, 57, NULL);
 insert into actions values (40038, 40039, NULL, 30027, NULL, NULL, 58, NULL);
 
-insert into perspective_elect_criteria VALUES (1, 40043, 0, 5, 2102, 0, 0, 'black', -1);
+insert into perspective_elect_criteria VALUES (1, 40043, 0, 8, 2102, 0, 0, 'black', -1, 1);  
 
-insert into perspective_elect_criteria VALUES (2, 40044, 0, 7, 2102, 0, 0, 'black', -5);
-insert into perspective_elect_criteria VALUES (3, 40044, 0, 7, 2105, 0, 0, 'black', -5);
-insert into perspective_elect_criteria VALUES (4, 40044, 0, 7, 2103, 0, 0, 'black', -5);
-insert into perspective_elect_criteria VALUES (5, 40044, 0, 7, 2106, 0, 0, 'black', -5);
-insert into perspective_elect_criteria VALUES (6, 40044, 0, 7, 2104, 0, 0, 'black', -5);
-insert into perspective_elect_criteria VALUES (7, 40044, 0, 3, 2104, 0, 2903, 'black', -1);
-insert into perspective_elect_criteria VALUES (8, 40044, 0, 2, 2104, 0, 2002, 'green', 1);
-insert into perspective_elect_criteria VALUES (9, 40044, 0, 2, 2104, 0, 2007, 'green', 1);
-insert into perspective_elect_criteria VALUES (10, 40044, 0, 2, 2104, 0, 2012, 'green', 1);
-insert into perspective_elect_criteria VALUES (11, 40044, 0, 2, 2104, 0, 2001, 'black', -1);
-insert into perspective_elect_criteria VALUES (12, 40044, 0, 2, 2104, 0, 2006, 'black', -1);
-insert into perspective_elect_criteria VALUES (13, 40044, 0, 2, 2104, 0, 2008, 'black', -1);
-insert into perspective_elect_criteria VALUES (14, 40044, 0, 3, 2103, 0, 2903, 'black', -1);
-insert into perspective_elect_criteria VALUES (15, 40044, 0, 2, 2102, 0, 2002, 'yellow', 1);
-insert into perspective_elect_criteria VALUES (16, 40044, 0, 2, 2102, 0, 2004, 'yellow', 1);
-insert into perspective_elect_criteria VALUES (17, 40044, 0, 2, 2102, 0, 2001, 'black', -1);
-insert into perspective_elect_criteria VALUES (18, 40044, 0, 2, 2102, 0, 2008, 'black', -1);
-insert into perspective_elect_criteria VALUES (19, 40044, 0, 2, 2102, 0, 2010, 'black', -1);
-insert into perspective_elect_criteria VALUES (20, 40044, 0, 5, 2102, 0, 0, 'black', -1);
-insert into perspective_elect_criteria VALUES (21, 40044, 0, 5, 2103, 0, 0, 'black', -1);
-insert into perspective_elect_criteria VALUES (22, 40044, 0, 5, 2104, 0, 0, 'black', -1);
-insert into perspective_elect_criteria VALUES (23, 40044, 0, 8, 2107, 0, 2024, 'black', -1);
-insert into perspective_elect_criteria VALUES (24, 40044, 0, 8, 2105, 0, 2024, 'black', -1);
-insert into perspective_elect_criteria VALUES (25, 40044, 0, 8, 2108, 0, 2024, 'black', -1);
-insert into perspective_elect_criteria VALUES (26, 40044, 0, 8, 2110, 0, 2024, 'black', -1);
-insert into perspective_elect_criteria VALUES (27, 40044, 0, 8, 2107, 0, 2027, 'black', -1);
-insert into perspective_elect_criteria VALUES (28, 40044, 0, 8, 2105, 0, 2027, 'black', -1);
-insert into perspective_elect_criteria VALUES (29, 40044, 0, 8, 2108, 0, 2027, 'black', -1);
-insert into perspective_elect_criteria VALUES (30, 40044, 0, 8, 2110, 0, 2027, 'black', -1);
-insert into perspective_elect_criteria VALUES (31, 40044, 0, 8, 2102, 0, 2024, 'orange', 1);
-insert into perspective_elect_criteria VALUES (32, 40044, 0, 8, 2104, 0, 2024, 'orange', 1);
-insert into perspective_elect_criteria VALUES (33, 40044, 0, 8, 2103, 0, 2024, 'orange', 1);
-insert into perspective_elect_criteria VALUES (34, 40044, 0, 8, 2106, 0, 2024, 'orange', 1);
-insert into perspective_elect_criteria VALUES (35, 40044, 0, 8, 2102, 0, 2027, 'orange', 1);
-insert into perspective_elect_criteria VALUES (36, 40044, 0, 8, 2104, 0, 2027, 'orange', 1);
-insert into perspective_elect_criteria VALUES (37, 40044, 0, 8, 2103, 0, 2027, 'orange', 1);
-insert into perspective_elect_criteria VALUES (38, 40044, 0, 8, 2106, 0, 2027, 'orange', 1);
-insert into perspective_elect_criteria VALUES (39, 40044, 0, 9, 2104, 0, 2021, 'green', 1);
-insert into perspective_elect_criteria VALUES (40, 40044, 0, 9, 2107, 0, 2021, 'black', -1);
-insert into perspective_elect_criteria VALUES (41, 40044, 0, 9, 2105, 0, 2021, 'black', -1);
-insert into perspective_elect_criteria VALUES (42, 40044, 0, 12, 2102, 0, 2043, 'black', -1);
-insert into perspective_elect_criteria VALUES (43, 40044, 0, 12, 2102, 0, 2045, 'black', -1);
-insert into perspective_elect_criteria VALUES (44, 40044, 0, 11, 2102, 2041, 2105, 'black', -1);
-insert into perspective_elect_criteria VALUES (45, 40044, 0, 11, 2102, 2041, 2107, 'black', -1);
+-- insert into perspective_elect_criteria VALUES (2, 40044, 0, 7, 2102, 0, 0, 'black', -5, 0);
+-- insert into perspective_elect_criteria VALUES (3, 40044, 0, 7, 2105, 0, 0, 'black', -5, 0);
+-- insert into perspective_elect_criteria VALUES (4, 40044, 0, 7, 2103, 0, 0, 'black', -5, 0);
+-- insert into perspective_elect_criteria VALUES (5, 40044, 0, 7, 2106, 0, 0, 'black', -5, 0);
+-- insert into perspective_elect_criteria VALUES (6, 40044, 0, 7, 2104, 0, 0, 'black', -5, 0);
+-- insert into perspective_elect_criteria VALUES (7, 40044, 0, 3, 2104, 0, 2903, 'black', -1, 0);
+-- insert into perspective_elect_criteria VALUES (8, 40044, 0, 2, 2104, 0, 2002, 'green', 1, 0);
+-- insert into perspective_elect_criteria VALUES (9, 40044, 0, 2, 2104, 0, 2007, 'green', 1, 0);
+-- insert into perspective_elect_criteria VALUES (10, 40044, 0, 2, 2104, 0, 2012, 'green', 1, 0);
+-- insert into perspective_elect_criteria VALUES (11, 40044, 0, 2, 2104, 0, 2001, 'black', -1, 0);
+-- insert into perspective_elect_criteria VALUES (12, 40044, 0, 2, 2104, 0, 2006, 'black', -1, 0);
+-- insert into perspective_elect_criteria VALUES (13, 40044, 0, 2, 2104, 0, 2008, 'black', -1, 0);
+-- insert into perspective_elect_criteria VALUES (14, 40044, 0, 3, 2103, 0, 2903, 'black', -1, 0);
+-- insert into perspective_elect_criteria VALUES (15, 40044, 0, 2, 2102, 0, 2002, 'yellow', 1, 0);
+-- insert into perspective_elect_criteria VALUES (16, 40044, 0, 2, 2102, 0, 2004, 'yellow', 1, 0);
+-- insert into perspective_elect_criteria VALUES (17, 40044, 0, 2, 2102, 0, 2001, 'black', -1, 0);
+-- insert into perspective_elect_criteria VALUES (18, 40044, 0, 2, 2102, 0, 2008, 'black', -1, 0);
+-- insert into perspective_elect_criteria VALUES (19, 40044, 0, 2, 2102, 0, 2010, 'black', -1, 0);
+-- insert into perspective_elect_criteria VALUES (20, 40044, 0, 5, 2102, 0, 0, 'black', -1, 0);
+-- insert into perspective_elect_criteria VALUES (21, 40044, 0, 5, 2103, 0, 0, 'black', -1, 0);
+-- insert into perspective_elect_criteria VALUES (22, 40044, 0, 5, 2104, 0, 0, 'black', -1, 0);
+-- insert into perspective_elect_criteria VALUES (23, 40044, 0, 8, 2107, 0, 2024, 'black', -1, 0);
+-- insert into perspective_elect_criteria VALUES (24, 40044, 0, 8, 2105, 0, 2024, 'black', -1, 0);
+-- insert into perspective_elect_criteria VALUES (25, 40044, 0, 8, 2108, 0, 2024, 'black', -1, 0);
+-- insert into perspective_elect_criteria VALUES (26, 40044, 0, 8, 2110, 0, 2024, 'black', -1, 0);
+-- insert into perspective_elect_criteria VALUES (27, 40044, 0, 8, 2107, 0, 2027, 'black', -1, 0);
+-- insert into perspective_elect_criteria VALUES (28, 40044, 0, 8, 2105, 0, 2027, 'black', -1, 0);
+-- insert into perspective_elect_criteria VALUES (29, 40044, 0, 8, 2108, 0, 2027, 'black', -1, 0);
+-- insert into perspective_elect_criteria VALUES (30, 40044, 0, 8, 2110, 0, 2027, 'black', -1, 0);
+-- insert into perspective_elect_criteria VALUES (31, 40044, 0, 8, 2102, 0, 2024, 'orange', 1, 0);
+-- insert into perspective_elect_criteria VALUES (32, 40044, 0, 8, 2104, 0, 2024, 'orange', 1, 0);
+-- insert into perspective_elect_criteria VALUES (33, 40044, 0, 8, 2103, 0, 2024, 'orange', 1, 0);
+-- insert into perspective_elect_criteria VALUES (34, 40044, 0, 8, 2106, 0, 2024, 'orange', 1, 0);
+-- insert into perspective_elect_criteria VALUES (35, 40044, 0, 8, 2102, 0, 2027, 'orange', 1, 0);
+-- insert into perspective_elect_criteria VALUES (36, 40044, 0, 8, 2104, 0, 2027, 'orange', 1, 0);
+-- insert into perspective_elect_criteria VALUES (37, 40044, 0, 8, 2103, 0, 2027, 'orange', 1, 0);
+-- insert into perspective_elect_criteria VALUES (38, 40044, 0, 8, 2106, 0, 2027, 'orange', 1, 0);
+-- insert into perspective_elect_criteria VALUES (39, 40044, 0, 9, 2104, 0, 2021, 'green', 1, 0);
+-- insert into perspective_elect_criteria VALUES (40, 40044, 0, 9, 2107, 0, 2021, 'black', -1, 0);
+-- insert into perspective_elect_criteria VALUES (41, 40044, 0, 9, 2105, 0, 2021, 'black', -1, 0);
+-- insert into perspective_elect_criteria VALUES (42, 40044, 0, 12, 2102, 0, 2043, 'black', -1, 0);
+-- insert into perspective_elect_criteria VALUES (43, 40044, 0, 12, 2102, 0, 2045, 'black', -1, 0);
+-- insert into perspective_elect_criteria VALUES (44, 40044, 0, 11, 2102, 2041, 2105, 'black', -1, 0);
+-- insert into perspective_elect_criteria VALUES (45, 40044, 0, 11, 2102, 2041, 2107, 'black', -1, 0);
+
+insert into perspective_elect_criteria VALUES (101, 40045, 0, 4, 2102, 2905, 0, 'red', 1, 0);
+insert into perspective_elect_criteria VALUES (102, 40045, 0, 4, 2102, 2906, 0, 'green', 1, 0);
+insert into perspective_elect_criteria VALUES (103, 40045, 0, 4, 2102, 2908, 0, 'yellow', 1, 0);
+insert into perspective_elect_criteria VALUES (104, 40045, 0, 4, 2102, 2909, 0, 'blue', 1, 0);
+insert into perspective_elect_criteria VALUES (105, 40045, 0, 4, 2102, 2904, 0, 'black', 1, 0);
+insert into perspective_elect_criteria VALUES (106, 40045, 0, 4, 2102, 2907, 0, 'black', 1, 0);
+insert into perspective_elect_criteria VALUES (107, 40045, 0, 8 , 2102, 0, 0, 'black', -1, 1);
 
 
