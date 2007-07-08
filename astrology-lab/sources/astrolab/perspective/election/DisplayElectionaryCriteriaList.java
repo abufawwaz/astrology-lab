@@ -46,8 +46,10 @@ public class DisplayElectionaryCriteriaList extends HTMLFormDisplay {
     ArrayList<Criterion> neutralCriteria = new ArrayList<Criterion>();
 
     if (timestamp != null) {
+      SpacetimeEvent nextTimestamp = timestamp.getMovedSpacetimeEvent(SpacetimeEvent.MINUTE, 1);
+
       for (Criterion criterion: criteria) {
-        int mark = criterion.getMark(timestamp, timestamp) * criterion.getMultiplyBy();
+        int mark = criterion.getMark(timestamp, nextTimestamp) * criterion.getMultiplyBy();
         if (mark > 0) {
           positiveCriteria.add(criterion);
         } else if (mark < 0) {

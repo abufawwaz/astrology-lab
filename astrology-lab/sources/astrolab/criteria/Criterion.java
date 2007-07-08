@@ -2,72 +2,275 @@ package astrolab.criteria;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Hashtable;
 
+import astrolab.astronom.Aspects;
 import astrolab.astronom.SpacetimeEvent;
+import astrolab.astronom.houses.HouseSystem;
+import astrolab.astronom.planet.SolarSystem;
 import astrolab.db.Database;
 import astrolab.web.server.Request;
 import astrolab.web.server.content.LocalizedStringBuffer;
 
-public abstract class Criterion {
+public class Criterion {
 
-  public final static int TYPE_LOCATION = 1;
-  public final static int TYPE_ZODIAC_SIGN = 2;
-  public final static int TYPE_POSITION_DIRECTION = 3;
-  public final static int TYPE_COURSE_DIRECTION = 4;
-  public final static int TYPE_COURSE_VOID = 5;
-  public final static int TYPE_POSITION_PHASE = 6;
-  public final static int TYPE_TIME_OF_WEEK = 7;
-  public final static int TYPE_POSITION_PLANET_HOUSE = 8;
-  public final static int TYPE_IS_HOUSE_RULER = 9;
-  public final static int TYPE_POSITION_PLANET_ASPECT = 10;
-  public final static int TYPE_COURSE_PLANET_ASPECT = 11;
-  public final static int TYPE_COURSE_ASPECT = 12;
+  public final static String TYPE_PLANET = "Planet";
+  public final static String TYPE_HOUSE = "House";
+  public final static String TYPE_SIGN = "Sign";
+  public final static String TYPE_ASPECT = "Aspect";
+  public final static String TYPE_DIRECTION = "Direction";
+  public final static String TYPE_PHASE = "Phase";
+  public final static Hashtable<String, ArrayList<Integer>> TYPES = new Hashtable<String, ArrayList<Integer>>();
+
+  private final static Criterion[] EMPTY_ARRAY = new Criterion[0];
 
   private int id;
-  private int type;
+  private int actor;
   private int action;
   private int factor;
-  private int activePoint;
   private int multiply = 1;
   private String color = "black";
+  private Modifiers modifiers;
+  private CriterionAlgorithm algorithm;
 
-  protected Criterion() {
+  static {
+    ArrayList<Integer> list = new ArrayList<Integer>();
+    for (int planet: SolarSystem.PLANETS_IDS) {
+      list.add(planet);
+    }
+    TYPES.put(TYPE_PLANET, list);
+
+    list = new ArrayList<Integer>();
+    list.add(Aspects.CONJUNCT);
+    list.add(Aspects.SEXTILE);
+    list.add(Aspects.SQUARE);
+    list.add(Aspects.TRINE);
+    list.add(Aspects.OPPOSITION);
+    TYPES.put(TYPE_ASPECT, list);
+
+    list = new ArrayList<Integer>();
+    list.add(CriterionDirection.ID_DIRECT);
+    list.add(CriterionDirection.ID_STATIONARY);
+    list.add(CriterionDirection.ID_RETROGRADE);
+    TYPES.put(TYPE_DIRECTION, list);
+
+    list = new ArrayList<Integer>();
+    for (int phase: CriterionPhase.PHASES) {
+      list.add(phase);
+    }
+    TYPES.put(TYPE_PHASE, list);
+
+    list = new ArrayList<Integer>();
+    for (int sign: CriterionSign.SIGNS) {
+      list.add(sign);
+    }
+    TYPES.put(TYPE_SIGN, list);
+
+    list = new ArrayList<Integer>();
+    for (int sign: HouseSystem.HOUSES) {
+      list.add(sign);
+    }
+    TYPES.put(TYPE_HOUSE, list);
   }
 
-  protected Criterion(int id, int type, int activePoint) {
+  protected Criterion(int id, int algorithm, int modifiers, int actor, int action, int factor, String color, int multiply) {
     this.id = id;
-    this.type = type;
-    this.activePoint = activePoint;
+    this.algorithm = CriterionAlgorithm.getAlgorithm(algorithm);
+    this.modifiers = new Modifiers(modifiers);
+    this.actor = actor;
+    this.action = action;
+    this.factor = factor;
+    this.color = color;
+    this.multiply = multiply;
   }
 
-  protected Criterion(int id, int type, int activePoint, int factor) {
-    this(id, type, activePoint);
+  protected Criterion(int algorithm) {
+    this.algorithm = CriterionAlgorithm.getAlgorithm(algorithm);
+  }
+
+  protected Criterion(int id, int algorithm, int actor) {
+    this(algorithm);
+    this.id = id;
+    this.actor = actor;
+  }
+
+  protected Criterion(int id, int algorithm, int actor, int factor) {
+    this(id, algorithm, actor);
     this.factor = factor;
   }
 
-  protected Criterion(int id, int type, int activePoint, int factor, int action) {
-    this(id, type, activePoint, factor);
+  protected Criterion(int id, int algorithm, int actor, int factor, int action) {
+    this(id, algorithm, actor, factor);
     this.action = action;
   }
 
-  public abstract String getName();
+  public final Criterion[] getModifications(int actor, int action, int factor, int modifiers) {
+    CriterionAlgorithm algorithm = getAlgorithm();
+    HashSet<Integer> actorMods = new HashSet<Integer>();
+    HashSet<Integer> actionMods = new HashSet<Integer>();
+    HashSet<Integer> factorMods = new HashSet<Integer>();
 
-  public abstract String[] getActorTypes();
+    if (actor != 0) {
+      if (algorithm.getActorTypes().length == 0) {
+        return EMPTY_ARRAY;
+      }
 
-  public int getActivePoint() {
-    return activePoint;
+      for (String actorType: algorithm.getActorTypes()) {
+        ArrayList<Integer> types = TYPES.get(actorType);
+        if ((types != null) && types.contains(actor)) {
+          for (int mod: Modifiers.ACTOR_MODIFIERS) {
+            if ((modifiers & mod) == mod) {
+              actorMods.add(mod);
+            } else {
+              actorMods.add(0);
+            }
+          }
+        }
+      }
+    } else {
+      if (algorithm.getActorTypes().length > 0) {
+        for (int mod: Modifiers.ACTOR_MODIFIERS) {
+          if ((modifiers & mod) == mod) {
+            actorMods.add(mod);
+          } else {
+            actorMods.add(0);
+          }
+        }
+      } else {
+        actorMods.add(0);
+      }
+    }
+
+    if (action != 0) {
+      if (algorithm.getActionTypes().length == 0) {
+        return EMPTY_ARRAY;
+      }
+
+      for (String actionType: algorithm.getActionTypes()) {
+        ArrayList<Integer> types = TYPES.get(actionType);
+        if ((types != null) && types.contains(action)) {
+          for (int mod: Modifiers.ACTION_MODIFIERS) {
+            if ((modifiers & mod) == mod) {
+              actionMods.add(mod);
+            } else {
+              actionMods.add(0);
+            }
+          }
+        }
+      }
+    } else if (algorithm.getActionTypes().length > 0) {
+      for (int mod: Modifiers.ACTION_MODIFIERS) {
+        if ((modifiers & mod) == mod) {
+          actionMods.add(mod);
+        } else {
+          actionMods.add(0);
+        }
+      }
+    } else {
+      for (int mod: Modifiers.ACTION_MODIFIERS) {
+        if ((modifiers & mod) == mod) {
+          return EMPTY_ARRAY;
+        }
+      }
+      actionMods.add(0);
+    }
+
+    if (factor != 0) {
+      if (algorithm.getFactorTypes().length == 0) {
+        return EMPTY_ARRAY;
+      }
+
+      for (String factorType: algorithm.getFactorTypes()) {
+        ArrayList<Integer> types = TYPES.get(factorType);
+        if ((types != null) && types.contains(factor)) {
+          for (int mod: Modifiers.FACTOR_MODIFIERS) {
+            if ((modifiers & mod) == mod) {
+              factorMods.add(mod);
+            } else {
+              factorMods.add(0);
+            }
+          }
+        }
+      }
+    } else if (algorithm.getFactorTypes().length > 0) {
+      for (int mod: Modifiers.FACTOR_MODIFIERS) {
+        if ((modifiers & mod) == mod) {
+          factorMods.add(mod);
+        } else {
+          factorMods.add(0);
+        }
+      }
+    } else {
+      for (int mod: Modifiers.FACTOR_MODIFIERS) {
+        if ((modifiers & mod) == mod) {
+          return EMPTY_ARRAY;
+        }
+      }
+      factorMods.add(0);
+    }
+
+    HashSet<Integer> mods = getAllCombinations(actorMods, actionMods, factorMods);
+    if ((modifiers == Modifier.MODIFIER_ALL) || (modifiers == 0)) {
+      mods.add(0);
+    }
+
+    ArrayList<Criterion> result = new ArrayList<Criterion>();
+    for (int modifications: mods) {
+      ReplacementCriterion modification = new ReplacementCriterion(this, actor, action, factor, modifications);
+      if (getAlgorithm().accepts(modification)) {
+        result.add(modification);
+      }
+    }
+
+    return result.toArray(EMPTY_ARRAY);
+  }
+
+  private final HashSet<Integer> getAllCombinations(HashSet<Integer> actorMods, HashSet<Integer> actionMods, HashSet<Integer> factorMods) {
+    HashSet<Integer> result = new HashSet<Integer>();
+
+    for (int actorMod: getAllCombinations(actorMods)) {
+      for (int actionMod: getAllCombinations(actionMods)) {
+        for (int factorMod: getAllCombinations(factorMods)) {
+          result.add(actorMod | actionMod | factorMod);
+        }
+      }
+    }
+
+    return result;
+  }
+
+  private final Integer[] getAllCombinations(HashSet<Integer> mods) {
+    if (mods.isEmpty()) {
+      return new Integer[0];
+    } else if (mods.size() == 1) {
+      return mods.toArray(new Integer[1]);
+    } else {
+      int m = mods.iterator().next();
+      HashSet<Integer> result = new HashSet<Integer>();
+      result.addAll(mods);
+      result.remove(m);
+      Integer[] combinations = getAllCombinations(result);
+      result.clear();
+
+      for (int c: combinations) {
+        result.add(m | c);
+      }
+      return result.toArray(new Integer[0]);
+    }
   }
 
   public int getId() {
     return id;
   }
 
-  public int getType() {
-    return type;
+  public CriterionAlgorithm getAlgorithm() {
+    return algorithm;
   }
 
   public int getActor() {
-    return activePoint;
+    return actor;
   }
 
   public int getAction() {
@@ -78,6 +281,10 @@ public abstract class Criterion {
     return factor;
   }
 
+  public int getModifiers() {
+    return modifiers.getModifiers();
+  }
+
   public int getMultiplyBy() {
     return multiply;
   }
@@ -86,86 +293,24 @@ public abstract class Criterion {
     return color;
   }
 
-  public abstract int getMark(SpacetimeEvent periodStart, SpacetimeEvent periodEnd);
-
-  public String toString() {
-    LocalizedStringBuffer buffer = new LocalizedStringBuffer();
-    buffer.append("<table><tr><td>");
-    buffer.localize(getActor());
-    buffer.append("</td><td>");
-    buffer.localize(getAction());
-    buffer.append("</td><td>");
-    buffer.localize(getFactor());
-    buffer.append("</td></tr></table>");
-    return buffer.toString();
+  public final int getMark(SpacetimeEvent periodStart, SpacetimeEvent periodEnd) {
+    return ((Modifiers) modifiers.clone()).getMark(this, periodStart, periodEnd);
   }
 
   protected static Criterion read(ResultSet query) throws SQLException {
-    int type = query.getInt(4);
-    Criterion criterion = null;
-
-    switch (type) {
-      case TYPE_TIME_OF_WEEK: {
-        criterion = new CriterionTimeOfWeek(query.getInt(1), query.getInt(5));
-        break;
-      }
-      case TYPE_ZODIAC_SIGN: {
-        criterion = new CriterionZodiacSign(query.getInt(1), query.getInt(5), query.getInt(7));
-        break;
-      }
-      case TYPE_POSITION_DIRECTION: {
-        criterion = new CriterionPositionDirection(query.getInt(1), query.getInt(5), query.getInt(7));
-        break;
-      }
-      case TYPE_COURSE_DIRECTION: {
-        criterion = new CriterionCourseDirection(query.getInt(1), query.getInt(5), query.getInt(7));
-        break;
-      }
-      case TYPE_COURSE_ASPECT: {
-        criterion = new CriterionCourseAspect(query.getInt(1), query.getInt(5), query.getInt(7));
-        break;
-      }
-      case TYPE_COURSE_PLANET_ASPECT: {
-        criterion = new CriterionCourseAspectPlanet(query.getInt(1), query.getInt(5), query.getInt(7), query.getInt(6));
-        break;
-      }
-      case TYPE_COURSE_VOID: {
-        criterion = new CriterionCourseVoid(query.getInt(1), query.getInt(5));
-        break;
-      }
-      case TYPE_POSITION_PHASE: {
-        criterion = new CriterionPositionPhase(query.getInt(1), query.getInt(5), query.getInt(7));
-        break;
-      }
-      case TYPE_POSITION_PLANET_HOUSE: {
-        criterion = new CriterionPositionPlanetInHouse(query.getInt(1), query.getInt(5), query.getInt(7));
-        break;
-      }
-      case TYPE_POSITION_PLANET_ASPECT: {
-        criterion = new CriterionPositionAspect(query.getInt(1), query.getInt(5), query.getInt(7), query.getInt(6));
-        break;
-      }
-      case TYPE_IS_HOUSE_RULER: {
-        criterion = new CriterionRulerOfHouse(query.getInt(1), query.getInt(5), query.getInt(7));
-        break;
-      }
-      default: {
-//        throw new IllegalStateException(" Type " + type + " is not a valid criteria type.");
-      }
-    }
-
-    criterion.type = type;
-    criterion.color = query.getString(8);
-    criterion.multiply = query.getInt(9);
-    return criterion;
+    return new Criterion(query.getInt(1), query.getInt(4), query.getInt(10), query.getInt(5), query.getInt(6), query.getInt(7), query.getString(8), query.getInt(9));
   }
 
-  protected final void store() {
+  public final void store() {
     int user = Request.getCurrentRequest().getUser();
-    Database.execute("INSERT INTO perspective_elect_criteria (criteria_template, criteria_owner, criteria_type, criteria_actor, criteria_action, criteria_factor, criteria_color, criteria_multiply) VALUES ('0', '" + user + "', '" + getType() + "', '" + getActor() + "', '" + getAction() + "', '" + getFactor() + "', '" + getColor() + "', '" + getMultiplyBy() + "')");
+    Database.execute("INSERT INTO perspective_elect_criteria (criteria_template, criteria_owner, criteria_type, criteria_actor, criteria_action, criteria_factor, criteria_color, criteria_multiply, criteria_modifiers) VALUES ('0', '" + user + "', '" + getAlgorithm().getType() + "', '" + getActor() + "', '" + getAction() + "', '" + getFactor() + "', '" + getColor() + "', '" + getMultiplyBy() + "', '" + getModifiers() + "')");
   }
 
-  public void delete() {
+  public final void store(String[] values) {
+    new ReplacementCriterion(this, Integer.parseInt(values[0]), Integer.parseInt(values[1]), Integer.parseInt(values[2]), 0);
+  }
+
+  public final void delete() {
     int user = Request.getCurrentRequest().getUser();
     Database.execute("DELETE FROM perspective_elect_criteria where criteria_id = " + getId() + " AND criteria_owner = " + user);
   }
@@ -197,8 +342,8 @@ public abstract class Criterion {
     Database.execute("UPDATE perspective_elect_criteria SET criteria_multiply = '" + newMultiply + "' WHERE criteria_id = " + getId() + " AND criteria_owner = " + user);
   }
 
-  protected abstract void store(String[] inputValues);
-
-  public abstract void toString(LocalizedStringBuffer output);
+  public final void toString(LocalizedStringBuffer output) {
+    new Modifiers(getModifiers()).toString(output, this);
+  }
 
 }

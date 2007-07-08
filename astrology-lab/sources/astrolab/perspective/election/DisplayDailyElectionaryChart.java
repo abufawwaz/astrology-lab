@@ -44,7 +44,7 @@ public class DisplayDailyElectionaryChart extends SVGDisplay {
     Calendar result = Calendar.getInstance();
     result.setTimeInMillis(timestamp.getTimeInMillis());
     result.set(Calendar.DAY_OF_MONTH, day + 1);
-    result.set(Calendar.HOUR_OF_DAY, hour + 1);
+    result.set(Calendar.HOUR_OF_DAY, hour);
     return new SpacetimeEvent(result.getTimeInMillis());
   }
 
@@ -52,14 +52,13 @@ public class DisplayDailyElectionaryChart extends SVGDisplay {
     int[][][] marks = new int[criteria.length][DAYS * 24 / HOUR_STEP][2];
     int maxValue = 0;
     SpacetimeEvent periodStart;
-    SpacetimeEvent periodEnd;
+    SpacetimeEvent periodEnd = getCalendar(0, 0);
 
     for (int d = 0; d < DAYS; d ++) {
-      periodEnd = getCalendar(d, 0);
-      for (int h = 0; h < 24; h += HOUR_STEP) {
-        int hourIndex = (d * 24 + h) / HOUR_STEP;
+      for (int h = HOUR_STEP; h <= 24; h += HOUR_STEP) {
+        int hourIndex = (d * 24 + (h - HOUR_STEP)) / HOUR_STEP;
         periodStart = periodEnd;
-        periodEnd = getCalendar(d, h + 1);
+        periodEnd = getCalendar(d, h);
   
         for (int c = 0; c < criteria.length; c++) {
           int value = criteria[c].getMark(periodStart, periodEnd) * criteria[c].getMultiplyBy();
@@ -144,7 +143,9 @@ public class DisplayDailyElectionaryChart extends SVGDisplay {
   private final void fillMarkLine(LocalizedStringBuffer buffer) {
     // mark line
     buffer.append("<g id='chart_mark_id' transform='translate(0 0)' style='stroke-width:.1;stroke:black'>");
-    buffer.append("<g transform='translate(0 " + HEIGHT + ")'><text id='chart_mark_text' style='stroke:none;font-size:" + (((float) HEIGHT) / 20) + "pt'>?? " + MONTHS[timestamp.get(Calendar.MONTH)] + "</text></g>");
+    buffer.append("<g transform='translate(0 " + HEIGHT + ")'><text id='chart_mark_text' style='stroke:none;font-size:" + (((float) HEIGHT) / 20) + "pt'>?? ");
+    buffer.localize(MONTHS[timestamp.get(Calendar.MONTH)]);
+    buffer.append("</text></g>");
     buffer.append("<line y2='");
     buffer.append(HEIGHT);
     buffer.append("' />");
@@ -154,7 +155,9 @@ public class DisplayDailyElectionaryChart extends SVGDisplay {
   private final void fillSelectLine(LocalizedStringBuffer buffer) {
     // select line
     buffer.append("<g id='chart_select_id' dispay='none' transform='translate(0 0)' style='stroke-width:.1;stroke:blue'>");
-    buffer.append("<g transform='translate(0 " + HEIGHT + ")'><text id='chart_select_text' style='stroke:none;font-size:" + (((float) HEIGHT) / 20) + "pt'>?? " + MONTHS[timestamp.get(Calendar.MONTH)] + "</text></g>");
+    buffer.append("<g transform='translate(0 " + HEIGHT + ")'><text id='chart_select_text' style='stroke:none;font-size:" + (((float) HEIGHT) / 20) + "pt'>?? ");
+    buffer.localize(MONTHS[timestamp.get(Calendar.MONTH)]);
+    buffer.append("</text></g>");
     buffer.append("<line y2='");
     buffer.append(HEIGHT);
     buffer.append("' />");
@@ -191,7 +194,9 @@ public class DisplayDailyElectionaryChart extends SVGDisplay {
     buffer.newline();
     buffer.append(" function moveMarkTo(mark, evt) {");
     buffer.append("  var day = Math.floor(" + WIDTH + " * evt.clientX / document.rootElement.width.baseVal.value);");
-    buffer.append("  var text = document.createTextNode('' + (day + 1) + ' " + MONTHS[timestamp.get(Calendar.MONTH)] + "');");
+    buffer.append("  var text = document.createTextNode('' + (day + 1) + ' ");
+    buffer.localize(MONTHS[timestamp.get(Calendar.MONTH)]);
+    buffer.append("');");
     buffer.append("  document.getElementById(mark + '_id').setAttribute('transform', 'translate(' + day + ' 0)');");
     buffer.append("  var text_node = document.getElementById(mark + '_text');");
     buffer.append("  while (text_node.hasChildNodes()) text_node.removeChild(text_node.firstChild);");

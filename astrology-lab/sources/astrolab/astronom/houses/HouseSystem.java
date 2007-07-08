@@ -101,6 +101,7 @@ public abstract class HouseSystem {
       HOUSE_NAMES[i] = "house." + (i + 1);
       HOUSES[i] = Text.getId(HOUSE_NAMES[i]);
       NAMES_MAP.put(HOUSES[i], HOUSE_NAMES[i]);
+System.err.println("House: " + HOUSES[i] + " = " + HOUSE_NAMES[i]);
     }
   }
 

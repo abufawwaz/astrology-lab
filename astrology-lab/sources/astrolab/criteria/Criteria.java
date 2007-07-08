@@ -12,6 +12,29 @@ public class Criteria {
 
   private final static Criterion[] EMPTY_LIST = new Criterion[0];
 
+//    new CriterionZodiacSign(),
+//    new Criterion(CriterionAlgorithm.ALGORITHM_DIRECTION),
+//    new Criterion(CriterionAlgorithm.ALGORITHM_PHASE),
+//    new CriterionPositionPlanetInHouse(),
+//    new Criterion(CriterionAlgorithm.ALGORITHM_ASPECT),
+//    new CriterionTimeOfWeek(),
+
+  public final static Criterion[] getCriteria(int type, int actor, int action, int factor, int modifiers) {
+    if (type != 0) {
+      return new Criterion[] { new ReplacementCriterion(new Criterion(type), actor, action, factor, modifiers) };
+    } else {
+      ArrayList<Criterion> list = new ArrayList<Criterion>();
+  
+      // TODO: optimize: remove Criterion constructor
+      for (CriterionAlgorithm algorithmType: CriterionAlgorithm.ALGORITHMS.values()) {
+        for (Criterion c: new Criterion(algorithmType.getType()).getModifications(actor, action, factor, modifiers)) {
+          list.add(c);
+        }
+      }
+      return list.toArray(EMPTY_LIST);
+    }
+  }
+
   public static Criterion[] getCriteria() {
     int template = getSelectedTemplate();
     int user = Request.getCurrentRequest().getUser();
