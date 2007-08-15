@@ -3,8 +3,8 @@ package astrolab.project;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
-import java.util.TimeZone;
 
+import astrolab.astronom.ActivePoint;
 import astrolab.astronom.SpacetimeEvent;
 import astrolab.db.Database;
 import astrolab.formula.FormulaeBase;
@@ -44,9 +44,11 @@ public class Project {
 
   public SpacetimeEvent getMinTime() {
     if (minTime == null) {
-      ResultSet set = Database.executeQuery("SELECT time FROM " + Project.TABLE_PREFIX + getName() + " ORDER BY time ASC LIMIT 1");
+      ResultSet set = null;
       try {
-        if (set.next()) {
+        set = Database.executeQuery("SELECT time FROM " + Project.TABLE_PREFIX + getName() + " ORDER BY time ASC LIMIT 1");
+
+        if ((set != null) && set.next()) {
           Date timestamp = set.getTimestamp(1);
           minTime = new SpacetimeEvent(timestamp.getTime());
         } else {
@@ -55,10 +57,12 @@ public class Project {
       } catch (Exception e) {
         e.printStackTrace();
       } finally {
-        try {
-          set.close();
-        } catch (SQLException e) {
-          e.printStackTrace();
+        if (set != null) {
+          try {
+            set.close();
+          } catch (SQLException e) {
+            e.printStackTrace();
+          }
         }
       }
     }
@@ -67,9 +71,11 @@ public class Project {
 
   public SpacetimeEvent getMaxTime() {
     if (maxTime == null) {
-      ResultSet set = Database.executeQuery("SELECT time FROM " + Project.TABLE_PREFIX + getName() + " ORDER BY time DESC LIMIT 1");
+      ResultSet set = null;
       try {
-        if (set.next()) {
+        set = Database.executeQuery("SELECT time FROM " + Project.TABLE_PREFIX + getName() + " ORDER BY time DESC LIMIT 1");
+
+        if ((set != null) && set.next()) {
           Date timestamp = set.getTimestamp(1);
           maxTime = new SpacetimeEvent(timestamp.getTime());
         } else {
@@ -78,10 +84,12 @@ public class Project {
       } catch (Exception e) {
         e.printStackTrace();
       } finally {
-        try {
-          set.close();
-        } catch (SQLException e) {
-          e.printStackTrace();
+        if (set != null) {
+          try {
+            set.close();
+          } catch (SQLException e) {
+            e.printStackTrace();
+          }
         }
       }
     }
@@ -125,15 +133,22 @@ public class Project {
         break;
       }
     }
-    if (!found) {
-      addKey(key);
-    }
 
-    ProjectDataFiller.startFiller(key, this);
+    if (!found) {
+      try {
+        ActivePoint.getActivePoint(key, new SpacetimeEvent(System.currentTimeMillis()));
+        ProjectDataFiller.startFiller(key, this);
+  
+        addKey(key);
+      } catch (IllegalStateException ise) {
+        // ignore the key;
+      }
+    }
   }
 
   private void addKey(String key) {
-    Database.execute("ALTER TABLE " + TABLE_PREFIX + name + " ADD COLUMN " + key + " DOUBLE, INDEX USING BTREE (" + key + ")");
+    Database.execute("ALTER TABLE " + TABLE_PREFIX + name + " ADD COLUMN " + key + " DOUBLE");
+    Database.execute("ALTER TABLE " + TABLE_PREFIX + name + " ADD INDEX USING BTREE (" + key + ")");
     listKeys();
   }
 

@@ -204,7 +204,7 @@ public class DisplayHourlyElectionaryChart extends SVGDisplay {
   private final SpacetimeEvent getCalendar(float hour) {
     Calendar result = Calendar.getInstance();
     result.setTime(timestamp.getTime());
-    result.set(Calendar.HOUR_OF_DAY, (int) hour);
+    result.set(Calendar.HOUR_OF_DAY, (int) (hour + 1));
     result.set(Calendar.MINUTE, (int) ((hour - (int) hour) * 60));
     return new SpacetimeEvent(result.getTimeInMillis());
   }
