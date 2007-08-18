@@ -1,17 +1,23 @@
-package astrolab.web.perspective;
+package astrolab.perspective;
 
 import java.io.File;
 import java.io.FileInputStream;
 
+import astrolab.astronom.SpacetimeEvent;
 import astrolab.db.Database;
+import astrolab.db.Project;
+import astrolab.project.ProjectDataKey;
+import astrolab.project.Projects;
 import astrolab.web.Display;
 import astrolab.web.server.Request;
+import astrolab.web.server.RequestParameters;
 import astrolab.web.server.SessionManager;
 import astrolab.web.server.content.LocalizedStringBuffer;
 
 public class Perspective extends Display {
 
   private final static String PERSPECTIVE_KEY = "_perspective";
+  private final static int PERSPECTIVE_STATISTICS = 40041; // Get from database
 
   public static boolean isPerspectiveRequest() {
     Request request = Request.getCurrentRequest();
@@ -24,8 +30,26 @@ public class Perspective extends Display {
     return Database.queryIds("SELECT perspective_id FROM views_perspective WHERE perspective_id > 0");
   }
 
+  // TODO: Make per perspective if a second one demands it
+  public static boolean isProjectAccepted(Project projectRecord) {
+    switch (getPerspectiveId()) {
+      case PERSPECTIVE_STATISTICS: {
+        astrolab.project.Project project = Projects.getProject(projectRecord.getId());
+
+        for (ProjectDataKey key: project.getKeys()) {
+          if ("time".equalsIgnoreCase(key.getName())) {
+            return true;
+          }
+        }
+
+        return false;
+      }
+    }
+    return true;
+  }
+
   public Perspective() {
-    super.addAction("project", "user.session.project");
+    super.addAction("project", RequestParameters.PROJECT_ID);
   }
 
   public String getType() {
@@ -53,16 +77,47 @@ public class Perspective extends Display {
 
     includeScripts(request, buffer);
 
-    buffer.append(getPerspectiveHtml(request.get(PERSPECTIVE_KEY))); buffer.newline();
+    buffer.append(getPerspectiveHtml()); buffer.newline();
 
     buffer.append("</html>"); buffer.newline();
   }
 
-  private String getPerspectiveHtml(String id) {
+  private final static int getPerspectiveId() {
+    int id = Request.getCurrentRequest().getParameters().getInt(PERSPECTIVE_KEY);
+
+    if (id <= 0) {
+      int user = Request.getCurrentRequest().getUser();
+      String textId = Database.query("SELECT perspective_id FROM project_webstats WHERE subject_id = " + user + " ORDER BY time DESC LIMIT 1");
+
+      if (textId != null) {
+        return Integer.parseInt(textId);
+      }
+    }
+
+    return id;
+  }
+
+  private String getPerspectiveHtml() {
+    int perspectiveId = getPerspectiveId();
+    int user = Request.getCurrentRequest().getUser();
+    int project = Request.getCurrentRequest().getParameters().getInt(RequestParameters.PROJECT_ID);
+    SpacetimeEvent time = new SpacetimeEvent(System.currentTimeMillis(), SpacetimeEvent.GMT_TIME_ZONE);
+    StringBuffer webstatsUpdate = new StringBuffer();
+    webstatsUpdate.append("INSERT INTO project_webstats VALUES (");
+    webstatsUpdate.append(user);
+    webstatsUpdate.append(", '");
+    webstatsUpdate.append(time.toMySQLString());
+    webstatsUpdate.append("', ");
+    webstatsUpdate.append(perspectiveId);
+    webstatsUpdate.append(", ");
+    webstatsUpdate.append(project);
+    webstatsUpdate.append(")");
+    Database.execute(webstatsUpdate.toString());
+
     StringBuffer query = new StringBuffer();
     query.append("SELECT perspective_html FROM views_perspective");
     query.append(" WHERE perspective_id = '");
-    query.append(id);
+    query.append(perspectiveId);
     query.append("' OR perspective_id = 0");
     query.append(" ORDER BY perspective_id DESC LIMIT 1");
 

@@ -184,6 +184,15 @@ create table project_classmates (
   private_info TEXT
 ) ENGINE=InnoDB;
 
+create table project_webstats (
+  subject_id INT UNSIGNED REFERENCES project_archive (event_id),
+  time DATETIME,
+  perspective_id INT UNSIGNED REFERENCES views_perspective (perspective_id),
+  project_id INT UNSIGNED REFERENCES project (name),
+
+  INDEX (subject_id)
+) ENGINE=InnoDB;
+
 create table perspective_elect_criteria (
   criteria_id INT UNSIGNED NOT NULL UNIQUE PRIMARY KEY AUTO_INCREMENT,
   criteria_template INT UNSIGNED NOT NULL REFERENCES text (id),
@@ -327,6 +336,7 @@ insert into text values (30024, NULL, NULL, 'Personal Office', 'Личен ка�
 insert into text values (30025, NULL, 'sleep', 'Sleep', 'Сън');
 insert into text values (30026, NULL, NULL, 'Astronomy', 'Астрономия');
 insert into text values (30027, NULL, 'sunspots', 'Sun Spots', 'Слънчеви петна');
+insert into text values (30028, NULL, 'webstats', 'Web Statistics', 'Уеб статистика');
 
 insert into text values (40002, NULL, NULL, 'Description', 'Описание');
 insert into text values (40003, NULL, NULL, 'Chart', 'Карта');
@@ -508,6 +518,7 @@ insert into project values (30013, 30012, 'white', now(), NULL, 30014);
 insert into project values (30017, 30024, 'white', now(), NULL, 30018);
 insert into project values (30019, 30002, 'white', now(), NULL, 30020);
 insert into project values (30027, 30026, 'white', now(), NULL, 0);
+insert into project values (30028, 30002, 'white', now(), NULL, 0);
 
 insert into project_geography values (0, 0, 0, 0, 0);
 insert into project_geography values (1001001,0,0,0,1000001);

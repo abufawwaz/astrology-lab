@@ -70,17 +70,20 @@ public abstract class ActivePoint {
   }
 
   public static ActivePoint getActivePoint(String name, SpacetimeEvent time) {
-    switch (SYSTEM_NAME.get(name)) {
-      case SYSTEM_PLANET: {
-        return PlanetSystemPool.getPlanetSystems().getPlanetSystem(time).getPlanet(name);
-      }
-      case SYSTEM_HOUSE: {
-        throw new IllegalStateException("House cannot be accessed by name.");
-      }
-      default: {
-        throw new IllegalStateException("No active point with name " + name);
+    Integer key = SYSTEM_NAME.get(name);
+
+    if (key != null) {
+      switch (key) {
+        case SYSTEM_PLANET: {
+          return PlanetSystemPool.getPlanetSystems().getPlanetSystem(time).getPlanet(name);
+        }
+        case SYSTEM_HOUSE: {
+          throw new IllegalStateException("House cannot be accessed by name.");
+        }
       }
     }
+
+    throw new IllegalStateException("No active point with name " + name);
   }
 
 }

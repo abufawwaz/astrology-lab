@@ -8,6 +8,7 @@ import astrolab.db.Text;
 
 public class RequestParameters {
 
+  public final static String PROJECT_ID = "user.session.project";
   public final static String TEXT_NAME = "_name";
 
   private Properties textParameters = new Properties();

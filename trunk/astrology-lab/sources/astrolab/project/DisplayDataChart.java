@@ -18,6 +18,7 @@ public class DisplayDataChart extends SVGDisplay {
 
   protected double strokeWidth = 1;
 
+  private boolean polyline = false;
   private double minx = Long.MAX_VALUE;
   private double miny = Long.MAX_VALUE;
   private double maxx = 0;
@@ -45,7 +46,7 @@ public class DisplayDataChart extends SVGDisplay {
     buffer.append("</g>");
 
     if (data != null) {
-      buffer.append("<g style='fill:none;");
+      buffer.append("<g style='");
       buffer.append(decorateLine());
       buffer.append("'>");
   
@@ -54,24 +55,39 @@ public class DisplayDataChart extends SVGDisplay {
         String color = series[yf].getColor();
 
         if ((color != null) && data.begin()) {
-          buffer.append("<polyline points='");
+          if (polyline) {
+            buffer.append("<polyline points='");
+          }
   
           do {
             x = data.getNumeric(base.getText()) - minx;
             y = miny - data.getNumeric(series[yf].getText());
-            buffer.append(x);
-            buffer.append(",");
-            buffer.append(y);
-            buffer.append(" ");
+
+            if (polyline) {
+              buffer.append(x);
+              buffer.append(",");
+              buffer.append(y);
+              buffer.append(" ");
+            } else {
+              buffer.append("<rect x='");
+              buffer.append(x - (width / 60));
+              buffer.append("' width='");
+              buffer.append(width / 30);
+              buffer.append("' y='");
+              buffer.append(y - (height / 20));
+              buffer.append("' height='");
+              buffer.append(height / 10);
+              buffer.append("' r='1' style='stroke:");
+              buffer.append(color);
+              buffer.append("' />");
+            }
           } while (data.move());
 
-          buffer.append("' ");
-
-          buffer.append("style='stroke:");
-          buffer.append(color);
-          buffer.append("'");
-
-          buffer.append(" />");
+          if (polyline) {
+            buffer.append("' style='stroke:");
+            buffer.append(color);
+            buffer.append("' />");
+          }
         }
       }
   
@@ -80,6 +96,7 @@ public class DisplayDataChart extends SVGDisplay {
   }
 
   public void fillViewBox(Request request, LocalizedStringBuffer buffer) {
+    polyline = false;
     series = FormulaIterator.getChartSeries(true);
     base = FormulaIterator.getChartBase();
     period = FormulaIterator.getChartPeriod();
@@ -100,6 +117,7 @@ public class DisplayDataChart extends SVGDisplay {
           }
         } while (data.move());
 
+        polyline = (miny != maxy);
         miny -= 5;
         maxy += 5;
       } else {
@@ -112,8 +130,12 @@ public class DisplayDataChart extends SVGDisplay {
     buffer.append("preserveAspectRatio='none' viewBox='0 " + (miny - maxy) + " " + (maxx - minx) + " " + (maxy - miny) + "'");
   }
 
-  protected String decorateLine() {
-    return "stroke:green;stroke-width:" + DECIMAL_FORMAT.format(strokeWidth);
+  private String decorateLine() {
+    if (polyline) {
+      return "fill:none;stroke:green;stroke-width:" + DECIMAL_FORMAT.format(strokeWidth);
+    } else {
+      return "stroke:none;fill:green";
+    }
   }
 
 }

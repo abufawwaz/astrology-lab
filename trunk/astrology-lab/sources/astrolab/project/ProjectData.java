@@ -2,7 +2,6 @@ package astrolab.project;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.TimeZone;
 
 import astrolab.astronom.SpacetimeEvent;
 import astrolab.db.Database;
