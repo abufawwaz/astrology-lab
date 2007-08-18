@@ -3,12 +3,17 @@ package astrolab.db;
 import java.sql.Date;
 import java.sql.ResultSet;
 
+import astrolab.perspective.Perspective;
+
 public class ProjectIterator {
 
+  private Project nextProject = null;
   private ResultSet set;
 
   private ProjectIterator(ResultSet set) {
     this.set = set;
+
+    readNextProject();
   }
 
   public static ProjectIterator iterate() {
@@ -18,23 +23,25 @@ public class ProjectIterator {
   }
 
   public boolean hasNext() {
-    try {
-      if (set == null) {
-        return false;
-      } else if (!set.isLast()) {
-        return true;
-      } else {
-        set.close();
-        set = null;
-        return false;
-      }
-    } catch (Exception e) {
-      e.printStackTrace();
-      return false;
-    }
+    return (nextProject != null);
   }
 
   public Project next() {
+    Project result = nextProject;
+
+    try {
+      return result;
+    } catch (Exception e) {
+      e.printStackTrace();
+      return null;
+    } finally {
+      readNextProject();
+    }
+  }
+
+  private void readNextProject() {
+    nextProject = null;
+
     try {
       if (set != null && set.next()) {
         int name = set.getInt(1);
@@ -43,12 +50,15 @@ public class ProjectIterator {
         Date started = set.getDate(4);
         int description = set.getInt(5);
         
-        return new Project(name, laboratory, type, started, description);
+        nextProject = new Project(name, laboratory, type, started, description);
       }
     } catch (Exception e) {
       e.printStackTrace();
     }
-    return null;
+
+    if ((nextProject != null) && !Perspective.isProjectAccepted(nextProject)) {
+      readNextProject();
+    }
   }
 
 }

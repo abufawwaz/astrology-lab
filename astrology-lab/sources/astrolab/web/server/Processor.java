@@ -3,9 +3,9 @@ package astrolab.web.server;
 import java.util.HashMap;
 
 import astrolab.db.Action;
+import astrolab.perspective.Perspective;
 import astrolab.web.Display;
 import astrolab.web.Modify;
-import astrolab.web.perspective.Perspective;
 import astrolab.web.server.content.StaticPage;
 
 public class Processor {

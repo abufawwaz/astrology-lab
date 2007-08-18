@@ -17,7 +17,7 @@ public class Project {
 
   private int id;
   private String name;
-  private ProjectDataKey[] keys;
+  private ProjectDataKey[] keys = new ProjectDataKey[0];
   private SpacetimeEvent minTime = null;
   private SpacetimeEvent maxTime = null;
 
@@ -25,7 +25,7 @@ public class Project {
     this.id = id;
     this.name = name;
 
-    if (name != null) {
+    if (!(this instanceof NoDataProject)) {
       listKeys();
     }
   }
@@ -42,6 +42,7 @@ public class Project {
     return keys;
   }
 
+  // project time is always GMT
   public SpacetimeEvent getMinTime() {
     if (minTime == null) {
       ResultSet set = null;
@@ -50,9 +51,9 @@ public class Project {
 
         if ((set != null) && set.next()) {
           Date timestamp = set.getTimestamp(1);
-          minTime = new SpacetimeEvent(timestamp.getTime());
+          minTime = new SpacetimeEvent(timestamp.getTime(), SpacetimeEvent.GMT_TIME_ZONE);
         } else {
-          minTime = new SpacetimeEvent(System.currentTimeMillis());
+          minTime = new SpacetimeEvent(System.currentTimeMillis(), SpacetimeEvent.GMT_TIME_ZONE);
         }
       } catch (Exception e) {
         e.printStackTrace();
@@ -69,6 +70,7 @@ public class Project {
     return minTime;
   }
 
+  // project time is always GMT
   public SpacetimeEvent getMaxTime() {
     if (maxTime == null) {
       ResultSet set = null;
@@ -77,9 +79,9 @@ public class Project {
 
         if ((set != null) && set.next()) {
           Date timestamp = set.getTimestamp(1);
-          maxTime = new SpacetimeEvent(timestamp.getTime());
+          maxTime = new SpacetimeEvent(timestamp.getTime(), SpacetimeEvent.GMT_TIME_ZONE);
         } else {
-          maxTime = new SpacetimeEvent(System.currentTimeMillis());
+          maxTime = new SpacetimeEvent(System.currentTimeMillis(), SpacetimeEvent.GMT_TIME_ZONE);
         }
       } catch (Exception e) {
         e.printStackTrace();
@@ -102,6 +104,7 @@ public class Project {
 
   public ProjectData getData(FormulaeSeries[] series, FormulaeBase base, FormulaePeriod period, SpacetimeEvent fromTime, SpacetimeEvent toTime) {
     checkKey(base.getText());
+
     for (int f = 0; f < series.length; f++) {
       checkKey(series[f].getText());
     }
@@ -112,7 +115,7 @@ public class Project {
     return new ProjectData(this, keys, base.getText(), fromTime, toTime);
   }
 
-  private void listKeys() {
+  public void listKeys() {
     String[] keyStrings = Database.queryList("SHOW FIELDS FROM " + TABLE_PREFIX + name);
     keys = new ProjectDataKey[keyStrings.length];
     for (int i = 0; i < keys.length; i++) {

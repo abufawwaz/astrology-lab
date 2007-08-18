@@ -1,5 +1,6 @@
 
 drop table perspective_elect_criteria;
+drop table project_webstats;
 drop table project_classmates;
 drop table project_sunspots;
 drop table project_relocation;

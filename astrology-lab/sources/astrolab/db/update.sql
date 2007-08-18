@@ -32,3 +32,14 @@ insert into project_classmates values (3, 'Пламена', '83592796bc17705662d
 
 PASS: didi -> e7f2f616ce8817ad893bbeaad3e942e94c69d323
 PASS: sisa -> 21c15bce9e39d65d31fbc7e284f462685685c0
+
+---------------------------------
+
+create table project_webstats (
+  subject_id INT UNSIGNED REFERENCES project_archive (event_id),
+  time DATETIME,
+  perspective_id INT UNSIGNED REFERENCES views_perspective (perspective_id),
+  project_id INT UNSIGNED REFERENCES project (name),
+
+  INDEX (subject_id)
+) ENGINE=InnoDB;

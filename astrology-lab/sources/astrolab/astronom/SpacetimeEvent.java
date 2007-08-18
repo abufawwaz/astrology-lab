@@ -74,7 +74,7 @@ public class SpacetimeEvent {
 
   protected final void init(long time, Location location) {
     this.calendar.setTimeInMillis(time);
-    this.calendar.setTimeZone((TimeZone.getTimeZone("GMT")));
+    this.calendar.setTimeZone(GMT_TIME_ZONE);
 
     // calculate GMT Julian day
     int im = (12 * (calendar.get(Calendar.YEAR) + 4800)) + (calendar.get(Calendar.MONTH) - 2);

@@ -1,7 +1,7 @@
 package astrolab.web.server.content;
 
+import astrolab.perspective.Perspective;
 import astrolab.web.HTMLDisplay;
-import astrolab.web.perspective.Perspective;
 import astrolab.web.server.Request;
 
 public class MenuPage extends HTMLDisplay {
