@@ -1,5 +1,7 @@
 package astrolab.web;
 
+import java.io.UnsupportedEncodingException;
+
 import astrolab.web.server.Request;
 import astrolab.web.server.content.LocalizedStringBuffer;
 
@@ -11,6 +13,18 @@ public abstract class SVGDisplay extends Display {
 
   public String getType() {
     return "image/svg+xml";
+  }
+
+  public byte[] getContent() {
+    LocalizedStringBuffer buffer = new LocalizedStringBuffer();
+
+    fillContent(Request.getCurrentRequest(), buffer);
+
+    try {
+      return buffer.toString().getBytes("UTF-8");
+    } catch (UnsupportedEncodingException uee) {
+      return buffer.toString().getBytes();
+    }
   }
 
   public void fillContent(Request request, LocalizedStringBuffer buffer) {

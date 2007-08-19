@@ -1,4 +1,4 @@
-package astrolab.project.classmates;
+package astrolab.perspective.classmates;
 
 import astrolab.db.Database;
 import astrolab.web.Display;

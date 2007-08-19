@@ -43,3 +43,10 @@ create table project_webstats (
 
   INDEX (subject_id)
 ) ENGINE=InnoDB;
+
+insert into views values (901, 'astrolab.perspective.classmates.FormClassmatesLogin');
+insert into views values (903, 'astrolab.perspective.classmates.DisplayClassmateGeneralInfo');
+insert into views values (904, 'astrolab.perspective.classmates.DisplayClassmatePrivateInfo');
+insert into views values (905, 'astrolab.perspective.classmates.ModifyClassmateGeneralInfo');
+insert into views values (906, 'astrolab.perspective.classmates.ModifyClassmatePrivateInfo');
+insert into views values (907, 'astrolab.perspective.classmates.DisplayClassmateImage');

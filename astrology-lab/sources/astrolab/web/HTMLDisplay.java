@@ -1,5 +1,7 @@
 package astrolab.web;
 
+import java.io.UnsupportedEncodingException;
+
 import astrolab.web.server.Request;
 import astrolab.web.server.content.LocalizedStringBuffer;
 
@@ -12,6 +14,18 @@ public abstract class HTMLDisplay extends Display {
 
   protected HTMLDisplay(String title) {
     this.title = title;
+  }
+
+  public byte[] getContent() {
+    LocalizedStringBuffer buffer = new LocalizedStringBuffer();
+
+    fillContent(Request.getCurrentRequest(), buffer);
+
+    try {
+      return buffer.toString().getBytes("UTF-8");
+    } catch (UnsupportedEncodingException uee) {
+      return buffer.toString().getBytes();
+    }
   }
 
   public final static String getExtension() {

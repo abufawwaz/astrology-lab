@@ -31,7 +31,7 @@ public abstract class Display {
 
   public abstract String getType();
 
-  public abstract void fillContent(Request request, LocalizedStringBuffer buffer);
+  public abstract byte[] getContent();
 
   public final static String getExtension(int id) {
     String extension = (String) viewsIdToExtension.get(new Integer(id));
