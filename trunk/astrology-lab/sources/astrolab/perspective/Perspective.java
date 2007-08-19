@@ -2,6 +2,7 @@ package astrolab.perspective;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.UnsupportedEncodingException;
 
 import astrolab.astronom.SpacetimeEvent;
 import astrolab.db.Database;
@@ -54,6 +55,18 @@ public class Perspective extends Display {
 
   public String getType() {
     return "application/xhtml+xml";
+  }
+
+  public byte[] getContent() {
+    LocalizedStringBuffer buffer = new LocalizedStringBuffer();
+
+    fillContent(Request.getCurrentRequest(), buffer);
+
+    try {
+      return buffer.toString().getBytes("UTF-8");
+    } catch (UnsupportedEncodingException uee) {
+      return buffer.toString().getBytes();
+    }
   }
 
   public void fillContent(Request request, LocalizedStringBuffer buffer) {

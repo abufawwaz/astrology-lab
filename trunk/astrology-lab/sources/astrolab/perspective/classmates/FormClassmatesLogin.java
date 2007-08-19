@@ -1,4 +1,4 @@
-package astrolab.project.classmates;
+package astrolab.perspective.classmates;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;

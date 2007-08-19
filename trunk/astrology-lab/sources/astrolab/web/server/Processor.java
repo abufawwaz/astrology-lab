@@ -84,14 +84,7 @@ public class Processor {
     //registerStaticPage("/events.js", "events.js", "text/javascript");
     //registerStaticPage("/control.js", "control.js", "text/javascript");
     //registerStaticPage("/window.js", "window.js", "text/javascript");
-    registerStaticPage("/classmates.html", "classmates.html", "text/html");
-    registerStaticPage("/hands_left.jpg", "hands_left.jpg", "image/jpeg");
-    registerStaticPage("/hands_top.jpg", "hands_top.jpg", "image/jpeg");
-    registerStaticPage("/hands_right.jpg", "hands_right.jpg", "image/jpeg");
-    registerStaticPage("/hands_bottom.jpg", "hands_bottom.jpg", "image/jpeg");
-    for (int i = 1; i <= 22; i++) {
-      registerStaticPage("/classmate" + i + ".jpg", "classmate" + i + ".jpg", "image/jpeg");
-    }
+    registerStaticPage("/classmates.html", "classes/astrolab/perspective/classmates/classmates.html", "text/html");
   }
 
   private static void registerStaticPage(String key, String filename, String type) {
