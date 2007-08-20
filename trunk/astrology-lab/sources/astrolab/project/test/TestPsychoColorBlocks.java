@@ -1,4 +1,4 @@
-package astrolab.web.project.archive.test;
+package astrolab.project.test;
 
 import java.util.Vector;
 
@@ -6,7 +6,7 @@ import astrolab.web.SVGDisplay;
 import astrolab.web.server.Request;
 import astrolab.web.server.content.LocalizedStringBuffer;
 
-public class Test1 extends SVGDisplay {
+public class TestPsychoColorBlocks extends SVGDisplay {
 
 	private static String[] COLORS = { "silver", "green", "blue", "cyan", "orange", "red", "brown" };
 
