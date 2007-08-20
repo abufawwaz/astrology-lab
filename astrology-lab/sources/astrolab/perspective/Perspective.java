@@ -113,7 +113,7 @@ public class Perspective extends Display {
   private String getPerspectiveHtml() {
     int perspectiveId = getPerspectiveId();
     int user = Request.getCurrentRequest().getUser();
-    int project = Request.getCurrentRequest().getParameters().getInt(RequestParameters.PROJECT_ID);
+    int project = Projects.getProject().getId();
     SpacetimeEvent time = new SpacetimeEvent(System.currentTimeMillis(), SpacetimeEvent.GMT_TIME_ZONE);
     StringBuffer webstatsUpdate = new StringBuffer();
     webstatsUpdate.append("INSERT INTO project_webstats VALUES (");

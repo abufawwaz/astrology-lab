@@ -79,7 +79,7 @@ public class FormulaIterator extends RecordIterator {
       ProjectDataKey[] keys = Projects.getProject().getKeys();
       String base = getChartBase().getText();
       for (int i = 0; i < keys.length; i++) {
-        if (!base.equals(keys[i].getName())) {
+        if (!base.equals(keys[i].getName()) && !"subject_id".equals(keys[i].getName())) {
           list.add(new FormulaeSeries(i, projectId, 0, keys[i].getName(), 0.0, (String) ((i < colors.length) ? colors[i] : "black")));
         }
       }

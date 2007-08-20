@@ -193,6 +193,23 @@ create table project_webstats (
   INDEX (subject_id)
 ) ENGINE=InnoDB;
 
+create table project_test_psycho_reaction (
+  subject_id INT UNSIGNED REFERENCES project_archive (subject_id),
+  time DATETIME,
+  r1 INT UNSIGNED,  r2 INT UNSIGNED,  r3 INT UNSIGNED,  r4 INT UNSIGNED,  r5 INT UNSIGNED,
+  r6 INT UNSIGNED,  r7 INT UNSIGNED,  r8 INT UNSIGNED,  r9 INT UNSIGNED,  r10 INT UNSIGNED,
+  r11 INT UNSIGNED,  r12 INT UNSIGNED,  r13 INT UNSIGNED,  r14 INT UNSIGNED,  r15 INT UNSIGNED,
+  r16 INT UNSIGNED,  r17 INT UNSIGNED,  r18 INT UNSIGNED,  r19 INT UNSIGNED,  r20 INT UNSIGNED,
+  r21 INT UNSIGNED,  r22 INT UNSIGNED,  r23 INT UNSIGNED,  r24 INT UNSIGNED,  r25 INT UNSIGNED,
+  r26 INT UNSIGNED,  r27 INT UNSIGNED,  r28 INT UNSIGNED,  r29 INT UNSIGNED,  r30 INT UNSIGNED,
+  r31 INT UNSIGNED,  r32 INT UNSIGNED,  r33 INT UNSIGNED,  r34 INT UNSIGNED,  r35 INT UNSIGNED,
+  r36 INT UNSIGNED,  r37 INT UNSIGNED,  r38 INT UNSIGNED,  r39 INT UNSIGNED,  r40 INT UNSIGNED,
+  r41 INT UNSIGNED,  r42 INT UNSIGNED,  r43 INT UNSIGNED,  r44 INT UNSIGNED,  r45 INT UNSIGNED,
+  r46 INT UNSIGNED,  r47 INT UNSIGNED,  r48 INT UNSIGNED,  r49 INT UNSIGNED,  r50 INT UNSIGNED,
+
+  INDEX (subject_id)
+) ENGINE=InnoDB;
+
 create table perspective_elect_criteria (
   criteria_id INT UNSIGNED NOT NULL UNIQUE PRIMARY KEY AUTO_INCREMENT,
   criteria_template INT UNSIGNED NOT NULL REFERENCES text (id),
@@ -514,6 +531,7 @@ insert into svg values (3101, "<svg:circle r='70' style='fill:green;stroke:black
 insert into svg values (3102, "<svg:circle r='70' style='fill:white;stroke:black;stroke-width:10' />");
 
 insert into project values (30001, 30002, 'white', now(), NULL, 30003);
+insert into project values (30005, 30004, 'white', now(), NULL, 30006);
 insert into project values (30013, 30012, 'white', now(), NULL, 30014);
 insert into project values (30017, 30024, 'white', now(), NULL, 30018);
 insert into project values (30019, 30002, 'white', now(), NULL, 30020);
@@ -557,7 +575,7 @@ insert into views values (13, 'astrolab.web.project.archive.test.Test1');
 insert into views values (15, 'astrolab.web.project.archive.test.StoreTestResult');
 insert into views values (17, 'astrolab.web.project.archive.SelectEvent');
 insert into views values (18, 'astrolab.web.component.SelectAttribute');
-insert into views values (19, 'astrolab.web.project.archive.test.Test2');
+insert into views values (19, 'astrolab.project.test.TestPsychoReaction');
 insert into views values (20, 'astrolab.web.project.archive.test.Test2Statistics');
 insert into views values (21, 'astrolab.web.project.labs.LaboratoryList');
 insert into views values (22, 'astrolab.web.project.labs.SelectLaboratory');
@@ -636,6 +654,7 @@ insert into actions values (40011, NULL, 4016, NULL, 25, 17, 25, NULL);
 insert into actions values (40011, NULL, 4017, NULL, 2, 18, 2, NULL);
 insert into actions values (40011, NULL, 4016, NULL, 30, 17, 30, NULL);
 insert into actions values (40018, 40016, NULL, 30001, NULL, NULL, 36, NULL);
+insert into actions values (40018, 40016, NULL, 30005, NULL, NULL, 19, NULL);
 insert into actions values (40018, 40016, NULL, 30013, NULL, NULL, 25, NULL);
 insert into actions values (40018, 40016, NULL, 30017, NULL, NULL, 31, NULL);
 insert into actions values (40018, 40016, NULL, 30019, NULL, NULL, 37, NULL);
