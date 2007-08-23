@@ -2,6 +2,7 @@ package astrolab.web.server;
 
 import java.util.StringTokenizer;
 
+import astrolab.db.Personalize;
 import astrolab.web.Display;
 import astrolab.web.Modify;
 import astrolab.web.server.content.PanelResponse;
@@ -30,7 +31,8 @@ public class Request {
   public Request(Connection connection, RequestParameters parameters) {
     this.connection = connection;
     this.parameters = parameters;
-    this.user = SessionManager.determineUser(this);
+
+    SessionManager.determineUser(this);
 
     currentRequest.set(this);
   }
@@ -51,7 +53,7 @@ public class Request {
   }
 
   public int getUser() {
-    return user;
+    return (user >= 0) ? user : Personalize.getUser();
   }
 
   public int getAction() {
