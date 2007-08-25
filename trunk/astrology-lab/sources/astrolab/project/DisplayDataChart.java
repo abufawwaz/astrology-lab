@@ -14,7 +14,7 @@ import astrolab.web.server.content.LocalizedStringBuffer;
 
 public class DisplayDataChart extends SVGDisplay {
 
-  private ProjectData data = null;
+  private ProjectDataIterator data = null;
 
   protected double strokeWidth = 1;
 
@@ -102,7 +102,7 @@ public class DisplayDataChart extends SVGDisplay {
     period = FormulaIterator.getChartPeriod();
 
     if (series.length > 0) {
-      data = Projects.getProject().getData(series, base, period, FormulaIterator.getChartFromTime(), FormulaIterator.getChartToTime());
+      data = Projects.getProject().getIterator(series, base, period, FormulaIterator.getChartFromTime(), FormulaIterator.getChartToTime());
 
       if (data.begin()) {
         do {

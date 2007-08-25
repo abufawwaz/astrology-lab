@@ -210,6 +210,14 @@ create table project_test_psycho_reaction (
   INDEX (subject_id)
 ) ENGINE=InnoDB;
 
+create table project_blood_type (
+  subject_id INT UNSIGNED REFERENCES project_archive (event_id),
+  blood_type ENUM ('?', 'O', 'A', 'B', 'AB') NOT NULL,
+  rhesus ENUM ('?', '+', '-') NOT NULL,
+
+  INDEX (subject_id)
+) ENGINE=InnoDB;
+
 create table perspective_elect_criteria (
   criteria_id INT UNSIGNED NOT NULL UNIQUE PRIMARY KEY AUTO_INCREMENT,
   criteria_template INT UNSIGNED NOT NULL REFERENCES text (id),
@@ -354,6 +362,7 @@ insert into text values (30025, NULL, 'sleep', 'Sleep', 'Сън');
 insert into text values (30026, NULL, NULL, 'Astronomy', 'Астрономия');
 insert into text values (30027, NULL, 'sunspots', 'Sun Spots', 'Слънчеви петна');
 insert into text values (30028, NULL, 'webstats', 'Web Statistics', 'Уеб статистика');
+insert into text values (30029, NULL, 'blood_type', 'Blood Type', 'Кръвна група');
 
 insert into text values (40002, NULL, NULL, 'Description', 'Описание');
 insert into text values (40003, NULL, NULL, 'Chart', 'Карта');
@@ -537,6 +546,7 @@ insert into project values (30017, 30024, 'white', now(), NULL, 30018);
 insert into project values (30019, 30002, 'white', now(), NULL, 30020);
 insert into project values (30027, 30026, 'white', now(), NULL, 0);
 insert into project values (30028, 30002, 'white', now(), NULL, 0);
+insert into project values (30029, 30009, 'white', now(), NULL, 0);
 
 insert into project_geography values (0, 0, 0, 0, 0);
 insert into project_geography values (1001001,0,0,0,1000001);
@@ -620,6 +630,7 @@ insert into views values (65, 'astrolab.perspective.election.DisplayElectionaryC
 insert into views values (66, 'astrolab.perspective.election.DisplayElectionaryCriteriaComponents');
 insert into views values (67, 'astrolab.perspective.election.FormElectionaryCriteriaTemplate');
 insert into views values (68, 'astrolab.perspective.election.DisplayElectionaryRestrictionList');
+insert into views values (70, 'astrolab.project.bloodtype.FormEditBloodType');
 insert into views values (901, 'astrolab.perspective.classmates.FormClassmatesLogin');
 insert into views values (903, 'astrolab.perspective.classmates.DisplayClassmateGeneralInfo');
 insert into views values (904, 'astrolab.perspective.classmates.DisplayClassmatePrivateInfo');
@@ -659,11 +670,13 @@ insert into actions values (40018, 40016, NULL, 30013, NULL, NULL, 25, NULL);
 insert into actions values (40018, 40016, NULL, 30017, NULL, NULL, 31, NULL);
 insert into actions values (40018, 40016, NULL, 30019, NULL, NULL, 37, NULL);
 insert into actions values (40018, 40016, NULL, 30025, NULL, NULL, 48, NULL);
+insert into actions values (40018, 40016, NULL, 30029, NULL, NULL, 70, NULL);
 insert into actions values (40019, 40016, NULL, 30001, NULL, NULL, 25, NULL);
 insert into actions values (40019, 40016, NULL, 30013, NULL, NULL, 34, NULL);
 insert into actions values (40019, 40016, NULL, 30017, NULL, NULL, 30, NULL);
 insert into actions values (40019, 40016, NULL, 30019, NULL, NULL, 33, NULL);
 insert into actions values (40019, 40016, NULL, 30027, NULL, NULL, 57, NULL);
+insert into actions values (40019, 40016, NULL, 30029, NULL, NULL, 25, NULL);
 insert into actions values (40021, 40028, NULL, NULL, NULL, NULL, 35, NULL);
 insert into actions values (40024, 40029, NULL, NULL, NULL, NULL, 2, NULL);
 insert into actions values (40025, 40016, NULL, 30001, NULL, NULL, 25, NULL);

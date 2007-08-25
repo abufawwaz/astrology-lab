@@ -50,3 +50,20 @@ insert into views values (904, 'astrolab.perspective.classmates.DisplayClassmate
 insert into views values (905, 'astrolab.perspective.classmates.ModifyClassmateGeneralInfo');
 insert into views values (906, 'astrolab.perspective.classmates.ModifyClassmatePrivateInfo');
 insert into views values (907, 'astrolab.perspective.classmates.DisplayClassmateImage');
+
+---------------------------------
+
+
+create table project_blood_type (
+  subject_id INT UNSIGNED REFERENCES project_archive (event_id),
+  blood_type ENUM ('?', 'O', 'A', 'B', 'AB') NOT NULL,
+  rhesus ENUM ('?', '+', '-') NOT NULL,
+
+  INDEX (subject_id)
+) ENGINE=InnoDB;
+
+insert into views values (70, 'astrolab.project.bloodtype.FormEditBloodType');
+insert into text values (30029, NULL, 'blood_type', 'Blood Type', 'Кръвна група');
+insert into project values (30029, 30009, 'white', now(), NULL, 0);
+insert into actions values (40018, 40016, NULL, 30029, NULL, NULL, 70, NULL);
+insert into actions values (40019, 40016, NULL, 30029, NULL, NULL, 25, NULL);
