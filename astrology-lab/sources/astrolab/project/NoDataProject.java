@@ -1,6 +1,9 @@
 package astrolab.project;
 
+import java.sql.ResultSet;
+
 import astrolab.astronom.SpacetimeEvent;
+import astrolab.db.Database;
 import astrolab.formula.FormulaeBase;
 import astrolab.formula.FormulaePeriod;
 import astrolab.formula.FormulaeSeries;
@@ -23,12 +26,9 @@ public class NoDataProject extends Project {
     return new SpacetimeEvent(System.currentTimeMillis());
   }
 
-  public ProjectData getData() {
-    return new NoDataProjectData(this);
-  }
-
-  public ProjectData getData(FormulaeSeries[] series, FormulaeBase base, FormulaePeriod period, SpacetimeEvent fromTime, SpacetimeEvent toTime) {
-    return new NoDataProjectData(this);
+  protected ProjectDataIterator getIterator(FormulaeSeries[] series, FormulaeBase base, FormulaePeriod period, SpacetimeEvent fromTime, SpacetimeEvent toTime) {
+    ResultSet emptySet = Database.executeQuery("SELECT * FROM project WHERE FALSE");
+    return new ProjectDataIterator(this, emptySet);
   }
 
 }

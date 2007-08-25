@@ -2,6 +2,7 @@ package astrolab.project;
 
 import java.util.HashMap;
 
+import astrolab.db.Database;
 import astrolab.db.Personalize;
 import astrolab.db.Text;
 import astrolab.web.server.Request;
@@ -37,19 +38,19 @@ public class Projects {
       project = projects.get(projectName);
   
       if (project == null) {
-        project = new Project(selectedProjectId, projectName);
+        String[] keys = listKeys(projectName);
 
-        boolean timeKeyExists = false;
-        for (ProjectDataKey key: project.getKeys()) {
-          if ("time".equalsIgnoreCase(key.getName())) {
-            timeKeyExists = true;
-            break;
+        for (String key: keys) {
+          if ("subject_id".equalsIgnoreCase(key)) {
+            project = new SubjectDataProject(selectedProjectId, projectName);
+            projects.put(projectName, project);
+            return project;
           }
-        }
-        if (timeKeyExists) {
-          projects.put(projectName, project);
-        } else {
-          project = null;
+          if ("time".equalsIgnoreCase(key)) {
+            project = new EventsDataProject(selectedProjectId, projectName);
+            projects.put(projectName, project);
+            return project;
+          }
         }
       }
     }
@@ -59,6 +60,10 @@ public class Projects {
     }
 
     return project;
+  }
+
+  private static String[] listKeys(String project) {
+    return Database.queryList("SHOW FIELDS FROM " + Project.TABLE_PREFIX + project);
   }
 
 }

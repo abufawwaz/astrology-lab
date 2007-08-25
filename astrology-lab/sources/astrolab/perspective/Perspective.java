@@ -7,7 +7,7 @@ import java.io.UnsupportedEncodingException;
 import astrolab.astronom.SpacetimeEvent;
 import astrolab.db.Database;
 import astrolab.db.Project;
-import astrolab.project.ProjectDataKey;
+import astrolab.project.NoDataProject;
 import astrolab.project.Projects;
 import astrolab.web.Display;
 import astrolab.web.server.Request;
@@ -35,15 +35,7 @@ public class Perspective extends Display {
   public static boolean isProjectAccepted(Project projectRecord) {
     switch (getPerspectiveId()) {
       case PERSPECTIVE_STATISTICS: {
-        astrolab.project.Project project = Projects.getProject(projectRecord.getId());
-
-        for (ProjectDataKey key: project.getKeys()) {
-          if ("time".equalsIgnoreCase(key.getName())) {
-            return true;
-          }
-        }
-
-        return false;
+        return !(Projects.getProject(projectRecord.getId()) instanceof NoDataProject);
       }
     }
     return true;

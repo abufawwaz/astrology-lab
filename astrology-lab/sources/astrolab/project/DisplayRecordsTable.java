@@ -19,18 +19,20 @@ public class DisplayRecordsTable extends HTMLDisplay {
     }
     buffer.append("</tr>");
 
-    ProjectData data = project.getData();
-    if (data.begin()) {
-       do {
-        buffer.append("<tr>");
-        for (int i = 0; i < keys.length; i++) {
-          buffer.append("<th>");
-          buffer.localize(data.getString(keys[i].getName()));
-          buffer.append("</th>");
-        }
-        buffer.append("</tr>");
-      } while (data.move());
-    }
+// TODO: if this is still used then fix it. Otherwise, remove it
+//    ProjectData data = project.getData();
+//
+//    if (data.begin()) {
+//       do {
+//        buffer.append("<tr>");
+//        for (int i = 0; i < keys.length; i++) {
+//          buffer.append("<th>");
+//          buffer.localize(data.getString(keys[i].getName()));
+//          buffer.append("</th>");
+//        }
+//        buffer.append("</tr>");
+//      } while (data.move());
+//    }
 
     buffer.append("</table>");
   }
