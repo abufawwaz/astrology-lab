@@ -35,15 +35,39 @@ public class DisplayDataChart extends SVGDisplay {
   }
 
   public void fillBodyContent(Request request, LocalizedStringBuffer buffer) {
-    double width = (maxx - minx) / 12;
+    double width;
     double height = maxy - miny;
 
-    buffer.append("<g style='fill:blue;fill-opacity:0.05'>");
-    for (int i = 0; i < 12; i += 2) {
-      double x = width * i;
-      buffer.append("<rect x='" + x + "' y='" + (miny - maxy) + "' width='" + width + "' height='" + height + "' />");
+    if (maxx - minx >= 12) {
+      width = (maxx - minx) / 12;
+      buffer.append("<g style='fill:blue;fill-opacity:0.05'>");
+      for (int i = 0; i < 12; i += 2) {
+        double x = width * i;
+        buffer.append("<rect x='" + x + "' y='" + (miny - maxy) + "' width='" + width + "' height='" + height + "' />");
+      }
+      buffer.append("</g>");
+    } else {
+      width = 1;
+
+      buffer.append("<g style='font-size:" + (height / 30) + "pt'>");
+      if ((data != null) && data.begin()) {
+        int x = 0;
+        do {
+          if (x % 2 == 0) {
+            buffer.append("<rect x='" + x + "' y='" + (miny - maxy) + "' width='" + width + "' height='" + height + "' style='fill:blue;fill-opacity:0.05' />");
+          }
+
+          buffer.append("<text x='" + x + "' y='" + (miny - maxy + height) + "' style='fill:black;fill-opacity:0.5'>");
+          buffer.append(data.get(base.getText()).toString());
+          buffer.append("</text>");
+
+          x += width;
+        } while (data.move());
+      }
+      buffer.append("</g>");
+
+      minx -= 0.5; // when the chart shows types, put dots in the middle
     }
-    buffer.append("</g>");
 
     if (data != null) {
       buffer.append("<g style='");
@@ -125,6 +149,7 @@ public class DisplayDataChart extends SVGDisplay {
       }
     }
 
+    maxx++;
     strokeWidth = ((double) (maxy - miny)) / 300;
 
     buffer.append("preserveAspectRatio='none' viewBox='0 " + (miny - maxy) + " " + (maxx - minx) + " " + (maxy - miny) + "'");
