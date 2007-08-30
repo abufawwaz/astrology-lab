@@ -104,22 +104,10 @@ public class Perspective extends Display {
 
   private String getPerspectiveHtml() {
     int perspectiveId = getPerspectiveId();
-    int user = Request.getCurrentRequest().getUser();
-    int project = Projects.getProject().getId();
-    SpacetimeEvent time = new SpacetimeEvent(System.currentTimeMillis(), SpacetimeEvent.GMT_TIME_ZONE);
-    StringBuffer webstatsUpdate = new StringBuffer();
-    webstatsUpdate.append("INSERT INTO project_webstats VALUES (");
-    webstatsUpdate.append(user);
-    webstatsUpdate.append(", '");
-    webstatsUpdate.append(time.toMySQLString());
-    webstatsUpdate.append("', ");
-    webstatsUpdate.append(perspectiveId);
-    webstatsUpdate.append(", ");
-    webstatsUpdate.append(project);
-    webstatsUpdate.append(")");
-    Database.execute(webstatsUpdate.toString());
 
-    StringBuffer query = new StringBuffer();
+    markWebStats(perspectiveId);
+
+    StringBuffer query = new StringBuffer(perspectiveId);
     query.append("SELECT perspective_html FROM views_perspective");
     query.append(" WHERE perspective_id = '");
     query.append(perspectiveId);
@@ -127,6 +115,38 @@ public class Perspective extends Display {
     query.append(" ORDER BY perspective_id DESC LIMIT 1");
 
     return Database.query(query.toString());
+  }
+
+  private void markWebStats(int perspectiveId) {
+    int user = Request.getCurrentRequest().getUser();
+    int project = Projects.getProject().getId();
+    SpacetimeEvent time = new SpacetimeEvent(System.currentTimeMillis(), SpacetimeEvent.GMT_TIME_ZONE);
+    SpacetimeEvent day = time.getMovedSpacetimeEvent(SpacetimeEvent.HOUR_OF_DAY, -10);
+
+    StringBuffer webstatsQuery = new StringBuffer();
+    webstatsQuery.append("SELECT * FROM project_webstats WHERE subject_id = ");
+    webstatsQuery.append(user);
+    webstatsQuery.append(" AND time > '");
+    webstatsQuery.append(day.toMySQLString());
+    webstatsQuery.append("' AND perspective_id = ");
+    webstatsQuery.append(perspectiveId);
+    webstatsQuery.append(" AND project_id = ");
+    webstatsQuery.append(project);
+
+    if (Database.query(webstatsQuery.toString()) == null) {
+      StringBuffer webstatsUpdate = new StringBuffer();
+      webstatsUpdate.append("INSERT INTO project_webstats VALUES (");
+      webstatsUpdate.append(user);
+      webstatsUpdate.append(", '");
+      webstatsUpdate.append(time.toMySQLString());
+      webstatsUpdate.append("', ");
+      webstatsUpdate.append(perspectiveId);
+      webstatsUpdate.append(", ");
+      webstatsUpdate.append(project);
+      webstatsUpdate.append(")");
+  
+      Database.execute(webstatsUpdate.toString());
+    }
   }
 
   private void includeScripts(Request request, LocalizedStringBuffer buffer) {
