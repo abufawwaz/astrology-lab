@@ -15,7 +15,11 @@ public class ConnectionInput extends Thread {
   ConnectionInput(InputStream in, Connection connection) {
     setName("client-" + hashCode());
     this.connection = connection;
-    this.in = new LineNumberReader(new InputStreamReader(in));
+    try {
+      this.in = new LineNumberReader(new InputStreamReader(in, "utf-8"));
+    } catch (UnsupportedEncodingException e) {
+      e.printStackTrace();
+    }
 
     start();
   }

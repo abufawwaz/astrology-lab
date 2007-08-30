@@ -14,6 +14,7 @@ import astrolab.project.EventsDataProject;
 import astrolab.project.Project;
 import astrolab.project.ProjectDataKey;
 import astrolab.project.Projects;
+import astrolab.project.SubjectDataProject;
 
 public class FormulaIterator extends RecordIterator {
 
@@ -33,15 +34,14 @@ public class FormulaIterator extends RecordIterator {
         " LIMIT 1";
     String[][] result = Database.queryList(4, query);
     if (result == null || result.length == 0) {
-      if (project instanceof EventsDataProject) {
-        return new FormulaeBase(0, project.getId(), userId, "time");
-      } else {
+      if (project instanceof SubjectDataProject) {
         for (ProjectDataKey key: project.getKeys()) {
           if (!"subject_id".equals(key.getName()) && !"time".equals(key.getName())) {
             return new FormulaeBase(0, project.getId(), userId, key.getName());
           }
         }
       }
+      return new FormulaeBase(0, project.getId(), userId, "time");
     }
 
     return new FormulaeBase(Integer.parseInt(result[0][0]), Integer.parseInt(result[0][1]), Integer.parseInt(result[0][2]), result[0][3]);

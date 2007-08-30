@@ -76,7 +76,7 @@ public class Test {
     fos.close();
   }
 
-  public static void main(String[] args) throws Exception {
+  public static void main7(String[] args) throws Exception {
     getSolarNumbers();
   }
 
@@ -200,7 +200,29 @@ public class Test {
     InputStream in = socket.getInputStream();
     int ch = -1;
     while ((ch = in.read()) > 0) {
-    	System.out.print((char) ch);
+      System.out.print((char) ch);
+    }
+  }
+
+  public static void main(String[] args) throws Exception {
+    System.out.println(" HTTP request ... ");
+    Socket socket = new Socket("localhost", 8080);
+    OutputStream out = socket.getOutputStream();
+    out.write("GET / HTTP/1.1\r\n".getBytes());
+    out.write("Host: www.astrology-lab.net\r\n".getBytes());
+    out.write("Accept: */*\r\n".getBytes());
+    out.write("Connection: Keep-alive\r\n".getBytes());
+    out.write("From: googlebot(at)googlebot.com\r\n".getBytes());
+    out.write("User-Agent: Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.test2.com/bot.html)\r\n".getBytes());
+    out.write("Accept-Encoding: gzip\r\n".getBytes());
+    out.write("If-Modified-Since: Mon, 13 Aug 2007 04:16:45 GMT\r\n".getBytes());
+    out.write("\r\n".getBytes());
+    out.flush();
+
+    InputStream in = socket.getInputStream();
+    int ch = -1;
+    while ((ch = in.read()) > 0) {
+      System.out.print((char) ch);
     }
   }
 

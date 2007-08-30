@@ -83,7 +83,10 @@ public class Text {
   }
 
   public static String getText(int id) {
-    String language = Personalize.getLanguage();
+    return Text.getText(id, Personalize.getLanguage());
+  }
+
+  public static String getText(int id, String language) {
     String accessible_by = TextAccessControl.constructAccessibleBy(String.valueOf(id));
     String value = Database.query("SELECT " + language + " from text where id = " + id + accessible_by);
     if (value == null && !"en".equals(language)) {
@@ -146,6 +149,10 @@ public class Text {
       value = Database.query("SELECT descrid from text where bg = '" + text + "'");
     }
     return (value != null) ? value : text;
+  }
+
+  public static void changeText(int id, String text, String language) {
+    Database.execute("UPDATE text set " + language + " = '" + text.replace('\'', '_') + "' where id = " + id);
   }
 
   public static void changeText(int id, String text, int user) {
