@@ -116,10 +116,11 @@ public class Location implements TreeObject {
     return result;
   }
 
-  public static void store(String name, int region, double longitude, double lattitude, TimeZone zone) {
-    int id = Text.reserve(name, Text.TYPE_REGION);
+  public static int store(String nameEn, int region, double longitude, double lattitude, TimeZone zone) {
+    int id = Text.reserve(nameEn, Text.TYPE_REGION);
     int timeZone = Text.reserve(zone.getDisplayName(), zone.getID(), Text.TYPE_TIME_ZONE);
     Database.execute("INSERT INTO " + ProjectGeography.TABLE_NAME + " VALUES (" + id + ", " + region + ", '" + longitude + "', " + lattitude + ", '" + timeZone + "')");
+    return id;
   }
 
   public static void update(int id, int region, double longitude, double lattitude, TimeZone zone) {

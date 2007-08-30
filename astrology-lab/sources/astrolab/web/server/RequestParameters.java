@@ -35,7 +35,13 @@ public class RequestParameters {
 
   public int getInt(String parameter) {
     try {
-      return (int) Double.parseDouble(textParameters.getProperty(parameter));
+      String textData = textParameters.getProperty(parameter);
+
+      if (textData == null || textData.length() == 0) {
+        return 0;
+      }
+
+      return (int) Double.parseDouble(textData);
     } catch (NullPointerException e) {
       return 0;
     } catch (Exception e) {

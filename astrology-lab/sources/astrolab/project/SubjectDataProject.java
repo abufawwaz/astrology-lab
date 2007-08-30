@@ -10,13 +10,12 @@ import astrolab.db.Database;
 import astrolab.formula.FormulaeBase;
 import astrolab.formula.FormulaePeriod;
 import astrolab.formula.FormulaeSeries;
+import astrolab.project.geography.Location;
 
 public class SubjectDataProject extends Project {
 
   private HashSet<String> keySet = new HashSet<String>();
   private ProjectDataKey[] keys = new ProjectDataKey[0];
-  private SpacetimeEvent minTime = null;
-  private SpacetimeEvent maxTime = null;
 
   public SubjectDataProject(int id, String name) {
     super(id, name);
@@ -33,30 +32,29 @@ public class SubjectDataProject extends Project {
     return keys;
   }
 
-  // project time is always GMT
   public SpacetimeEvent getMinTime() {
-    if (minTime == null) {
-      minTime = readTime("ASC");
-    }
-    return minTime;
+    return readTime("ASC");
+  }
+
+  public SpacetimeEvent getMaxTime() {
+    return readTime("DESC");
   }
 
   // project time is always GMT
-  public SpacetimeEvent getMaxTime() {
-    if (maxTime == null) {
-      maxTime = readTime("DESC");
-    }
-    return maxTime;
-  }
-
   private SpacetimeEvent readTime(String order) {
     ResultSet set = null;
     try {
-      set = Database.executeQuery("SELECT event_time FROM " + SubjectDataProject.TABLE_PREFIX + getName() + ", project_archive WHERE " + SubjectDataProject.TABLE_PREFIX + getName() + ".subject_id = project_archive.subject_id ORDER BY event_time " + order + " LIMIT 1");
+      String sql = "SELECT event_time, location FROM " + SubjectDataProject.TABLE_PREFIX + getName() +
+         (!"archive".equalsIgnoreCase(getName()) ? ", project_archive" : "") +
+         " WHERE " + SubjectDataProject.TABLE_PREFIX + getName() +
+         ".subject_id = project_archive.subject_id ORDER BY event_time " + order + " LIMIT 1"; 
+      set = Database.executeQuery(sql);
 
       if ((set != null) && set.next()) {
         Date timestamp = set.getTimestamp(1);
-        return new SpacetimeEvent(timestamp.getTime(), SpacetimeEvent.GMT_TIME_ZONE);
+        int location = set.getInt(2);
+        SpacetimeEvent event = new SpacetimeEvent(timestamp.getTime(), Location.getLocation(location));
+        return new SpacetimeEvent(event.getTimeInMillis(), SpacetimeEvent.GMT_TIME_ZONE);
       }
     } catch (Exception e) {
       e.printStackTrace();
@@ -133,7 +131,9 @@ public class SubjectDataProject extends Project {
     select.append(" FROM ");
     select.append(Project.TABLE_PREFIX);
     select.append(getName());
-    select.append(", project_archive ");
+    if (!"archive".equalsIgnoreCase(getName())) {
+      select.append(", project_archive ");
+    }
     select.append(" WHERE ");
     select.append(Project.TABLE_PREFIX);
     select.append(getName());

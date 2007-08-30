@@ -1,15 +1,18 @@
 package astrolab.project.geography;
 
+import astrolab.db.Personalize;
+import astrolab.db.Text;
 import astrolab.web.AJAXFormDisplay;
 import astrolab.web.Modify;
 import astrolab.web.component.ComponentSelectNumber;
 import astrolab.web.server.Request;
-import astrolab.web.server.RequestParameters;
 import astrolab.web.server.content.LocalizedStringBuffer;
 
 public class FormAddLocation extends AJAXFormDisplay {
 
-  private final static String KEY_LOCATION = "user.session.location.1";
+  final static String KEY_LOCATION = "user.session.location.1";
+  final static String KEY_NAME_EN = "_name_en";
+  final static String KEY_NAME_BG = "_name_bg";
 
   public FormAddLocation() {
     super("Add Location", Modify.getId(ModifyLocation.class));
@@ -33,9 +36,17 @@ public class FormAddLocation extends AJAXFormDisplay {
     buffer.append("<tr>");
     buffer.append("<td>");
     buffer.localize("Location");
-    buffer.append(":</td>");
-    buffer.append("<td><input id=\"" + RequestParameters.TEXT_NAME + "\" type='text' name='" + RequestParameters.TEXT_NAME + "' value='");
-    buffer.localize(location.getId());
+    buffer.append(" (EN):</td>");
+    buffer.append("<td><input id=\"" + KEY_NAME_EN + "\" type='text' name='" + KEY_NAME_EN + "' value='");
+    buffer.append(Text.getText(location.getId(), Personalize.LANGUAGE_EN));
+    buffer.append("' /></td>");
+    buffer.append("</tr>");
+    buffer.append("<tr>");
+    buffer.append("<td>");
+    buffer.append("Location");
+    buffer.append(" (BG):</td>");
+    buffer.append("<td><input id=\"" + KEY_NAME_BG + "\" type='text' name='" + KEY_NAME_BG + "' value='");
+    buffer.append(Text.getText(location.getId(), Personalize.LANGUAGE_BG));
     buffer.append("' /></td>");
     buffer.append("</tr>");
     buffer.append("<tr>");
@@ -78,7 +89,8 @@ public class FormAddLocation extends AJAXFormDisplay {
     buffer.localize("New");
     buffer.append("' onclick='");
     ComponentSelectNumber.fillReset(buffer, "_location_id");
-    buffer.append("document.forms[0]." + RequestParameters.TEXT_NAME + ".value=\"\";");
+    buffer.append("document.forms[0]." + KEY_NAME_EN + ".value=\"\";");
+    buffer.append("document.forms[0]." + KEY_NAME_BG + ".value=\"\";");
     ComponentSelectLattitude.fillReset(buffer);
     ComponentSelectLongitude.fillReset(buffer);
     buffer.append("'/>");
