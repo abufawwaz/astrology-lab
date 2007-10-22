@@ -23,7 +23,9 @@ public class LocalizedStringBuffer {
   }
 
   public void localize(String text) {
-    append(bbcode(Text.getSVGText(text, 20)));
+    if (text != null) {
+      append(bbcode(Text.getSVGText(text, 20)));
+    }
   }
 
   public void localize(int id) {

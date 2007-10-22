@@ -8,8 +8,9 @@ import astrolab.db.Database;
 import astrolab.db.Personalize;
 import astrolab.formula.score.FormulaScoreFactory;
 import astrolab.project.Projects;
+import astrolab.web.server.content.LocalizedStringBuffer;
 
-public abstract class Formulae {
+public class Formulae {
 
   private int id = -1;
   private int project = -1;
@@ -38,8 +39,69 @@ public abstract class Formulae {
     this.text = formulae;
   }
 
+  public void fill(LocalizedStringBuffer buffer) {
+    if (element == null || element.length == 0) {
+      buffer.append(getText());
+    } else {
+      Element first = null;
+      for (Element element: getElements()) {
+        if (element.getCoefficient() > 0) {
+          fillElement(buffer, element, true);
+          first = element;
+          break;
+        }
+      }
+      for (Element element: getElements()) {
+        if ((first == null) || (element.getId() != first.getId())) {
+          fillElement(buffer, element, false);
+        }
+      }
+    }
+  }
+
+  private static void fillElement(LocalizedStringBuffer buffer, Element element, boolean isFirst) {
+    double coefficient = element.getCoefficient();
+    if (coefficient == 0) {
+      return;
+    } else if (coefficient == 1.0) {
+      if (!isFirst) {
+        buffer.append("+");
+      }
+    } else if (coefficient == -1.0) {
+      buffer.append("-");
+    } else if (coefficient > 0) {
+      if (!isFirst) {
+        buffer.append("+");
+      }
+      buffer.append(String.valueOf((int) Math.abs(coefficient)));
+    } else if (coefficient < 0) {
+      buffer.append("-");
+      buffer.append(String.valueOf((int) Math.abs(coefficient)));
+    }
+    buffer.localize(element.getId());
+  }
+
   public String getText() {
     return text;
+  }
+
+  public String getSQL() {
+    StringBuffer result = new StringBuffer();
+
+    for (Element e: element) {
+      result.append(" ");
+      if (e.getCoefficient() == 0) {
+        continue;
+      } else if (e.getCoefficient() > 0) {
+        result.append("+");
+      }
+      result.append(e.getCoefficient());
+      result.append("*");
+      result.append(e.getText());
+    }
+
+    String rawKey = result.toString().trim();
+    return "floor(" + rawKey + " - floor((" + rawKey + ") / 360) * 360)";
   }
 
   public int getId() {

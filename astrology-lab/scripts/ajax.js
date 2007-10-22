@@ -4,7 +4,7 @@ function createAjaxRequest() {
 
   if (window.XMLHttpRequest) { // if Mozilla, Safari etc
     httprequest = new XMLHttpRequest()
-    if (httprequest.overrideMimeType) httprequest.overrideMimeType('text/xml')
+    if (httprequest.overrideMimeType) httprequest.overrideMimeType('text/xml; charset=Unicode')
   } else if (window.ActiveXObject){ // if IE
     try {
       httprequest=new ActiveXObject("Msxml2.XMLHTTP");
@@ -35,11 +35,11 @@ function postAjaxRequest(url, data_form, handle_result_function) {
       if (i > 0) parameters += "&"
       parameters += data_form.elements[i].name
       parameters += "="
-      parameters += data_form.elements[i].value
+      parameters += encodeURIComponent(data_form.elements[i].value)
     }
 
     ajax.open('POST', url, true)
-    ajax.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
+    ajax.setRequestHeader("Content-type", "application/x-www-form-urlencoded;charset=Unicode")
     ajax.setRequestHeader("Content-length", parameters.length)
     ajax.setRequestHeader("Connection", "close")
     ajax.send(parameters)

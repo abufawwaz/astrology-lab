@@ -10,7 +10,9 @@ public class ComponentSelectChoice {
   }
 
   public static void fill(LocalizedStringBuffer buffer, Object[] enumeration, Object[] values, Object selected, String choice_id) {
-    buffer.append("\r\n<select name='" + choice_id + "'>");
+    buffer.append("\r\n<select name='" + choice_id + "'");
+    buffer.append(" onChange='alert(\"change: \");' onMouseOut='alert(\"mouse out: \");' >");
+//    buffer.append(" onChange='alert(\"change: \" + this.value);top.fireEvent(window, \"" + choice_id + "\", this.value)'>");
     for (int i = 0; i < enumeration.length; i++) {
       buffer.append("\r\n\t<option value='" + values[i].toString() + "'");
       if ((selected != null) && selected.toString().equalsIgnoreCase(enumeration[i].toString())) {

@@ -30,7 +30,8 @@ public class RequestParameters {
   }
 
   public String get(String parameter, String defaultValue) {
-    return textParameters.getProperty(parameter, defaultValue);
+    String result = textParameters.getProperty(parameter, defaultValue);
+    return ((result != null) && (result.length() > 0)) ? result : defaultValue;
   }
 
   public int getInt(String parameter) {

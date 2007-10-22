@@ -4,7 +4,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
 
-import astrolab.astronom.ActivePoint;
 import astrolab.astronom.SpacetimeEvent;
 import astrolab.db.Database;
 import astrolab.formula.FormulaeBase;
@@ -19,7 +18,7 @@ public class EventsDataProject extends Project {
 
   public EventsDataProject(int id, String name) {
     super(id, name);
-    listKeys();
+    refresh();
   }
 
   public ProjectDataKey[] getKeys() {
@@ -138,44 +137,12 @@ public class EventsDataProject extends Project {
     return new ProjectDataIterator(this, Database.executeQuery("SELECT " + keyselect + " FROM " + Project.TABLE_PREFIX + getName() + timing + groupby + " LIMIT " + slots));
   }
 
-  private void listKeys() {
+  public void refresh() {
     String[] keyStrings = Database.queryList("SHOW FIELDS FROM " + TABLE_PREFIX + getName());
     keys = new ProjectDataKey[keyStrings.length];
     for (int i = 0; i < keys.length; i++) {
       keys[i] = new ProjectDataKey(keyStrings[i], null);
     }
-  }
-
-  protected void checkKey(String key) {
-    if (key.indexOf(' ') >= 0 || key.indexOf('(') >= 0) {
-      // TODO: find atoms more precisely!
-      return;
-    }
-
-    boolean found = false;
-    for (int k = 0; k < keys.length; k++) {
-      if (key.equalsIgnoreCase(keys[k].getName())) {
-        found = true;
-        break;
-      }
-    }
-
-    if (!found) {
-      try {
-        ActivePoint.getActivePoint(key, new SpacetimeEvent(System.currentTimeMillis()));
-        ProjectDataFiller.startFiller(key, this);
-  
-        addKey(key);
-      } catch (IllegalStateException ise) {
-        // ignore the key;
-      }
-    }
-  }
-
-  private void addKey(String key) {
-    Database.execute("ALTER TABLE " + TABLE_PREFIX + getName() + " ADD COLUMN " + key + " DOUBLE");
-    Database.execute("ALTER TABLE " + TABLE_PREFIX + getName() + " ADD INDEX USING BTREE (" + key + ")");
-    listKeys();
   }
 
 }

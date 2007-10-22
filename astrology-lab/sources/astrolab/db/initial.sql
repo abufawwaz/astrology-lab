@@ -314,6 +314,7 @@ insert into text values (3007, NULL, 'black', 'black', 'black');
 insert into text values (3008, NULL, 'white', 'white', 'white');
 insert into text values (3101, NULL, 'checked', 'checked', 'отбелязано');
 insert into text values (3102, NULL, 'unchecked', 'unchecked', 'неотбелязано');
+insert into text values (3103, NULL, 'x-axis', 'x-axis', 'х-коорд.');
 
 insert into text values (4001, NULL, NULL, 'subject', 'subject');
 insert into text values (4002, NULL, NULL, 'location', 'location');
@@ -616,7 +617,6 @@ insert into views values (47, 'astrolab.web.component.help.ModifySendInvitation'
 insert into views values (48, 'astrolab.project.sleep.FormSleepRecord');
 insert into views values (49, 'astrolab.project.sleep.ModifySleepRecord');
 insert into views values (50, 'astrolab.project.sleep.DisplaySleepRecords');
-insert into views values (52, 'astrolab.formula.display.DisplayProjectFormula');
 insert into views values (53, 'astrolab.formula.display.ModifyFormulae');
 insert into views values (56, 'astrolab.web.entrance.DisplayPersonalData');
 insert into views values (57, 'astrolab.project.DisplayRecordsTable');

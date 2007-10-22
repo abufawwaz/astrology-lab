@@ -8,8 +8,8 @@ function unregisterListener(eventType, listener) {
   getEventType(eventType).unregisterListener(listener)
 }
 
-function fireEvent(win, eventType, message) {
-  getEventType(eventType).fireEvent(win, message)
+function fireEvent(win, eventType, message, includeOwnWindow) {
+  getEventType(eventType).fireEvent(win, message, includeOwnWindow)
 }
 
 // internal functions
@@ -38,10 +38,10 @@ function EventType() {
     }
   }
 
-  this.fireEvent = function(win, message) {
+  this.fireEvent = function(win, message, includeOwnWindow) {
     for (var i = 0; i < listeners.length; i++) {
       try {
-        if (listeners[i] && (listeners[i].owner != win)) {
+        if (listeners[i] && (includeOwnWindow || (listeners[i].owner != win))) {
           listeners[i].handle((typeof(message) == "function") ? message() : message, listeners[i].owner.frameIndex)
         }
       } catch (e) {

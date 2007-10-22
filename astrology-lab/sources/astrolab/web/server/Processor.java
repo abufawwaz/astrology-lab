@@ -84,7 +84,7 @@ public class Processor {
     //registerStaticPage("/events.js", "events.js", "text/javascript");
     //registerStaticPage("/control.js", "control.js", "text/javascript");
     //registerStaticPage("/window.js", "window.js", "text/javascript");
-    registerStaticPage("/classmates.html", "classes/astrolab/perspective/classmates/classmates.html", "text/html");
+    registerStaticPage("/classmates.html", Processor.class.getResource("/astrolab/perspective/classmates/classmates.html").getFile().replace("%20", " "), "text/html");
   }
 
   private static void registerStaticPage(String key, String filename, String type) {

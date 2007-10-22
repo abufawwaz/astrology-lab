@@ -20,7 +20,7 @@ public abstract class AJAXFormDisplay extends HTMLDisplay {
     buffer.append("\r\n\t<?import namespace=\"svg\" implementation=\"#AdobeSVG\"?>");
     buffer.append("\r\n</head>");
 
-    fillActionScript(request, buffer, false);
+    fillActionScript(request, buffer);
 
     buffer.newline();
     buffer.append("<body style='background-color:transparent' onload='top.manage_control()'>");

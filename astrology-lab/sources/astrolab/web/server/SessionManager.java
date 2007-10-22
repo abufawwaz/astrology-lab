@@ -96,8 +96,8 @@ public class SessionManager {
   
       if (index > 0) {
         index += "http://".length();
-  
-        int nameEnd = agent.indexOf('/', index);
+
+        int nameEnd = min(min(agent.indexOf('/', index), agent.indexOf(')', index)), agent.indexOf(')', index));
         botName = (nameEnd > 0) ? agent.substring(index, nameEnd) : agent.substring(index);
   
         index = botName.lastIndexOf('.');
@@ -113,5 +113,15 @@ public class SessionManager {
     }
 
     return botName;
+  }
+
+  private final static int min(int a, int b) {
+    if (a < 0) {
+      return b;
+    } else if (b < 0) {
+      return a;
+    } else {
+      return Math.min(a, b);
+    }
   }
 }

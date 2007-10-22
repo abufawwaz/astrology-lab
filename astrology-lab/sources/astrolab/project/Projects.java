@@ -38,19 +38,27 @@ public class Projects {
       project = projects.get(projectName);
   
       if (project == null) {
+        boolean hasTime = false;
+        boolean hasSubject = false;
         String[] keys = listKeys(projectName);
 
         for (String key: keys) {
-          if ("subject_id".equalsIgnoreCase(key)) {
-            project = new SubjectDataProject(selectedProjectId, projectName);
-            projects.put(projectName, project);
-            return project;
-          }
           if ("time".equalsIgnoreCase(key)) {
-            project = new EventsDataProject(selectedProjectId, projectName);
-            projects.put(projectName, project);
-            return project;
+            hasTime = true;
           }
+          if ("subject_id".equalsIgnoreCase(key)) {
+            hasSubject = true;
+          }
+        }
+        if (hasTime) {
+          project = new EventsDataProject(selectedProjectId, projectName);
+          projects.put(projectName, project);
+          return project;
+        }
+        if (hasSubject) {
+          project = new SubjectDataProject(selectedProjectId, projectName);
+          projects.put(projectName, project);
+          return project;
         }
       }
     }

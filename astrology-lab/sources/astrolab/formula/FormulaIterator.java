@@ -9,8 +9,6 @@ import astrolab.astronom.SpacetimeEvent;
 import astrolab.db.Database;
 import astrolab.db.Personalize;
 import astrolab.db.RecordIterator;
-import astrolab.formula.display.ModifyFormulaeSetChartColor;
-import astrolab.project.EventsDataProject;
 import astrolab.project.Project;
 import astrolab.project.ProjectDataKey;
 import astrolab.project.Projects;
@@ -82,23 +80,6 @@ public class FormulaIterator extends RecordIterator {
       list.add((Formulae) iterator.next());
     }
     iterator.close();
-
-    // if there is no formula added use the keys
-    if (list.size() == 0) {
-      Object[] colors = ModifyFormulaeSetChartColor.getColors().toArray();
-      ProjectDataKey[] keys = Projects.getProject().getKeys();
-      String base = getChartBase().getText();
-
-      if (project instanceof EventsDataProject) {
-        for (int i = 0; i < keys.length && i < colors.length; i++) {
-          if (!base.equals(keys[i].getName()) && !"subject_id".equals(keys[i].getName())) {
-            list.add(new FormulaeSeries(i, project.getId(), 0, keys[i].getName(), 0.0, (String) colors[i]));
-          }
-        }
-      } else {
-        list.add(new FormulaeSeries(0, project.getId(), 0, "count(" + base + ")", 0.0, (String) colors[0]));
-      }
-    }
 
     return list.toArray(new FormulaeSeries[0]);
   }

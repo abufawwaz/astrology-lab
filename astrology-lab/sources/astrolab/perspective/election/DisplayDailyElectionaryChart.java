@@ -173,11 +173,16 @@ public class DisplayDailyElectionaryChart extends SVGDisplay {
 
   private final void fillScript(LocalizedStringBuffer buffer) {
     buffer.newline();
-    buffer.append("<script type='text/javascript'>");
+    buffer.append("<script type='text/javascript'>"); buffer.newline();
+    buffer.append(" //<![CDATA["); buffer.newline();
     buffer.append(" document.getElementById('chart_id').onclick = function(evt) {");
     buffer.append("  selected_day = Math.floor(" + WIDTH + " * evt.clientX / document.rootElement.width.baseVal.value);");
     buffer.append("  moveMarkTo('chart_mark', evt);");
-    buffer.append("  top.fireEvent(window, 'timestamp', Math.floor(start_timestamp + selected_day * a_day + selected_hour));");
+    buffer.append("  var fireTimestamp = start_timestamp + selected_day * a_day + selected_hour;");
+    // avoid day change on change of DST by moving one hour closer to mid-day
+    buffer.append("  if (selected_hour <= an_hour) fireTimestamp += an_hour;");
+    buffer.append("  if (selected_hour >= an_hour * 23) fireTimestamp -= an_hour;");
+    buffer.append("  top.fireEvent(window, 'timestamp', Math.floor(fireTimestamp));");
     buffer.append(" }");
     buffer.newline();
     buffer.append(" document.getElementById('chart_id').onmousemove = function(evt) {");
@@ -205,16 +210,20 @@ public class DisplayDailyElectionaryChart extends SVGDisplay {
     buffer.newline();
     buffer.append(" var start_timestamp = " + getCalendar(0, 0).getTimeInMillis());
     buffer.newline();
-    buffer.append(" var a_day = 1000 * 60 * 60 * 24");
+    buffer.append(" var an_hour = 1000 * 60 * 60");
+    buffer.newline();
+    buffer.append(" var a_day = an_hour * 24");
     buffer.newline();
     buffer.append(" var selected_day = 0");
     buffer.newline();
     buffer.append(" var selected_hour = 0");
     buffer.newline();
     buffer.append(" function updateTime(timestamp) {");
-    buffer.append("  selected_hour = diff - Math.floor((timestamp - start_timestamp) / aday) * aday;");
+    buffer.append("  var diff = timestamp - start_timestamp;");
+    buffer.append("  selected_hour = diff - Math.floor(diff / a_day) * a_day;");
     buffer.append(" }");
     buffer.newline();
+    buffer.append("//]]>"); buffer.newline();
     buffer.append("</script>");
   }
 
