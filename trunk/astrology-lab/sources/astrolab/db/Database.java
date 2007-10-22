@@ -43,28 +43,32 @@ public class Database {
   }
 
   public static void execute(String sql) {
-    Log.log("[SQL execute] " + sql);
+    long time = System.currentTimeMillis();
 
     try {
       createStatement().execute(sql);
     } catch (Exception e) {
       Log.log(sql, e);
+    } finally {
+      Log.log("[SQL execute :" + (System.currentTimeMillis() - time) + " millis] " + sql);
     }
   }
 
   public static ResultSet executeQuery(String query) {
-    Log.log("[SQL execute query] " + query);
+    long time = System.currentTimeMillis();
 
     try {
       return createStatement().executeQuery(query);
     } catch (Exception e) {
       Log.log(query, e);
+    } finally {
+      Log.log("[SQL execute query :" + (System.currentTimeMillis() - time) + " millis] " + query);
     }
     return null;
   }
 
   public static String query(String query) {
-    Log.log("[SQL query value] " + query);
+    long time = System.currentTimeMillis();
 
     ResultSet set = null;
     try {
@@ -77,6 +81,7 @@ public class Database {
       Log.log(query, e);
     } finally {
       closeSet(set);
+      Log.log("[SQL query value :" + (System.currentTimeMillis() - time) + " millis] " + query);
     }
     return null;
   }
@@ -131,7 +136,7 @@ public class Database {
     Log.log("[SQL query values] " + query);
 
     ResultSet set = null;
-    Vector vector = new Vector();
+    Vector<String[]> vector = new Vector<String[]>();
     try {
       set = createStatement().executeQuery(query);
       set.beforeFirst();
@@ -149,7 +154,7 @@ public class Database {
     }
     String[][] result = new String[vector.size()][];
     for (int i = 0; i < result.length; i++) {
-      result[i] = (String[]) vector.get(i);
+      result[i] = vector.get(i);
     }
     return result;
   }

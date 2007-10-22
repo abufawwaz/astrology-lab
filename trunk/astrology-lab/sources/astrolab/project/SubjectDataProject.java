@@ -19,7 +19,10 @@ public class SubjectDataProject extends Project {
 
   public SubjectDataProject(int id, String name) {
     super(id, name);
+    refresh();
+  }
 
+  public void refresh() {
     String[] keyStrings = Database.queryList("SHOW FIELDS FROM " + TABLE_PREFIX + getName());
     keys = new ProjectDataKey[keyStrings.length];
     for (int i = 0; i < keys.length; i++) {
@@ -144,9 +147,6 @@ public class SubjectDataProject extends Project {
     select.append(slots);
 
     return new ProjectDataIterator(this, Database.executeQuery(select.toString()));
-  }
-
-  protected void checkKey(String key) {
   }
 
 }

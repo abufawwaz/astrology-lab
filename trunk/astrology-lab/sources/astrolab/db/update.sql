@@ -1,30 +1,3 @@
-insert into project_sunspots values ('1977-01-01 00:00:00', 10);
-insert into project_sunspots values ('1977-01-02 00:00:00', 20);
-insert into project_sunspots values ('1977-01-03 00:00:00', 30);
-insert into project_sunspots values ('1977-01-04 00:00:00', 40);
-insert into project_sunspots values ('1977-01-05 00:00:00', 50);
-insert into project_sunspots values ('1977-01-06 00:00:00', 60);
-insert into project_sunspots values ('1977-01-07 00:00:00', 70);
-insert into project_sunspots values ('1977-01-08 00:00:00', 60);
-insert into project_sunspots values ('1977-01-09 00:00:00', 50);
-insert into project_sunspots values ('1977-01-10 00:00:00', 40);
-insert into project_sunspots values ('1977-01-11 00:00:00', 30);
-insert into project_sunspots values ('1977-01-12 00:00:00', 20);
-insert into project_sunspots values ('1977-01-13 00:00:00', 10);
-insert into project_sunspots values ('2007-01-01 00:00:00', 10);
-insert into project_sunspots values ('2007-01-02 00:00:00', 20);
-insert into project_sunspots values ('2007-01-03 00:00:00', 30);
-insert into project_sunspots values ('2007-01-04 00:00:00', 40);
-insert into project_sunspots values ('2007-01-05 00:00:00', 50);
-insert into project_sunspots values ('2007-01-06 00:00:00', 60);
-insert into project_sunspots values ('2007-01-07 00:00:00', 70);
-insert into project_sunspots values ('2007-01-08 00:00:00', 60);
-insert into project_sunspots values ('2007-01-09 00:00:00', 50);
-insert into project_sunspots values ('2007-01-10 00:00:00', 40);
-insert into project_sunspots values ('2007-01-11 00:00:00', 30);
-insert into project_sunspots values ('2007-01-12 00:00:00', 20);
-insert into project_sunspots values ('2007-01-13 00:00:00', 10);
-
 alter table project_classmates add column change_password ENUM ('no', 'yes') NOT NULL DEFAULT 'yes';
 insert into project_classmates values (1, 'Стефан', '6367c48dd193d56ea7b0baad25b19455e529f5ee', '<b>Име:</b> Стефан Христов Златарев\r\n<b>Сайт:</b>http://www.astrology-lab.net', '<b>Адрес</b>: София\r\n<b>Телефон</b>: +359 885 138 136');
 insert into project_classmates values (2, 'Никола', '?', '<b>Име:</b> Никола\r\n<b>Сайт:</b>???', '<b>Адрес</b>: Казанлък');
@@ -67,3 +40,84 @@ insert into text values (30029, NULL, 'blood_type', 'Blood Type', 'Кръвна 
 insert into project values (30029, 30009, 'white', now(), NULL, 0);
 insert into actions values (40018, 40016, NULL, 30029, NULL, NULL, 70, NULL);
 insert into actions values (40019, 40016, NULL, 30029, NULL, NULL, 25, NULL);
+
+
+---------------------------------
+
+update views set request='astrolab.perspective.statistics.DisplayTimeDataChart' where view=58;
+update views set request='astrolab.perspective.statistics.DisplayGroupChartConfiguration' where view=52;
+
+insert into views values (72, 'astrolab.perspective.statistics.DisplayTypesDataChart');
+insert into views values (73, 'astrolab.perspective.statistics.DisplayZodiacDataChart');
+insert into views values (74, 'astrolab.perspective.statistics.DisplayTypesConfiguration');
+insert into views values (75, 'astrolab.perspective.statistics.DisplayTimeConfiguration');
+insert into views values (76, 'astrolab.perspective.statistics.DisplayZodiacConfiguration');
+insert into views values (77, 'astrolab.perspective.statistics.ModifyFormulaeIncrementFactor');
+
+create table perspective_statistics (
+  subject_id INT UNSIGNED REFERENCES project_archive (event_id),
+  project_id INT UNSIGNED REFERENCES project (name),
+  formulae_id INT UNSIGNED NOT NULL REFERENCES formula (formulae_id),
+
+  INDEX (subject_id, project_id)
+) ENGINE=InnoDB;
+
+create table perspective_statistics_correction (
+  subject_id INT UNSIGNED REFERENCES project_archive (event_id),
+  project_id INT UNSIGNED REFERENCES project (name),
+  series_id INT UNSIGNED,
+  element_offset INT NOT NULL,
+  element_level INT NOT NULL,
+  element_altitude INT NOT NULL,
+  element_length INT NOT NULL,
+  formulae_id INT UNSIGNED NOT NULL REFERENCES formula (formulae_id),
+
+  INDEX (subject_id, project_id, series_id)
+) ENGINE=InnoDB;
+
+insert into text values (2111, NULL, 'Earth', 'Earth', 'Земя');
+insert into svg values (2111, "<svg:g style='stroke:green;stroke-width:20;fill:none'><svg:circle r='90' /><svg:line y1='-90' y2='90' /><svg:line x1='-90' x2='90' /></svg:g>");
+
+insert into views values (78, 'astrolab.perspective.statistics.AJAXDataCorrectionEffect');
+insert into views values (79, 'astrolab.perspective.statistics.ModifyDataCorrectionEffect');
+
+insert into text values (3103, NULL, 'x-axis', 'x-axis', 'х-коорд.');
+insert into svg values (3103, "<svg:g style='stroke:black;stroke-width:10;fill:none'><svg:line x1='-90' x2='-90' y2='100' /><svg:line x1='-100' y1='90' x2='100' y2='90' /></svg:g>");
+
+----------------------------------------------------
+
+create table project_forex (
+  subject_id INT UNSIGNED REFERENCES project_archive (event_id),
+  time DATETIME,
+  exchange_rate_close DOUBLE,
+  min_exchange_rate_close DOUBLE,
+  max_exchange_rate_close DOUBLE,
+  volume INT,
+
+  Sun DOUBLE,
+  Moon DOUBLE,
+  Mercury DOUBLE,
+  Venus DOUBLE,
+  Mars DOUBLE,
+  Jupiter DOUBLE,
+  Saturn DOUBLE,
+  Uranus DOUBLE,
+  Neptune DOUBLE,
+  Pluto DOUBLE,
+
+  INDEX (subject_id, time),
+  INDEX (Sun),
+  INDEX (Moon),
+  INDEX (Mercury),
+  INDEX (Venus),
+  INDEX (Mars),
+  INDEX (Jupiter),
+  INDEX (Saturn),
+  INDEX (Uranus),
+  INDEX (Neptune),
+  INDEX (Pluto)
+) ENGINE=InnoDB;
+
+insert into text values (30030, NULL, 'forex', 'Forex', 'Forex');
+insert into project values (30030, 30002, 'white', now(), NULL, 0);
+

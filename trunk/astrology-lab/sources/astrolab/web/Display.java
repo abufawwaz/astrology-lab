@@ -1,10 +1,12 @@
 package astrolab.web;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
 
 import astrolab.db.Action;
+import astrolab.tools.Log;
 import astrolab.web.server.Request;
 import astrolab.web.server.content.LocalizedStringBuffer;
 
@@ -13,15 +15,31 @@ import astrolab.web.server.content.LocalizedStringBuffer;
  */
 public abstract class Display {
 
-  private static Hashtable viewsIdToClass = new Hashtable();
-  private static Hashtable viewsIdToExtension = new Hashtable();
-	private static Hashtable viewsClassToId = new Hashtable();
+  public final static String TRIGGER_ON_LOAD = "onLoad";
 
+  private static Hashtable<Integer, String> viewsIdToClass = new Hashtable<Integer, String>();
+  private static Hashtable<Integer, String> viewsIdToExtension = new Hashtable<Integer, String>();
+	private static Hashtable<String, Integer> viewsClassToId = new Hashtable<String, Integer>();
+
+  private boolean inOwnScript = false;
+  private ArrayList<String> actionsOnLoad = new ArrayList<String>();
   private Hashtable<String, String> actions = new Hashtable<String, String>();
   private Hashtable<String, String[]> actionsAvoid = new Hashtable<String, String[]>();
 
-  public void addAction(String eventType, String requestParameter) {
-    actions.put(eventType, requestParameter);
+  protected Display() {
+    this(false);
+  }
+
+  protected Display(boolean inOwnScript) {
+    this.inOwnScript = inOwnScript;
+  }
+
+  public void addAction(String trigger, String action) {
+    if (TRIGGER_ON_LOAD.equalsIgnoreCase(trigger)) {
+      actionsOnLoad.add(action);
+    } else {
+      actions.put(trigger, action);
+    }
   }
 
   public void addAction(String eventType, String requestParameter, String[] avoidParameters) {
@@ -52,7 +70,7 @@ public abstract class Display {
     return id.intValue();
   }
 
-  protected final void fillActionScript(Request request, LocalizedStringBuffer buffer, boolean inOwnScript) {
+  public void fillActionScript(Request request, LocalizedStringBuffer buffer) {
     String key;
     String parameter;
     Enumeration<String> keys = actions.keys();
@@ -61,13 +79,15 @@ public abstract class Display {
     String url = (get.indexOf('?') >= 0) ? get + "&" : get + "?";
     url = url.replaceAll("&amp;", "&");
 
-    if (keys.hasMoreElements()) {
-      if (!inOwnScript) {
-        buffer.newline();
-        buffer.append("<script language='javascript'>"); buffer.newline();
-        buffer.append("//<![CDATA["); buffer.newline();
-      }
+    // open script tag
+    if (!inOwnScript) {
+      buffer.newline();
+      buffer.append("<script language='javascript'>"); buffer.newline();
+      buffer.append("//<![CDATA["); buffer.newline();
+    }
 
+    // add actions
+    if (keys.hasMoreElements()) {
       buffer.newline();
       buffer.append("var listenerObject = null;");
       buffer.newline();
@@ -115,11 +135,22 @@ public abstract class Display {
           buffer.append("\r\nlistenerObject = top.registerListener(this.window, '" + key + "', function(message) { " + parameter.substring("javascript:".length()) + " })");
         }
       }
+    }
 
-      if (!inOwnScript) {
-        buffer.append("\r\n//]]>");
-        buffer.append("\r\n</script>");
-      }
+    // add onLoad actions
+    buffer.newline();
+    buffer.newline();
+    buffer.append(" // Actions executed on load");
+    buffer.newline();
+    for (String a: actionsOnLoad) {
+      buffer.append(a);
+      buffer.newline();
+    }
+
+    // close script tag
+    if (!inOwnScript) {
+      buffer.append("\r\n//]]>");
+      buffer.append("\r\n</script>");
     }
   }
 
@@ -170,10 +201,10 @@ public abstract class Display {
 
     String extension = "html";
     try {
-      Method method_extension = classs.getMethod("getExtension", null);
+      Method method_extension = classs.getMethod("getExtension", (Class[]) null);
       extension = (String) method_extension.invoke(null, (Object[]) null);
     } catch (Exception e) {
-      e.printStackTrace();
+      Log.log("No display extension found: " + e.toString());
     }
     viewsIdToExtension.put(id, extension);
   }

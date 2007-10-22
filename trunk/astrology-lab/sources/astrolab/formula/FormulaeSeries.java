@@ -13,4 +13,8 @@ public class FormulaeSeries extends Formulae {
     return color;
   }
 
+  public String getSQL() {
+    return getText();
+  }
+
 }

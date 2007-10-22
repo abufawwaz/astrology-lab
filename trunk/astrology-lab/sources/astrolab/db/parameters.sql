@@ -1,5 +1,9 @@
 ## jdbc:mysql://localhost:3306/astrolab?useUnicode=true&connectionCollation=cp1251_bulgarian_ci&characterEncoding=cp1251
 
+select t1.time, t2.exchange_rate_close - t1.exchange_rate_close
+from project_forex as t1, project_forex as t2
+where TIMESTAMPADD(MINUTE,30,t1.time) = t2.time
+
 
 SELECT DISTINCT(text.id) as app_id, TABLE1.app1, TABLE2.app2, TABLE11.app11, TABLE21.app21
  FROM text

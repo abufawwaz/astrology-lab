@@ -31,4 +31,7 @@ public class NoDataProject extends Project {
     return new ProjectDataIterator(this, emptySet);
   }
 
+  public void refresh() {
+  }
+
 }

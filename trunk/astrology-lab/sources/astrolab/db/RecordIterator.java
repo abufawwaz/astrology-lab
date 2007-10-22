@@ -14,7 +14,7 @@ public abstract class RecordIterator {
 
   protected abstract Object read() throws Exception;
 
-  public final boolean hasNext() {
+  public boolean hasNext() {
     if (moved) {
       return true;
     }

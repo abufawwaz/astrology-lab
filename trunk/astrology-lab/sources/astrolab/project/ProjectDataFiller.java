@@ -45,10 +45,30 @@ public class ProjectDataFiller extends Thread {
       setPriority(Thread.MIN_PRIORITY);
       Log.beSilent(true);
 
+      ensureColumn(key);
+
+      PreparedStatement query;
+      PreparedStatement update;
       Connection connection = Database.getConnection();
       connection.setAutoCommit(false);
-      PreparedStatement query = connection.prepareStatement("SELECT time FROM " + Project.TABLE_PREFIX + project.getName() + " WHERE " + key + " IS NULL LIMIT 360");
-      PreparedStatement update = connection.prepareStatement("UPDATE " + Project.TABLE_PREFIX + project.getName() + " SET " + key + " = ? WHERE time = ?");
+      String table = Project.TABLE_PREFIX + project.getName();
+      String projectTableKey = null;
+      for (ProjectDataKey key: project.getKeys()) {
+        if ("time".equals(key.getName())) {
+          projectTableKey = "time";
+          break;
+        } else if ("event_time".equals(key.getName())) {
+          projectTableKey = "event_time";
+          break;
+        }
+      }
+      if (projectTableKey != null) {
+        query = connection.prepareStatement("SELECT " + projectTableKey + " FROM " + table + " WHERE " + table + "." + key + " IS NULL LIMIT 360");
+        update = connection.prepareStatement("UPDATE " + table + " SET " + table + "." + key + " = ? WHERE " + projectTableKey + " = ?");
+      } else {
+        query = connection.prepareStatement("SELECT project_archive.event_time FROM " + table + ", project_archive WHERE " + table + "." + key + " IS NULL AND " + table + ".subject_id = project_archive.event_id LIMIT 360");
+        update = connection.prepareStatement("UPDATE " + table + " SET " + table + "." + key + " = ? WHERE subject_id IN (SELECT event_id FROM project_archive WHERE project_archive.event_time = ?)");
+      }
 
       while (true) {
         boolean isEmpty = true;
@@ -57,6 +77,13 @@ public class ProjectDataFiller extends Thread {
         while (set.next()) {
           isEmpty = false;
           Timestamp time = set.getTimestamp(1);
+//if (projectTableKey != null) {
+//System.err.println(" query  '" + "SELECT " + projectTableKey + " FROM " + table + " WHERE " + table + "." + key + " IS NULL LIMIT 360" + "'");
+//System.err.println(" update '" + "UPDATE " + table + " SET " + table + "." + key + " = ? WHERE " + projectTableKey + " = ?" + "'");
+//} else {
+//  System.err.println(" query '" + "SELECT project_archive.event_time FROM " + table + ", project_archive WHERE " + table + "." + key + " IS NULL AND " + table + ".subject_id = project_archive.event_id LIMIT 360" + "'");
+//  System.err.println(" update '" + "UPDATE " + table + " SET " + table + "." + key + " = ? WHERE subject_id = (SELECT event_id FROM project_archive WHERE project_archive.event_time = ?)" + "'");
+//}
           SpacetimeEvent astrotime = new SpacetimeEvent(time.getTime());
 //          solar.calculate(new InMemoryEvent(astrotime)); // TODO: calculate based on time!
           position = ActivePoint.getActivePoint(key, astrotime).getPosition();
@@ -79,4 +106,15 @@ public class ProjectDataFiller extends Thread {
     }
   }
 
+  private void ensureColumn(String key) {
+    for (ProjectDataKey column: project.getKeys()) {
+      if (column.getName().equalsIgnoreCase(key)) {
+        return;
+      }
+    }
+
+    Database.execute("ALTER TABLE " + Project.TABLE_PREFIX + project.getName() + " ADD COLUMN " + key + " DOUBLE KEY");
+    Database.execute("ALTER TABLE " + Project.TABLE_PREFIX + project.getName() + " ADD INDEX USING BTREE (" + key + ")");
+    project.refresh();
+  }
 }

@@ -22,6 +22,7 @@ public class StaticPage extends Request implements Response {
 
     try {
       FileInputStream fis = new FileInputStream(new File(filename));
+System.err.println("file: " + new File(filename).toString());
       int read;
       byte[] data = new byte[500];
       ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -30,6 +31,7 @@ public class StaticPage extends Request implements Response {
         baos.write(data, 0, read);
       }
       CONTENTS = baos.toByteArray();
+System.err.println("file: " + CONTENTS.length);
       fis.close();
     } catch (Exception e) {
       e.printStackTrace();

@@ -30,7 +30,8 @@ public class SolarSystem extends PlanetSystem {
     Text.getId(SolarSystem.SATURN),
     Text.getId(SolarSystem.URANUS),
     Text.getId(SolarSystem.NEPTUNE),
-    Text.getId(SolarSystem.PLUTO)
+    Text.getId(SolarSystem.PLUTO),
+    Text.getId(SolarSystem.EARTH)
   };
 
   public SolarSystem(SpacetimeEvent spacetime) {

@@ -543,7 +543,6 @@ insert into views values (48, 'astrolab.project.sleep.FormSleepRecord');
 insert into views values (49, 'astrolab.project.sleep.ModifySleepRecord');
 insert into views values (50, 'astrolab.project.sleep.DisplaySleepRecords');
 insert into views values (51, 'astrolab.project.statistics.ComponentChartStatistics');
-insert into views values (52, 'astrolab.formula.display.DisplayProjectFormula');
 insert into views values (53, 'astrolab.formula.display.ModifyFormulae');
 insert into views values (54, 'astrolab.formula.display.FormEditFormulae');
 insert into views values (55, 'astrolab.formula.display.ComponentChartFormulae');
@@ -624,5 +623,3 @@ insert into project_financial_products values (8000007, 8000001);
 insert into project_financial_products values (8000008, 8000001);
 insert into project_financial_products values (8000009, 8000002);
 insert into project_financial_products values (8000010, 8000003);
-
-

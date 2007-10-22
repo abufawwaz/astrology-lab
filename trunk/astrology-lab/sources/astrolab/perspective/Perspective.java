@@ -42,6 +42,7 @@ public class Perspective extends Display {
   }
 
   public Perspective() {
+    super(true);
     super.addAction("project", RequestParameters.PROJECT_ID);
   }
 
@@ -165,7 +166,7 @@ public class Perspective extends Display {
         }
       }
       buffer.newline();
-      super.fillActionScript(request, buffer, true);
+      super.fillActionScript(request, buffer);
       buffer.newline();
       buffer.append("//]]>");
       buffer.newline();

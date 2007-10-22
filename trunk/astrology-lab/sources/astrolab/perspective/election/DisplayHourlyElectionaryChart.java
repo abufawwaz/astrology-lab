@@ -15,11 +15,10 @@ public class DisplayHourlyElectionaryChart extends SVGDisplay {
   private final static float HEIGHT_LINE_WIDTH = (float) HEIGHT / 100;
   private final static float MINUTE_STEP = ((float) 15) / 60;
 
-  private Calendar timestamp;
+  private SpacetimeEvent timestamp;
 
   public DisplayHourlyElectionaryChart() {
     super.addAction("timestamp", "timestamp");
-//    super.addAction("timestamp", "javascript:updateTime(message)");
     super.addAction("criteria", "action");
   }
 
@@ -75,7 +74,7 @@ public class DisplayHourlyElectionaryChart extends SVGDisplay {
     buffer.append(" document.getElementById('chart_id').onclick = function(evt) {");
     buffer.append("  var selected_hour = 24 * evt.clientX / document.rootElement.width.baseVal.value;");
     buffer.append("  moveMarkTo('chart_mark', evt);");
-    buffer.append("  top.fireEvent(window, 'timestamp', Math.floor(start_timestamp + selected_hour * an_hour ));");
+    buffer.append("  top.fireEvent(window, 'timestamp', Math.floor(start_timestamp + selected_hour * an_hour));");
     buffer.append(" }");
     buffer.newline();
     buffer.append(" document.getElementById('chart_id').onmousemove = function(evt) {");
@@ -91,42 +90,41 @@ public class DisplayHourlyElectionaryChart extends SVGDisplay {
     buffer.append(" }");
     buffer.newline();
     buffer.append(" function moveMarkTo(mark, evt) {");
-    buffer.append("  var hour = 24 * evt.clientX / document.rootElement.width.baseVal.value;");
+    buffer.append("  moveMarkToHour(mark, 24 * evt.clientX / document.rootElement.width.baseVal.value);");
+    buffer.append(" }");
+    buffer.newline();
+    buffer.append(" function moveMarkToHour(mark, hour) {");
     buffer.append("  var text = document.createTextNode('' + Math.floor(hour) + ':' + Math.floor((hour - Math.floor(hour)) * 60));");
-    buffer.append("  document.getElementById(mark + '_id').setAttribute('transform', 'translate(' + (24 * evt.clientX / document.rootElement.width.baseVal.value) + ' 0)');");
+    buffer.append("  document.getElementById(mark + '_id').setAttribute('transform', 'translate(' + hour + ' 0)');");
     buffer.append("  var text_node = document.getElementById(mark + '_text');");
     buffer.append("  while (text_node.hasChildNodes()) text_node.removeChild(text_node.firstChild);");
     buffer.append("  text_node.appendChild(text);");
     buffer.append(" }");
     buffer.newline();
-    buffer.append(" var start_timestamp = " + getCalendar(0).getTimeInMillis());
+
+    long startTimeMillis = getCalendar(0).getTimeInMillis();
+    float selectedHour = ((float) (timestamp.getTimeInMillis() - startTimeMillis)) / 1000 / 60 / 60;
+    System.err.println(" start: " + getCalendar(0).toMySQLString() + "   -> " + new java.util.Date(getCalendar(0).getTimeInMillis()).toString());
+    System.err.println(" time : " + new java.util.Date(timestamp.getTimeInMillis()).toString());
+    System.err.println(" diff: " + (timestamp.getTimeInMillis() - startTimeMillis));
+    buffer.append(" var start_timestamp = " + startTimeMillis);
     buffer.newline();
-//    buffer.append(" var selected_day = 0");
-//    buffer.newline();
     buffer.append(" var an_hour = 60 * 60 * 1000");
     buffer.newline();
-//    buffer.append(" var selected_hour = 0");
-//    buffer.newline();
-//    buffer.append(" function updateTime(timestamp) {");
-//    buffer.append("  selected_day = timestamp - start_timestamp - selected_hour * an_hour; alert(new Date(start_timestamp + selected_day))");
-//    buffer.append(" }");
-//    buffer.newline();
+    buffer.append(" moveMarkToHour('chart_select', " + selectedHour + ");");
+    buffer.append(" moveMarkToHour('chart_mark', " + selectedHour + ");");
+    buffer.newline();
     buffer.append("</script>");
   }
 
   private final void determineStartingTime(Request request, Criterion[] criteria) {
     String timeParameter = request.get("timestamp");
     if (timeParameter != null) {
-      timestamp = Calendar.getInstance();
-      timestamp.setTimeInMillis(Long.parseLong(timeParameter));
+      timestamp = new SpacetimeEvent(Long.parseLong(timeParameter));
     }
     if (timestamp == null) {
-      timestamp = Calendar.getInstance();
-      timestamp.setTimeInMillis(ElectiveEnvironment.getStartingTime().getTimeInMillis());
+      timestamp = ElectiveEnvironment.getStartingTime();
     }
-    timestamp.set(Calendar.HOUR_OF_DAY, 0);
-    timestamp.set(Calendar.MINUTE, 0);
-    timestamp.set(Calendar.SECOND, 0);
   }
 
   private final void fillMarks(LocalizedStringBuffer buffer, Criterion[] criteria) {
@@ -202,11 +200,24 @@ public class DisplayHourlyElectionaryChart extends SVGDisplay {
   }
 
   private final SpacetimeEvent getCalendar(float hour) {
-    Calendar result = Calendar.getInstance();
-    result.setTime(timestamp.getTime());
-    result.set(Calendar.HOUR_OF_DAY, (int) (hour + 1));
-    result.set(Calendar.MINUTE, (int) ((hour - (int) hour) * 60));
-    return new SpacetimeEvent(result.getTimeInMillis());
+    int hh = (int) hour;
+    int mm = (int) ((hour - (int) hour) * 60);
+    SpacetimeEvent result = timestamp;
+
+    if (result.get(SpacetimeEvent.HOUR_OF_DAY) != hh) {
+      result = result.getMovedSpacetimeEvent(SpacetimeEvent.HOUR_OF_DAY, hh - result.get(SpacetimeEvent.HOUR_OF_DAY));
+    }
+    if (result.get(SpacetimeEvent.MINUTE) != mm) {
+      result = result.getMovedSpacetimeEvent(SpacetimeEvent.MINUTE, mm - result.get(SpacetimeEvent.MINUTE));
+    }
+    if (result.get(SpacetimeEvent.SECOND) != 0) {
+      result = result.getMovedSpacetimeEvent(SpacetimeEvent.SECOND, - result.get(SpacetimeEvent.SECOND));
+    }
+    if (result.get(Calendar.MILLISECOND) != 0) {
+      result = result.getMovedSpacetimeEvent(Calendar.MILLISECOND, - result.get(Calendar.MILLISECOND));
+    }
+
+    return result;
   }
 
   public void fillViewBox(Request request, LocalizedStringBuffer buffer) {

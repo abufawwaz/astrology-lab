@@ -35,6 +35,8 @@ public abstract class Project {
 
   protected abstract ProjectDataIterator getIterator(FormulaeSeries[] series, FormulaeBase base, FormulaePeriod period, SpacetimeEvent fromTime, SpacetimeEvent toTime);
 
+  public abstract void refresh();
+
   protected String normalizeKey(String key) {
     final String projectTablePrefix = Project.TABLE_PREFIX + getName() + ".";
     final String archiveTablePrefix = Project.TABLE_PREFIX + "archive.";
